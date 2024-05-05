@@ -21,3 +21,4 @@ services:
       dockerfile: ./docker/volumes/build/php-fpm8.1/Dockerfile
     volumes:
       - ./app:/usr/share/nginx/html
+      - ./app:/var/www/
