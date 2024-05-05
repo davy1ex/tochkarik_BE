@@ -22,3 +22,18 @@ services:
     volumes:
       - ./app:/usr/share/nginx/html
       - ./app:/var/www/
+
+  postgres:
+    container_name: 'pg-skeleton'
+    image: postgres:15.1-alpine
+    ports:
+      - '5431:5432'
+    working_dir: /app
+    restart: always
+    environment:
+      POSTGRES_DB: 'skeletorn'
+      POSTGRES_USER: 'devuser'
+      POSTGRES_PASSWORD: '97y2amDpm'
+    volumes:
+      - ./db/dump:/app/dump
+      - ./db/postgresql:/var/lib/postgresql/data
