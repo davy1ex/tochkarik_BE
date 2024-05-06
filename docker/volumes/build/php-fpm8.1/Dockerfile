@@ -1,6 +1,15 @@
 FROM php:8.1-fpm
 
 
+ARG INSTALL_XDEBUG=false
+RUN if [ ${INSTALL_XDEBUG} = true ]; \
+    then \
+        # Установка Xdebug
+        pecl install xdebug \
+        && docker-php-ext-enable xdebug \
+    fi;
+
+
 RUN apt-get update && apt-get install -y \
         libzip-dev \
         libicu-dev \
@@ -20,9 +29,7 @@ RUN apt-get update && apt-get install -y \
 
 
 
-# Установка Xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+
 
 # Дополнительные команды для настройки Xdebug
 RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \

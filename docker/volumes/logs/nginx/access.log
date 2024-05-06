@@ -24,3 +24,6 @@
 192.168.65.1 - - [05/May/2024:05:46:38 +0000] "GET /symfony/ HTTP/1.1" 403 555 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 192.168.65.1 - - [05/May/2024:05:48:13 +0000] "GET / HTTP/1.1" 403 555 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 192.168.65.1 - - [05/May/2024:05:53:03 +0000] "GET / HTTP/1.1" 404 32288 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+192.168.65.1 - - [05/May/2024:10:29:58 +0000] "POST /pkix/ HTTP/1.0" 499 0 "-" "-"
+192.168.65.1 - - [05/May/2024:10:30:00 +0000] "POST /pkix/ HTTP/1.0" 404 143824 "-" "-"
+192.168.65.1 - - [05/May/2024:10:30:02 +0000] "POST http://[::1]:52312/pkix/ HTTP/1.0" 499 0 "-" "-"
