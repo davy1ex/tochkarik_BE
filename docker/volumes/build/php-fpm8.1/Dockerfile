@@ -4,9 +4,8 @@ FROM php:8.1-fpm
 ARG INSTALL_XDEBUG=false
 RUN if [ ${INSTALL_XDEBUG} = true ]; \
     then \
-        # Установка Xdebug
-        pecl install xdebug \
-        && docker-php-ext-enable xdebug \
+        # Установка Xdebug 
+        pecl install xdebug && docker-php-ext-enable xdebug; \
     fi;
 
 
