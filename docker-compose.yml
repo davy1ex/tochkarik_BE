@@ -24,7 +24,9 @@ services:
       - ./app:/var/www/
 
   postgres:
-    container_name: 'pg-skeleton'
+    build:
+      context: .
+      dockerfile: ./docker/volumes/build/postgres/Dockerfile
     image: postgres:15.1-alpine
     ports:
       - '5431:5432'

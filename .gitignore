@@ -1,6 +1,7 @@
 .idea
 .DS_Store
 composer.lock
+db/*
 
 ###> symfony/framework-bundle ###
 /.env.local
