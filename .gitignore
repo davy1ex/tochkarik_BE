@@ -3,6 +3,8 @@
 composer.lock
 db/*
 
+docker/volumes/logs/
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
