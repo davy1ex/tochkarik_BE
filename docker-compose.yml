@@ -22,6 +22,8 @@ services:
     volumes:
       - ./app:/usr/share/nginx/html
       - ./app:/var/www/
+    depends_on:
+      - postgres
 
   postgres:
     build:
