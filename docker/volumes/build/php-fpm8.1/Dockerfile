@@ -12,9 +12,9 @@ RUN apt-get update && apt-get install -y \
         pdo_pgsql \
         zip \
         intl \
-        opcache \
-    && pecl install apcu \
-    && docker-php-ext-enable apcu
+        opcache
+#    && pecl install apcu \
+#    && docker-php-ext-enable apcu
 
 
 
@@ -40,13 +40,13 @@ RUN docker-php-ext-install pdo_pgsql
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 
+
 # Copy php.ini to container
-COPY ./docker/volumes/etc/php-fpm8.1/php.ini /usr/local/etc/php/php.ini
+#COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 WORKDIR /var/www/symfony
 
-#RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-#RUN php composer-setup.php
-#RUN php -r "unlink('composer-setup.php');"
-#RUN mv composer.phar /usr/local/bin/composer
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
 
 
