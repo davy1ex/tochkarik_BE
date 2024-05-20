@@ -1,7 +1,8 @@
 .idea
 .env
 .env.local
-
+.DS_Store
+*/.DS_Store
 
 ###> symfony/framework-bundle ###
 /backend/.env.local
