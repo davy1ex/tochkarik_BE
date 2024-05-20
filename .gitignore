@@ -25,5 +25,8 @@
 ###< symfony/phpunit-bridge ###
 /backend/postgres_data
 
+
+
 /frontend/node_modules
+/frontend/tochkarik/.env
 

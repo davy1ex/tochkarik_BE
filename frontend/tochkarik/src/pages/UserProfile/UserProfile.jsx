@@ -12,13 +12,16 @@ const UserProfile = ({ userId }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Замените URL на тот, который используется для обращения к вашему Symfony-контейнеру
-        const url = `http://localhost:50000/api/user/${userId}`;
+        const apiUrl = import.meta.env.VITE_API_URL;
+        console.log(apiUrl)
+        console.log(import.meta.env)
+        const url = `${apiUrl}/api/user/${userId}`;
 
         axios.get(url)
             .then(response => {
                 setUser(response.data);
                 setLoading(false);
+                console.log(response)
 
             })
             .catch(error => {

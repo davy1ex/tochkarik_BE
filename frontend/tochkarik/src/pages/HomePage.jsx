@@ -7,9 +7,9 @@ import sonic from '../../public/sonic.gif'
 const HomePage = () => {
 
     return (
-        <div>
+        <div style={{width: 'auto'}}>
             <h3>Welcome to NothingWorked App</h3>
-            <img src={sonic} alt=""/>
+            <img src={sonic} width={'300px'}  alt=""/>
         </div>
     );
 };

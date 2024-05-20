@@ -15,7 +15,7 @@ function App()  {
           <Header />
           <Routes>
               <Route exact path="/" element={<HomePage />} />
-              <Route path="/user/1" element={<UserProfile />} />
+              <Route path="/profile" element={<UserProfile userId={1}/>} />
           </Routes>
       </Router>
   )
