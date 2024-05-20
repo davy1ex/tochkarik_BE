@@ -3,7 +3,7 @@ version: "3.1"
 services:
   php-fpm:
     build:
-      dockerfile: docker/php-fpm/Dockerfile
+      dockerfile: ./docker/php-fpm/Dockerfile
     volumes:
       - ./backend:/application
     depends_on:
@@ -12,7 +12,7 @@ services:
 
   nginx:
     build:
-      dockerfile: docker/nginx/Dockerfile
+      dockerfile: ./docker/nginx/Dockerfile
     volumes:
       - ./backend:/application
       - ./frontend:/frontend
