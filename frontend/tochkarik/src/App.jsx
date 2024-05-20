@@ -12,6 +12,9 @@ import Header from './components/Header/Header.jsx'
 import Post from './components/Post.jsx';
 
 import Button from './components/buttons/Button.jsx'
+
+import UserProfile from './pages/UserProfile';
+
 //
 // function App() {
 //   root = getSelection()
@@ -36,7 +39,7 @@ function App()  {
           {/*</Switch>*/}
         <main>
           <h1>Hello</h1>
-
+            <UserProfile  userId={1}/>
             < Post num_post={1} title={"Lorem Ipsulm"} body_prev={"kek puk shmonk"} />
 
             <Button onClick ={() => buttonClicked("f")}>Generate</Button>
