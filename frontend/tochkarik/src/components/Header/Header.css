@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap');
+
+body {
+    font-family: "Titan One", sans-serif;
+
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000;
+    color: white;
+    padding: 0 10px;
+}
+
+.headerContainer {
+    display: flex;
+}
+
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+.points {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.points .icon {
+    margin-left: 5px;
+}
+
+.icon {
+    font-size: 24px;
+    margin-left: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+}
+
+.icon:hover {
+    text-decoration: underline;
+}
+
+
+a {
+    color: white !important;
+}

@@ -1,34 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import Header from './components/Header/Header.jsx'
+import Post from './components/Post.jsx';
+
+import Button from './components/buttons/Button.jsx'
+//
+// function App() {
+//   root = getSelection()
+// }
+//
+// export default App
+
+
+
+function App()  {
+    function buttonClicked(param) {
+        console.log({param})
+    }
 
   return (
-    <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+          <Header />
+          {/*<Switch>*/}
+          {/*    <Route exact path="/" component={HomePage} />*/}
+          {/*    <Route path="/generate" component={GeneratePage} />*/}
+          {/*    <Route path="/posts" component={PostsPage} />*/}
+          {/*</Switch>*/}
+        <main>
+          <h1>Hello</h1>
+
+            < Post num_post={1} title={"Lorem Ipsulm"} body_prev={"kek puk shmonk"} />
+
+            <Button onClick ={() => buttonClicked("f")}>Generate</Button>
+        </main>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   )
 }
 
