@@ -18,13 +18,17 @@ const UserProfile = ({ userId }) => {
         axios.get(url)
             .then(response => {
                 setUser(response.data);
-                console.log(response)
+                setLoading(false);
+
             })
             .catch(error => {
                 setError(error.response ? error.response.data.message : 'Error fetching user');
+                setLoading(false);
+
             });
     }, [userId]);
 
+    if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading user data: {error.message}</p>;
 
     return (

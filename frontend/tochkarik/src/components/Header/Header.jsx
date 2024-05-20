@@ -8,7 +8,7 @@ const Header = () => {
             <div className="menu-icon" onClick={() => alert('Пример меню')}>
                 ☰
             </div>
-            <a to="/" className="logo">
+            <a className="logo">
                 Tochkarik
             </a>
 
