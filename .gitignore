@@ -23,3 +23,6 @@
 /backend/phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+
+/frontend/node_modules
+

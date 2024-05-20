@@ -26,13 +26,13 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+
+
   node:
     build:
-#      context: ./frontend
       dockerfile: ./docker/node/Dockerfile
     volumes:
-      - ./frontend:/frontend
+      - ./frontend/tochkarik:/frontend
     ports:
-      - "50005:3000"
-    command: npm start
-#    command: sh -c "npx create-react-app . && npm start"
+      - "5173:5173"
+    command: npm run dev
