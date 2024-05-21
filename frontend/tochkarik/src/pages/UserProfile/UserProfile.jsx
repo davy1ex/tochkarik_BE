@@ -13,15 +13,12 @@ const UserProfile = ({ userId }) => {
 
     useEffect(() => {
         const apiUrl = import.meta.env.VITE_API_URL;
-        console.log(apiUrl)
-        console.log(import.meta.env)
         const url = `${apiUrl}/api/user/${userId}`;
 
         axios.get(url)
             .then(response => {
                 setUser(response.data);
                 setLoading(false);
-                console.log(response)
 
             })
             .catch(error => {
