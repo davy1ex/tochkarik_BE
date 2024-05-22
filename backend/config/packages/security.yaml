@@ -12,7 +12,7 @@ security:
                 property: username
     firewalls:
         login:
-            pattern: ^/api/login
+            pattern: ^/api/login_check
             stateless: true
             provider: app_user_provider
             json_login:
@@ -26,6 +26,8 @@ security:
             pattern: ^/api
             stateless: true
             jwt: ~
+            provider: app_user_provider
+
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -55,6 +57,7 @@ security:
         - { path: ^/login, roles:  }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/app_login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

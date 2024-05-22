@@ -21,9 +21,11 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/{id}", name="api_user_show", methods={"GET"})
      */
-    #[Route('/api/user/{id}', name: 'app_user_show', methods: ['GET'])]
+    #[Route('/api/user/{id}', name: 'app_user_show', methods: ['POST'])]
     public function show(UserRepository $userRepository, $id): JsonResponse
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $user = $userRepository->find($id);
 
         if (!$user) {
