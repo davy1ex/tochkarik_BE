@@ -12,12 +12,12 @@ security:
                 property: username
     firewalls:
         login:
-            pattern: ^/api/login_check
+            pattern: ^/api/auth/signin
             stateless: true
             provider: app_user_provider
             json_login:
                 username_path: username
-                check_path: /api/login_check
+                check_path: /api/auth/signin
                 success_handler:
                     lexik_jwt_authentication.handler.authentication_success
                 failure_handler:

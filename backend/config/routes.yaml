@@ -7,4 +7,4 @@ kernel:
     type: annotation
 
 api_loin_check:
-    path: /api/login_check
+    path: /api/auth/signin
