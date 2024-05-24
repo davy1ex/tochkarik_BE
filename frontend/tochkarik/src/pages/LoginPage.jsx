@@ -13,7 +13,7 @@ const LoginForm = ({ setAuthStatus }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:50000/api/login_check', {
+            const response = await axios.post('http://localhost:50000/api/auth/signin', {
                 username,
                 password,
             });
