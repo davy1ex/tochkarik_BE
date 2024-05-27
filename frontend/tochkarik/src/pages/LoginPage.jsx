@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import setAuthToken  from "../api.token.js";
+// import setAuthToken  from "../api.token.js";
 
-const LoginForm = ({ setAuthStatus }) => {
+const LoginForm = ({ setAuthToken }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -25,7 +25,8 @@ const LoginForm = ({ setAuthStatus }) => {
 
             navigate('/'); // Redirect user after successful login
         } catch (error) {
-            setError('Invalid credentials');
+
+            setError('Invalid credentials ' + error);
         }
     };
 
