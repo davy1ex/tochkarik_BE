@@ -13,17 +13,14 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class AuthController extends AbstractController
 {
-    #[Route('/auth', name: 'app_auth', methods: ['POST'])]
-    public function auth(Request $request, UserProviderInterface $userProvider, UserPasswordHasherInterface $passwordHasher, JWTTokenManagerInterface $JWTManager): JsonResponse
+    #[Route('/api/auth/signin', name: 'api_auth_signin', methods: ['POST'])]
+    public function signin(UserInterface $user, JWTTokenManagerInterface $jwtManager): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $token = $jwtManager->create($user);
 
-        $user = $userProvider->loadUserByIdentifier($data['username']);
-        if (!$user || !$passwordHasher->isPasswordValid($user, $data['password'])) {
-            return new JsonResponse(['error' => 'Invalid credentials'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
-
-        $token = $JWTManager->create($user);
+        // Логирование данных токена для отладки
+        $decodedToken = $jwtManager->decode($token);
+        dump($decodedToken); // Проверьте данные токена
 
         return new JsonResponse(['token' => $token]);
     }
