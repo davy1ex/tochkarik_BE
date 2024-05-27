@@ -1,5 +1,3 @@
-// src/pages/UserProfile/UserProfile.jsx
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -8,7 +6,7 @@ import './UserProfile.css';
 
 import BigBtn from '../../components/buttons/Button.jsx';
 
-const UserProfile = ({ userId }) => {
+const UserProfile = ({ userId, logoutHandler }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,7 +15,7 @@ const UserProfile = ({ userId }) => {
         const apiUrl = import.meta.env.VITE_API_URL;
         const token = localStorage.getItem('token');
         const url = `${apiUrl}/api/user/${userId}`;
-        console.log('Token retrieved from localStorage:', token);  // Добавьте эту строку
+        console.log('Token retrieved from localStorage:', token);
 
         axios.get(url, {
             headers: {
@@ -37,6 +35,8 @@ const UserProfile = ({ userId }) => {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading user data: {error}</p>;
 
+
+
     return (
         <div className={'container-user-profile'}>
             <div>
@@ -54,6 +54,11 @@ const UserProfile = ({ userId }) => {
                     <BigBtn>Edit profile</BigBtn>
                     <BigBtn>My posts</BigBtn>
                     <BigBtn>My bookmarks</BigBtn>
+
+                    <BigBtn onClick={logoutHandler}>Logout</BigBtn>
+
+                </div>
+                <div>
                 </div>
             </div>
         </div>

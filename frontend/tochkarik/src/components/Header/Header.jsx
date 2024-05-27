@@ -1,16 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, Navigate, useNavigate} from 'react-router-dom';
 import './Header.css';
 
 import coin from '../../../public/coin.svg'
 
 const Header = () => {
+    const navigate = useNavigate(); // Use useNavigate for navigation
+
     return (
         <header className="header">
-            <div className="menu-icon" onClick={() => alert('Пример меню')}>
+            <div className="menu-icon" onClick={() => navigate("/profile")}>
                 ☰
             </div>
-            <a className="logo">
+            <a className="logo" onClick={() => navigate("/")}>
                 Tochkarik
             </a>
 
