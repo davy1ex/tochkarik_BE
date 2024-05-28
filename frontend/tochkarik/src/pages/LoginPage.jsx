@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // import setAuthToken  from "../api.token.js";
 
-const LoginForm = ({ setAuthToken }) => {
+const LoginPage = ({ setAuthToken }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -59,4 +59,4 @@ const LoginForm = ({ setAuthToken }) => {
     );
 };
 
-export default LoginForm;
+export default LoginPage;
