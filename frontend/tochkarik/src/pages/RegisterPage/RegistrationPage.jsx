@@ -59,7 +59,7 @@ const RegistrationPage = ({  }) => {
                     required
                     placeholder="Repeat password"
                 />
-                <button type="submit">Login</button>
+                <button type="submit">Sign Up</button>
 
                 {error && <p>{error}</p>}
             </form>

@@ -54,7 +54,7 @@ const LoginPage = ({ setAuthToken }) => {
                 </div>
                 <button type="submit">Login</button>
 
-                <a href="/reg">Register</a>
+                <a href="/reg">Sign Up</a>
 
                 {error && <p>{error}</p>}
             </form>
