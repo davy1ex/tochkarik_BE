@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -41,5 +42,35 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
+    }
+
+    #[Route('/api/auth/signup', name: 'api_register', methods: ['POST'])]
+    public function api_register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request -> getContent(), true);
+
+        if (empty($data['username']) || empty($data['password']) || empty($data['password']))
+            return new JsonResponse(['message' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
+
+        $user = new User();
+        $user->setUsername($data['username']);
+        $user->setPassword(
+            $userPasswordHasher->hashPassword(
+                $user,
+                $data['password']
+            )
+        );
+
+        try {
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+        catch (\Exception $e) {
+            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+
+        return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
+
     }
 }
