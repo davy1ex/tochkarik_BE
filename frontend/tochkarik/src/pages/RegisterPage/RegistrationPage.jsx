@@ -58,11 +58,9 @@ const RegistrationPage = ({  }) => {
                         placeholder="Password"
                     />
 
-                    {/*<label>Repeat pas</label>*/}
                     <input
                         type="password"
                         value={password_repeat}
-                        // onChage={(e) => setUsername(e.target.value)}
                         onChange={(e) => setPasswordRepeat(e.target.value)}
                         required
                         placeholder="Repeat password"
