@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import LoginPage from "../pages/LoginPage.jsx";
+import LoginPage from "../pages/LoginPage/LoginPage.jsx";
 import RegistrationPage from "../pages/RegisterPage/RegistrationPage.jsx";
 
 function UnauthenticatedRoutes({ setAuthToken }) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// import setAuthToken  from "../api.token.js";
+import "./LoginPage.css"
 
 const LoginPage = ({ setAuthToken }) => {
     const [username, setUsername] = useState('');
@@ -31,10 +31,10 @@ const LoginPage = ({ setAuthToken }) => {
     };
 
     return (
-        <div>
+        <div className={"login-container"}>
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className={"login-container-item"}>
                     <label>Username:</label>
                     <input
                         type="text"
@@ -43,7 +43,7 @@ const LoginPage = ({ setAuthToken }) => {
                         required
                     />
                 </div>
-                <div>
+                <div className={"login-container-item"}>
                     <label>Password:</label>
                     <input
                         type="password"

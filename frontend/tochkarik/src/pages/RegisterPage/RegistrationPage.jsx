@@ -37,34 +37,45 @@ const RegistrationPage = ({  }) => {
         <div className={"register-container"}>
             <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                    placeholder="Login"
-                />
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="Password"
-                />
-                <input
-                    type="password"
-                    value={password_repeat}
-                    // onChage={(e) => setUsername(e.target.value)}
-                    onChange={(e) => setPasswordRepeat(e.target.value)}
-                    required
-                    placeholder="Repeat password"
-                />
-                <button type="submit">Sign Up</button>
+                <div className={"register-container-item"}>
+                    <label>Login</label>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                        placeholder="Login"
+                    />
+                </div>
 
-                {error && <p>{error}</p>}
+                <div className={"register-container-item"}>
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="Password"
+                    />
+
+                    {/*<label>Repeat pas</label>*/}
+                    <input
+                        type="password"
+                        value={password_repeat}
+                        // onChage={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setPasswordRepeat(e.target.value)}
+                        required
+                        placeholder="Repeat password"
+                    />
+                </div>
+                    <button type="submit">Sign Up</button>
+                    <a href="/login">Sign In</a>
+
+
+                    {error && <p>{error}</p>}
             </form>
         </div>
-    )
+)
 }
 
 
