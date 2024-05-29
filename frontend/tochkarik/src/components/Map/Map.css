@@ -1,0 +1,17 @@
+
+.map-container {
+    width: 100%;
+
+
+}
+
+.leaflet-control-container{
+    display: none;
+}
+.leaflet-bottom {
+    display: none;
+}
+
+.leaflet-container {
+    height: 70vh;
+}
