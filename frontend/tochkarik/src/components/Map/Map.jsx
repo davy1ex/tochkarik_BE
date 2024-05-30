@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Circle } from 'react-leaflet';
+import { MapContainer, TileLayer, Circle, Marker } from 'react-leaflet';
 
 import BigBtn from "../buttons/Button.jsx";"../buttons/Button.jsx"
 
@@ -8,11 +8,37 @@ import "./Map.css";
 
 const MapComponent = () => {
     const [radius, setRadius] = useState(1000);
-    const position = [51.505, -0.09];
+    let position = [53.242, 50.221];
+
+    const [markerPosition, setMarkerPosition] = useState(null);
+    const [showCircle, setShowCircle] = useState(true);
+
 
     const handleRadiusChange = (event) => {
         setRadius(event.target.value);
     };
+
+
+    const generateRandomCoordinates = (center, radius) => {
+        const randomAngle = Math.random() * 2 * Math.PI; // Случайный угол в радианах
+        const randomRadius = Math.random() * radius; // Случайное расстояние от центра
+
+        const offsetX = randomRadius * Math.cos(randomAngle); // Смещение по оси X
+        const offsetY = randomRadius * Math.sin(randomAngle); // Смещение по оси Y
+
+        const earthRadius = 6378137; // Радиус Земли в метрах
+        const newLatitude = center[0] + (offsetY / earthRadius) * (180 / Math.PI);
+        const newLongitude = center[1] + (offsetX / earthRadius) * (180 / Math.PI) / Math.cos(center[0] * Math.PI / 180);
+
+
+        setMarkerPosition([newLatitude, newLongitude]);
+        setShowCircle(false);
+
+        console.log(newLatitude, newLongitude)
+
+        return [newLatitude, newLongitude];
+    };
+
 
 
     return (
@@ -23,7 +49,9 @@ const MapComponent = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
 
-                <Circle center={position} radius={radius} />
+                {showCircle && <Circle center={position} radius={radius} />}
+                {markerPosition && <Marker position={markerPosition} />}
+
             </MapContainer>
             <div className="controls-container">
                 <input
@@ -39,7 +67,7 @@ const MapComponent = () => {
                 </div>
 
                 <div>
-                <BigBtn>Generate</BigBtn>
+                    <BigBtn onClick={() => generateRandomCoordinates(position, radius)}>Generate</BigBtn>
                 </div>
             </div>
         </div>
