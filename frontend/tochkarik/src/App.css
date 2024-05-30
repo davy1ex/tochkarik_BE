@@ -5,6 +5,12 @@ body {
 body, #root  {
   display: block !important;
   width: 100%;
+  background: black;
+
+}
+
+#root {
+  color: white;
 }
 
 
@@ -20,7 +26,6 @@ body, #root  {
     width: 470px;
 
     margin: auto;
-    color: red;
   }
 }
 

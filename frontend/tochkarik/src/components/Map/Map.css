@@ -7,6 +7,7 @@
 
 .leaflet-control-container{
     display: none;
+
 }
 .leaflet-bottom {
     display: none;
@@ -14,4 +15,36 @@
 
 .leaflet-container {
     height: 70vh;
+    /*background: white;*/
+    color: white;
+    position: relative;
+
 }
+
+
+
+
+/* src/components/Map/Map.css */
+.map-wrapper {
+    width: 100%;
+    height: 70vh;
+}
+
+.map-container {
+    /*width: 100%;*/
+    /*height: 500px;*/
+    /*position: relative;*/
+    /*background: white !important; !* Фон для карты *!*/
+}
+
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.slider {
+    margin: 10px 0;
+}
+

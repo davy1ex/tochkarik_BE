@@ -6,7 +6,16 @@
     display: flex;
     flex-direction: column;
 
-
     align-items: center;
+}
+
+.controls-container {
+    width: 90%;
+    margin: auto;
+}
+
+.controls-container input {
+    width: 100%;
+    margin: auto;
 }
 
