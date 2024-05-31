@@ -11,6 +11,8 @@ const MapComponent = () => {
 
     const [markerPosition, setMarkerPosition] = useState(null);
     const [showCircle, setShowCircle] = useState(true);
+    const [showSlider, setShowSlider] = useState(true);
+
     const [showGenerateBtn, setShowGenerateBtn] = useState(true)
     const [showGenerateNewBtn, setShowGenerateNewBtn] = useState(false)
     const [position, setPosition] = useState([53.242, 50.221]);
@@ -33,14 +35,17 @@ const MapComponent = () => {
         const newLongitude = center[1] + (offsetX / earthRadius) * (180 / Math.PI) / Math.cos(center[0] * Math.PI / 180);
 
 
-        setMarkerPosition([newLatitude, newLongitude]);
         setShowCircle(false);
-        setShowGenerateBtn(false)
-        setShowGenerateNewBtn(true)
+        setShowGenerateBtn(false);
+        setShowGenerateNewBtn(true);
 
-        console.log(newLatitude, newLongitude)
+        setShowSlider(false);
+        setMarkerPosition([newLatitude, newLongitude]);
 
-        return [newLatitude, newLongitude];
+        //
+        // console.log(newLatitude, newLongitude)
+        //
+        // return [newLatitude, newLongitude];
     };
 
     useEffect(() => {
@@ -64,7 +69,13 @@ const MapComponent = () => {
         return null;
     };
 
-
+    const handleGenerateNew = () => {
+        setMarkerPosition(null);
+        setShowCircle(true);
+        setShowGenerateBtn(true);
+        setShowGenerateNewBtn(false);
+        setShowSlider(true);
+    };
 
 
     return (
@@ -82,21 +93,25 @@ const MapComponent = () => {
 
             </MapContainer>
             <div className="controls-container">
-                <input
-                    type="range"
-                    min="100"
-                    max="5000"
-                    value={radius}
-                    onChange={handleRadiusChange}
-                    className="slider"
-                />
-                <div>
-                    <span>{radius} meters</span>
-                </div>
+                {showSlider && (
+                    <>
+                        <input
+                            type="range"
+                            min="100"
+                            max="5000"
+                            value={radius}
+                            onChange={handleRadiusChange}
+                            className="slider"
+                        />
+                        <div>
+                            <span>{radius} meters</span>
+                        </div>
+                    </>
+                )}
 
                 <div>
                     {showGenerateBtn && <BigBtn onClick={() => generateRandomCoordinates(position, radius)}>Generate</BigBtn>}
-                    {showGenerateNewBtn && <BigBtn onClick={() => generateRandomCoordinates(position, radius)}>Generate new</BigBtn>}
+                    {showGenerateNewBtn && <BigBtn onClick={handleGenerateNew}>Generate new</BigBtn>}
                 </div>
             </div>
         </div>
