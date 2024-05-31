@@ -13,6 +13,7 @@ const Header = () => {
                 ☰
             </div>
             <a className="logo" onClick={() => navigate("/")}>
+                <div className={"logo-image"}><img src={"../../../public/logo.svg"}/></div>
                 Tochkarik
             </a>
 
