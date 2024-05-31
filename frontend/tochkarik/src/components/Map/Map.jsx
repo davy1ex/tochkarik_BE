@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { MapContainer, TileLayer, Circle, Marker } from 'react-leaflet';
+import React, {useEffect, useState} from 'react';
+import { MapContainer, TileLayer, Circle, Marker, useMap } from 'react-leaflet';
 
 import BigBtn from "../buttons/Button.jsx";"../buttons/Button.jsx"
 
@@ -8,10 +8,12 @@ import "./Map.css";
 
 const MapComponent = () => {
     const [radius, setRadius] = useState(1000);
-    let position = [53.242, 50.221];
 
     const [markerPosition, setMarkerPosition] = useState(null);
     const [showCircle, setShowCircle] = useState(true);
+    const [showGenerateBtn, setShowGenerateBtn] = useState(true)
+    const [showGenerateNewBtn, setShowGenerateNewBtn] = useState(false)
+    const [position, setPosition] = useState([53.242, 50.221]);
 
 
     const handleRadiusChange = (event) => {
@@ -33,17 +35,43 @@ const MapComponent = () => {
 
         setMarkerPosition([newLatitude, newLongitude]);
         setShowCircle(false);
+        setShowGenerateBtn(false)
+        setShowGenerateNewBtn(true)
 
         console.log(newLatitude, newLongitude)
 
         return [newLatitude, newLongitude];
     };
 
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const { latitude, longitude } = position.coords;
+                setPosition([latitude, longitude]);
+            });
+        }
+    }, []);
+
+    const UpdateMapCenter = ({ position }) => {
+        const map = useMap();
+
+        useEffect(() => {
+            if (position) {
+                map.setView(position);
+            }
+        }, [position, map]);
+
+        return null;
+    };
+
+
 
 
     return (
         <div className="map-container">
             <MapContainer center={position} zoom={13}>
+                <UpdateMapCenter position={position} />
+
                 <TileLayer
                     url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -67,7 +95,8 @@ const MapComponent = () => {
                 </div>
 
                 <div>
-                    <BigBtn onClick={() => generateRandomCoordinates(position, radius)}>Generate</BigBtn>
+                    {showGenerateBtn && <BigBtn onClick={() => generateRandomCoordinates(position, radius)}>Generate</BigBtn>}
+                    {showGenerateNewBtn && <BigBtn onClick={() => generateRandomCoordinates(position, radius)}>Generate new</BigBtn>}
                 </div>
             </div>
         </div>
