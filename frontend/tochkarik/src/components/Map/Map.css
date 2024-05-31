@@ -47,4 +47,21 @@
 .slider {
     margin: 10px 0;
 }
+.controls-container input, input[type="range"]::-moz-range-progress, input[type="range"]::-ms-fill-lower {
+    color: #6B85D8;
+    background-color: #6B85D8;
+}
+
+
+.manual-location-form {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+.manual-location-form input {
+    color: white;
+    width: 90%;
+    padding: 10px 5px;
+}
 

@@ -5,6 +5,8 @@ import BigBtn from "../buttons/Button.jsx";"../buttons/Button.jsx"
 
 import "leaflet/dist/leaflet.css";
 import "./Map.css";
+import "../InputField/InputField.css"
+
 
 import axios from 'axios'
 
@@ -140,10 +142,10 @@ const MapComponent = () => {
                     </>
                 )}
 
-                <div>
+                {/*<div>*/}
                     {showGenerateBtn && <BigBtn onClick={() => generateRandomCoordinates(position, radius)}>Generate</BigBtn>}
                     {showGenerateNewBtn && <BigBtn onClick={handleGenerateNew}>Generate new</BigBtn>}
-                </div>
+                {/*</div>*/}
 
                 {locationError && (
                     <div className="location-error">
