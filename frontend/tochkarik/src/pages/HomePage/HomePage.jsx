@@ -2,7 +2,7 @@ import React from 'react';
 
 import "./HomePage.css"
 
-import Map from '../../components/Map/Map.jsx';
+import Map from '../../components/MapLocation/geo/MapComponent.jsx';
 import BigBtn from "../../components/buttons/Button.jsx";
 
 
