@@ -13,11 +13,18 @@ const Header = ({user_login}) => {
         navigate('/login'); // Redirect to /login
     };
 
+    const showJoinInButton = location.pathname !== '/login';
+
     return (
         <header className="header">
-            <div className="menu-icon" onClick={() => navigate("/profile")}>
-                ☰
-            </div>
+            {user_login ? (
+                <div className="menu-icon" onClick={() => navigate("/profile")}>
+                    ☰
+                </div>
+            ) : (<></>)
+
+            }
+
             <a className="logo" onClick={() => navigate("/")}>
                 <div className={"logo-image"}><img src={"../../../public/logo.svg"}/></div>
                 Tochkarik
@@ -39,9 +46,9 @@ const Header = ({user_login}) => {
                 ) :
 
                 (
-                    <>
+                    showJoinInButton && (
                         <BigBtn onClick={handleJoinInClick}>Join In</BigBtn>
-                    </>
+                    )
                 )
                 }
             </div>
