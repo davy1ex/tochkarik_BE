@@ -8,7 +8,7 @@ import Header from "../components/Header/Header.jsx";
 function AuthenticatedRoutes({ logoutHandler }) {
     return (
         <>
-            <Header />
+            <Header user_login={true}/>
             <Routes>
                 <Route path="/profile" element={<UserProfile userId={1} logoutHandler={logoutHandler} />} />
                 <Route path="/" element={<HomePage />} />

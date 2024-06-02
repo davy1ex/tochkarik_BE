@@ -4,8 +4,14 @@ import './Header.css';
 
 import coin from '../../../public/coin.svg'
 
-const Header = () => {
+import BigBtn from "../buttons/Button.jsx";
+
+const Header = ({user_login}) => {
     const navigate = useNavigate(); // Use useNavigate for navigation
+
+    const handleJoinInClick = () => {
+        navigate('/login'); // Redirect to /login
+    };
 
     return (
         <header className="header">
@@ -18,15 +24,26 @@ const Header = () => {
             </a>
 
             <div className={"headerContainer"}>
-                <a className="points" onClick={() => alert('Перейти в магазин')}>
-                    300 <span className="icon"> <img src={coin} alt=""/> </span>
-                </a>
-                <a to="/generate" className="icon">
-                    🧭
-                </a>
-                <a to="/posts" className="icon">
-                    🌐
-                </a>
+                {user_login ? (
+                    <>
+                        <a className="points" onClick={() => alert('Перейти в магазин')}>
+                            300 <span className="icon"> <img src={coin} alt=""/> </span>
+                        </a>
+                        <a to="/generate" className="icon">
+                        🧭
+                        </a>
+                        <a to="/posts" className="icon">
+                        🌐
+                        </a>
+                    </>
+                ) :
+
+                (
+                    <>
+                        <BigBtn onClick={handleJoinInClick}>Join In</BigBtn>
+                    </>
+                )
+                }
             </div>
 
         </header>
