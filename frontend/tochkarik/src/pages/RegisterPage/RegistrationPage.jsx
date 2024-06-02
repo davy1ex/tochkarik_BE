@@ -22,7 +22,7 @@ const RegistrationPage = ({  }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:50000/api/auth/signup', {
+            const response = await axios.post(`${apiUrl}/api/auth/signup`, {
                 username,
                 password,
             });

@@ -12,10 +12,12 @@ const LoginPage = ({ setAuthToken }) => {
     const [error, setError] = useState('');
     const navigate = useNavigate(); // Use useNavigate for navigation
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:50000/api/auth/signin', {
+            const response = await axios.post(`${apiUrl}/api/auth/signin`, {
                 username,
                 password,
             });
