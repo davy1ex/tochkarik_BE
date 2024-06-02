@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import '../../../components/InputField/InputField.css'
+import BigBtn from "../../buttons/Button.jsx";
+
 const ManualLocationInput = ({ setPosition, setError }) => {
     const [manualLocation, setManualLocation] = useState('');
     const [locationSuggestions, setLocationSuggestions] = useState([]);
@@ -54,7 +57,7 @@ const ManualLocationInput = ({ setPosition, setError }) => {
                 placeholder="Enter city name"
                 className="manual-location-input"
             />
-            <button onClick={handleManualLocationSubmit}>Set Location</button>
+            <BigBtn onClick={handleManualLocationSubmit}>Set Location</BigBtn>
             {locationSuggestions.length > 0 && (
                 <ul className="suggestions-list">
                     {locationSuggestions.map((suggestion, index) => (

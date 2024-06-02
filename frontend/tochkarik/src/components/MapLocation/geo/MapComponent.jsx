@@ -10,6 +10,8 @@ import ErrorMessage from '../ErrorMessage.jsx';
 import useGeoLocation from './useGeoLocation.jsx';
 import useRandomCoordinates from './useRandomCoordinates.jsx';
 
+import BigBtn from "../../buttons/Button.jsx";
+
 const MapComponent = () => {
     const [position, setPosition] = useState([53.242, 50.221]);
     const [radius, setRadius] = useState(1000);
@@ -46,6 +48,13 @@ const MapComponent = () => {
             setError('Position not determined. Please enter your location manually.');
         }
     };
+    const handleGenerateNew = () => {
+        setMarkerPosition(null);
+        setShowCircle(true);
+        setShowGenerateBtn(true);
+        setShowGenerateNewBtn(false);
+        setShowSlider(true);
+    };
 
     const UpdateMapPosition = ({ position }) => {
         const map = useMap();
@@ -73,8 +82,8 @@ const MapComponent = () => {
             <div className="controls-container">
                 <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange} />
                 <div>
-                    {showGenerateBtn && <button onClick={handleGenerate}>Generate</button>}
-                    {showGenerateNewBtn && <button onClick={handleGenerate}>Generate new</button>}
+                    {showGenerateBtn && <BigBtn onClick={handleGenerate}>Generate</BigBtn>}
+                    {showGenerateNewBtn && <BigBtn onClick={handleGenerateNew}>Generate new</BigBtn>}
                 </div>
                 {error && <ErrorMessage message={error} />}
                 <ManualLocationInput
