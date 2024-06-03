@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import '../../../components/InputField/InputField.css'
-import BigBtn from "../../buttons/Button.jsx";
+import '../../../InputField/InputField.css'
+import BigBtn from "../../../buttons/Button.jsx";
+
+import './ManualLocation.css'
 
 const ManualLocationInput = ({ setPosition, setError }) => {
     const [manualLocation, setManualLocation] = useState('');
@@ -13,7 +15,9 @@ const ManualLocationInput = ({ setPosition, setError }) => {
         if (event.target.value.length > 2) {
             try {
                 const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`);
-                setLocationSuggestions(response.data);
+                const limitedSuggestions = response.data.slice(0, 3); // Обрезаем массив до 3 предложений
+                setLocationSuggestions(limitedSuggestions);
+
             } catch (error) {
                 console.error('Error fetching location suggestions:', error);
             }
@@ -50,23 +54,28 @@ const ManualLocationInput = ({ setPosition, setError }) => {
 
     return (
         <div className="manual-location">
-            <input
-                type="text"
-                value={manualLocation}
-                onChange={handleManualLocationChange}
-                placeholder="Enter city name"
-                className="manual-location-input"
-            />
-            <BigBtn onClick={handleManualLocationSubmit}>Set Location</BigBtn>
-            {locationSuggestions.length > 0 && (
-                <ul className="suggestions-list">
-                    {locationSuggestions.map((suggestion, index) => (
-                        <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                            {suggestion.display_name}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <div className={"manual-location-control"}>
+                <input
+                    type="text"
+                    value={manualLocation}
+                    onChange={handleManualLocationChange}
+                    placeholder="Enter city name"
+                    className="manual-location-input"
+                />
+                <BigBtn onClick={handleManualLocationSubmit}>Set Location</BigBtn>
+            </div>
+
+            <div className={"search-suggestion-container"}>
+                {locationSuggestions.length > 0 && (
+                    <ul className="suggestions-list">
+                        {locationSuggestions.map((suggestion, index) => (
+                            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                {suggestion.display_name}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 };

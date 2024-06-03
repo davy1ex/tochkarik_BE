@@ -1,0 +1,23 @@
+.manual-location {
+    width: 100%;
+    margin-top: 10px;
+}
+.manual-location-control {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+}
+
+.manual-location input {
+    margin: auto;
+    padding: 10px 5px;
+    margin-right: 10px;
+}
+
+.search-suggestion-container li {
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+
+    margin-top: 10px;
+}

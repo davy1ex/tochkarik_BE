@@ -3,9 +3,9 @@ import { MapContainer, TileLayer, Circle, Marker, useMap } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import "./Map.css";
 
-import RadiusSlider from '../RadiusSlider.jsx';
-import ManualLocationInput from './ManualLocationInput.jsx';
-import ErrorMessage from '../ErrorMessage.jsx';
+import RadiusSlider from '../Slider/RadiusSlider.jsx';
+import ManualLocationInput from './ManualLocation/ManualLocationInput.jsx';
+import ErrorMessage from '../ErrorMessage/ErrorMessage.jsx';
 
 import useGeoLocation from './useGeoLocation.jsx';
 import useRandomCoordinates from './useRandomCoordinates.jsx';
@@ -79,13 +79,14 @@ const MapComponent = () => {
                 {showCircle && position && <Circle center={position} radius={radius} />}
                 {markerPosition && <Marker position={markerPosition} />}
             </MapContainer>
+
             <div className="controls-container">
                 <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange} />
-                <div>
-                    {showGenerateBtn && <BigBtn onClick={handleGenerate}>Generate</BigBtn>}
-                    {showGenerateNewBtn && <BigBtn onClick={handleGenerateNew}>Generate new</BigBtn>}
-                </div>
+                {showGenerateBtn && <BigBtn onClick={handleGenerate}>Generate</BigBtn>}
+                {showGenerateNewBtn && <BigBtn onClick={handleGenerateNew}>Generate new</BigBtn>}
+
                 {error && <ErrorMessage message={error} />}
+
                 <ManualLocationInput
                     setPosition={setPosition}
                     setError={setError}

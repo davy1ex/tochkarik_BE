@@ -1,7 +1,10 @@
 import React from 'react';
 
+import './Slider.css'
+
+
 const RadiusSlider = ({ radius, handleRadiusChange }) => (
-    <div>
+    <div className={"slider-container"}>
         <input
             type="range"
             min="100"
@@ -10,9 +13,8 @@ const RadiusSlider = ({ radius, handleRadiusChange }) => (
             onChange={handleRadiusChange}
             className="slider"
         />
-        <div>
-            <span>{radius} meters</span>
-        </div>
+
+        <span>{radius} meters</span>
     </div>
 );
 

@@ -3,6 +3,8 @@ import {Link, Navigate, useNavigate} from 'react-router-dom';
 import './Header.css';
 
 import coin from '../../../public/coin.svg'
+import explore from '../../../public/explore.svg'
+import browse from '../../../public/browse.svg'
 
 import BigBtn from "../buttons/Button.jsx";
 
@@ -37,10 +39,10 @@ const Header = ({user_login}) => {
                             300 <span className="icon"> <img src={coin} alt=""/> </span>
                         </a>
                         <a to="/generate" className="icon">
-                        🧭
+                            <img src={explore} />
                         </a>
                         <a to="/posts" className="icon">
-                        🌐
+                            <img src={browse}/>
                         </a>
                     </>
                 ) :
