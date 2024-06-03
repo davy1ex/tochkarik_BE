@@ -1,16 +1,27 @@
 import React from 'react';
 import AuthenticatedRoutes from './AuthenticatedRoutes';
 import UnauthenticatedRoutes from './UnauthenticatedRoutes';
+import {Navigate, Route, Routes} from "react-router-dom";
+
+import Error401 from '../pages/Errors/Error401.jsx'
+import Error404 from '../pages/Errors/Error404.jsx'
+import Error501 from '../pages/Errors/Error501.jsx'
+import Error502 from '../pages/Errors/Error502.jsx'
 
 function AppRoutes({ isAuthenticated, setAuthToken, handleLogout }) {
     return (
-        <>
+        <Routes>
             {isAuthenticated ? (
-                <AuthenticatedRoutes logoutHandler={handleLogout} />
+                <Route path="*" element={<AuthenticatedRoutes logoutHandler={handleLogout} />} />
             ) : (
-                <UnauthenticatedRoutes setAuthToken={setAuthToken} />
+                <Route path="*" element={<UnauthenticatedRoutes setAuthToken={setAuthToken} />} />
             )}
-        </>
+            <Route path="/401" element={<Error401 />} />
+            <Route path="/404" element={<Error404 />} />
+            <Route path="/501" element={<Error501 />} />
+            <Route path="/502" element={<Error502 />} />
+            <Route path="*" element={<Navigate to="/404" />} />
+        </Routes>
     );
 }
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
+import axiosInstance from '../../hooks/axiosConfig';
+
 
 import '../../components/InputField/InputField.css'
 import "./LoginPage.css"
@@ -12,13 +14,11 @@ const LoginPage = ({ setAuthToken }) => {
     const [error, setError] = useState('');
     const navigate = useNavigate(); // Use useNavigate for navigation
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post(`${apiUrl}/api/auth/signin`, {
+            const response = await axiosInstance.post('/auth/signin', {
                 username,
                 password,
             });
