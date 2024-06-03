@@ -14,6 +14,8 @@ body {
     padding: 0 10px;
 }
 
+
+
 .headerContainer {
     display: flex;
 }
@@ -24,10 +26,19 @@ body {
 }
 
 .logo {
+    display: flex;
+    flex-direction: row;
     font-size: 24px;
     font-weight: bold;
     color: #fff;
     text-decoration: none;
+
+    margin: auto;
+}
+
+.header .logo img {
+    width: 25px;
+    padding-right: 10px;
 }
 
 .points {
@@ -56,4 +67,17 @@ body {
 
 a {
     color: white !important;
+}
+
+
+
+header .bigBtn {
+    background: white !important;
+    color: black !important;
+
+    padding: 5px 15px;
+    height: 20px;
+
+    line-height: 10px;
+    font-size: 15px;
 }

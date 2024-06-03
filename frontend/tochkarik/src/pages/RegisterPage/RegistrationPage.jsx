@@ -13,6 +13,8 @@ const RegistrationPage = ({  }) => {
     const navigate = useNavigate();
     const [error, setError] = useState('');
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -22,15 +24,23 @@ const RegistrationPage = ({  }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:50000/api/auth/signup', {
+            const response = await axios.post(`${apiUrl}/api/auth/signup`, {
                 username,
                 password,
             });
             navigate('/login');
         }
         catch (error) {
-            console.log(error.response)
-            setError('Registration failed: ' + (error.response.statusText))
+            if (error.response) {
+                console.error('Error response:', error.response);
+                setError(`Error: ${error.response.statusText}`);
+            } else if (error.request) {
+                console.error('Error request:', error.request);
+                setError('No response received from server.');
+            } else {
+                console.error('Error message:', error.message);
+                setError(`Error: ${error.message}`);
+            }
         }
     }
 

@@ -1,0 +1,60 @@
+.map-wrapper {
+    width: 100%;
+    height: 70vh;
+}
+
+
+.map-container {
+    width: 100%;
+    background: black;
+}
+
+.leaflet-control-container{
+    display: none;
+
+}
+.leaflet-bottom {
+    display: none;
+}
+
+.leaflet-container {
+    height: 70vh;
+    /*background: white;*/
+    color: white;
+    position: relative;
+
+}
+
+
+
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.slider {
+    margin: 10px 0;
+}
+.controls-container input, input[type="range"]::-moz-range-progress, input[type="range"]::-ms-fill-lower {
+    color: #6B85D8;
+    background-color: #6B85D8;
+}
+
+
+.manual-location-form {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+.manual-location input {
+    color: white;
+    width: 90%;
+    padding: 10px 5px;
+}
+
+.manual-location {
+    background: black;
+}

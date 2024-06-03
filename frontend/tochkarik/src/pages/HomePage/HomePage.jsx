@@ -1,19 +1,15 @@
-// src/pages/HomePage.js
 import React from 'react';
 
 import "./HomePage.css"
 
-import sonic from '../../../public/sonic.gif'
-import logo from '../../assets/logo.svg'
-
+import Map from '../../components/MapLocation/geo/MapComponent.jsx';
+import BigBtn from "../../components/buttons/Button.jsx";
 
 
 const HomePage = () => {
-
     return (
         <div className={"home-container"}>
-            <h3>Welcome to NothingWorked App</h3>
-            <img src={logo} width={'300px'}  alt=""/>
+            <Map/>
         </div>
     );
 };
