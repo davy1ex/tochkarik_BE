@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Navigate, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import './Header.css';
 
 import coin from '../../../public/coin.svg'
@@ -28,8 +28,8 @@ const Header = ({user_login}) => {
             }
 
             <a className="logo" onClick={() => navigate("/")}>
-                <div className={"logo-image"}><img src={"../../../public/logo.svg"}/></div>
-                Tochkarik
+                <div className={"logo-image"}><img alt={"icon logo"} src={"../../../public/logo.svg"}/></div>
+                TochKarik
             </a>
 
             <div className={"headerContainer"}>
@@ -39,10 +39,10 @@ const Header = ({user_login}) => {
                             300 <span className="icon"> <img src={coin} alt=""/> </span>
                         </a>
                         <a to="/generate" className="icon">
-                            <img src={explore} />
+                            <img alt={"icon explore"} src={explore} />
                         </a>
                         <a to="/posts" className="icon">
-                            <img src={browse}/>
+                            <img alt={"icon browse posts"} src={browse}/>
                         </a>
                     </>
                 ) :

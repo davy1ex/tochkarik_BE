@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 import '../../components/InputField/InputField.css'
 import "./LoginPage.css"
+
 
 const LoginPage = ({ setAuthToken }) => {
     const [username, setUsername] = useState('');
@@ -16,6 +16,7 @@ const LoginPage = ({ setAuthToken }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         try {
             const response = await axios.post(`${apiUrl}/api/auth/signin`, {
                 username,
@@ -26,7 +27,6 @@ const LoginPage = ({ setAuthToken }) => {
             localStorage.setItem('token', token);
 
             setAuthToken(token);
-
             navigate('/'); // Redirect user after successful login
         } catch (error) {
 
@@ -37,6 +37,7 @@ const LoginPage = ({ setAuthToken }) => {
     return (
         <div className={"login-container"}>
             <h2>Login</h2>
+
             <form onSubmit={handleSubmit}>
                 <div className={"login-container-item"}>
                     <label>Username:</label>
@@ -56,8 +57,8 @@ const LoginPage = ({ setAuthToken }) => {
                         required
                     />
                 </div>
-                <button type="submit">Login</button>
 
+                <button type="submit">Login</button>
                 <a href="/reg">Sign Up</a>
 
                 {error && <p>{error}</p>}

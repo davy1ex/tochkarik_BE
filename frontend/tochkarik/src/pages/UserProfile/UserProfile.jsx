@@ -15,7 +15,6 @@ const UserProfile = ({ userId, logoutHandler }) => {
         const apiUrl = import.meta.env.VITE_API_URL;
         const token = localStorage.getItem('token');
         const url = `${apiUrl}/api/user/${userId}`;
-        console.log('Token retrieved from localStorage:', token);
 
         axios.get(url, {
             headers: {
@@ -34,7 +33,6 @@ const UserProfile = ({ userId, logoutHandler }) => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading user data: {error}</p>;
-
 
 
     return (
@@ -56,9 +54,6 @@ const UserProfile = ({ userId, logoutHandler }) => {
                     <BigBtn>My bookmarks</BigBtn>
 
                     <BigBtn onClick={logoutHandler}>Logout</BigBtn>
-
-                </div>
-                <div>
                 </div>
             </div>
         </div>

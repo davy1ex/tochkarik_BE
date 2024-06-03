@@ -18,6 +18,7 @@ const MapComponent = () => {
 
     const [markerPosition, setMarkerPosition] = useState(null);
     const [showCircle, setShowCircle] = useState(true);
+    const [showSlider, setShowSlider] = useState(true);
 
     const [showGenerateBtn, setShowGenerateBtn] = useState(true);
     const [showGenerateNewBtn, setShowGenerateNewBtn] = useState(false);
@@ -44,6 +45,8 @@ const MapComponent = () => {
             setShowCircle(false);
             setShowGenerateBtn(false);
             setShowGenerateNewBtn(true);
+            setShowSlider(false);
+
         } else {
             setError('Position not determined. Please enter your location manually.');
         }
@@ -81,7 +84,8 @@ const MapComponent = () => {
             </MapContainer>
 
             <div className="controls-container">
-                <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange} />
+                {showSlider && <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange} />}
+
                 {showGenerateBtn && <BigBtn onClick={handleGenerate}>Generate</BigBtn>}
                 {showGenerateNewBtn && <BigBtn onClick={handleGenerateNew}>Generate new</BigBtn>}
 

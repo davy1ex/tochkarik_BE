@@ -12,6 +12,7 @@ const ManualLocationInput = ({ setPosition, setError }) => {
 
     const handleManualLocationChange = async (event) => {
         setManualLocation(event.target.value);
+
         if (event.target.value.length > 2) {
             try {
                 const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`);
@@ -31,8 +32,6 @@ const ManualLocationInput = ({ setPosition, setError }) => {
         setLocationSuggestions([]);
         setManualLocation('');
         setError('');
-
-        console.log([parseFloat(suggestion.lat), parseFloat(suggestion.lon)])
     };
 
     const handleManualLocationSubmit = async () => {

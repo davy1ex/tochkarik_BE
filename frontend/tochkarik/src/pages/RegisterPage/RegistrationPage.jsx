@@ -32,15 +32,12 @@ const RegistrationPage = ({  }) => {
         }
         catch (error) {
             if (error.response) {
-                // Сервер ответил с кодом состояния, который выходит за пределы 2xx
                 console.error('Error response:', error.response);
                 setError(`Error: ${error.response.statusText}`);
             } else if (error.request) {
-                // Запрос был сделан, но ответа не получено
                 console.error('Error request:', error.request);
                 setError('No response received from server.');
             } else {
-                // Что-то пошло не так при настройке запроса
                 console.error('Error message:', error.message);
                 setError(`Error: ${error.message}`);
             }
