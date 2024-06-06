@@ -1,5 +1,5 @@
 const useRandomCoordinates = () => {
-    const generateRandomCoordinates = (center, radius) => {
+    const generateRandomCoordinates = (center: [number, number], radius: number): [number, number] => {
         const randomAngle = Math.random() * 2 * Math.PI;
         const randomRadius = Math.random() * radius;
 

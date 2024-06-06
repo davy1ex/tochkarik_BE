@@ -1,21 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, FC, FormEvent, ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-import '../../components/InputField/InputField.css'
-import './RegisterPage.css'
+import '../../components/InputField/InputField.css';
+import './RegisterPage.css';
 
-const RegistrationPage = ({  }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [password_repeat, setPasswordRepeat] = useState('');
+interface RegistrationPageProps {
+    setAuthToken: (token: string | null) => void;
+}
+
+const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [password_repeat, setPasswordRepeat] = useState<string>('');
+    const [error, setError] = useState<string>('');
 
     const navigate = useNavigate();
-    const [error, setError] = useState('');
 
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (password !== password_repeat) {
@@ -29,8 +33,7 @@ const RegistrationPage = ({  }) => {
                 password,
             });
             navigate('/login');
-        }
-        catch (error) {
+        } catch (error: any) {
             if (error.response) {
                 console.error('Error response:', error.response);
                 setError(`Error: ${error.response.statusText}`);
@@ -42,29 +45,41 @@ const RegistrationPage = ({  }) => {
                 setError(`Error: ${error.message}`);
             }
         }
-    }
+    };
+
+    const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setUsername(e.target.value);
+    };
+
+    const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
+    };
+
+    const handlePasswordRepeatChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPasswordRepeat(e.target.value);
+    };
 
     return (
-        <div className={"register-container"}>
+        <div className="register-container">
             <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
-                <div className={"register-container-item"}>
+                <div className="register-container-item">
                     <label>Login</label>
                     <input
                         type="text"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={handleUsernameChange}
                         required
                         placeholder="Login"
                     />
                 </div>
 
-                <div className={"register-container-item"}>
+                <div className="register-container-item">
                     <label>Password</label>
                     <input
                         type="password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handlePasswordChange}
                         required
                         placeholder="Password"
                     />
@@ -72,20 +87,18 @@ const RegistrationPage = ({  }) => {
                     <input
                         type="password"
                         value={password_repeat}
-                        onChange={(e) => setPasswordRepeat(e.target.value)}
+                        onChange={handlePasswordRepeatChange}
                         required
                         placeholder="Repeat password"
                     />
                 </div>
-                    <button type="submit">Sign Up</button>
-                    <a href="/login">Sign In</a>
+                <button type="submit">Sign Up</button>
+                <a href="/login">Sign In</a>
 
-
-                    {error && <p>{error}</p>}
+                {error && <p>{error}</p>}
             </form>
         </div>
-)
-}
+    );
+};
 
-
-export default RegistrationPage
+export default RegistrationPage;

@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
-import setAuthToken from './api.token.js';
+import setAuthToken from './api.token';
 
-function useAuth() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+interface UseAuth {
+    isAuthenticated: boolean;
+    setAuthToken: (token: string | null) => void;
+    handleLogout: () => void;
+}
+
+function useAuth(): UseAuth {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -12,12 +18,12 @@ function useAuth() {
         }
     }, []);
 
-    const handleSetAuthToken = (token) => {
+    const handleSetAuthToken = (token: string | null): void => {
         setAuthToken(token);
         setIsAuthenticated(!!token);
     };
 
-    const handleLogout = () => {
+    const handleLogout = (): void => {
         localStorage.removeItem('token');
         setAuthToken(null);
         setIsAuthenticated(false);
