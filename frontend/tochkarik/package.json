@@ -7,15 +7,21 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.18",
+    "@types/leaflet": "^1.9.12",
+    "@types/node": "^20.14.2",
+    "@types/react-leaflet": "^3.0.0",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "exit": "^0.1.2",
     "history": "^5.3.0",
     "leaflet": "^1.9.4",
     "mobx": "^6.12.3",
@@ -25,11 +31,12 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.23.1",
     "react-validation": "^3.0.7",
+    "typescript": "^5.4.5",
     "validator": "^13.12.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",

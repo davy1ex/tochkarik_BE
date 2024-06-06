@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 
-import '../../../InputField/InputField.css'
-import BigBtn from "../../../buttons/Button.jsx";
+import '../../../components/InputField/InputField.css';
+import BigBtn from '../../../components/buttons/Button';
 
-import './ManualLocation.css'
+import './ManualLocationInput.css';
 
-const ManualLocationInput = ({ setPosition, setError }) => {
-    const [manualLocation, setManualLocation] = useState('');
-    const [locationSuggestions, setLocationSuggestions] = useState([]);
+interface ManualLocationInputProps {
+    setPosition: (position: [number, number]) => void;
+    setError: (error: string) => void;
+}
 
-    const handleManualLocationChange = async (event) => {
+const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError }) => {
+    const [manualLocation, setManualLocation] = useState<string>('');
+    const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
+
+    const handleManualLocationChange = async (event: ChangeEvent<HTMLInputElement>) => {
         setManualLocation(event.target.value);
 
         if (event.target.value.length > 2) {
             try {
                 const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`);
-                const limitedSuggestions = response.data.slice(0, 3); // Обрезаем массив до 3 предложений
+                const limitedSuggestions = response.data.slice(0, 3);
                 setLocationSuggestions(limitedSuggestions);
-
             } catch (error) {
                 console.error('Error fetching location suggestions:', error);
             }
@@ -27,8 +31,8 @@ const ManualLocationInput = ({ setPosition, setError }) => {
         }
     };
 
-    const handleSuggestionClick = (suggestion) => {
-        setPosition([parseFloat(suggestion.lat), parseFloat(suggestion.lon)]);  // Парсинг значений lat и lon
+    const handleSuggestionClick = (suggestion: any) => {
+        setPosition([parseFloat(suggestion.lat), parseFloat(suggestion.lon)]);
         setLocationSuggestions([]);
         setManualLocation('');
         setError('');
@@ -39,7 +43,7 @@ const ManualLocationInput = ({ setPosition, setError }) => {
             try {
                 const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${manualLocation}`);
                 if (response.data.length > 0) {
-                    setPosition([parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]);  // Парсинг значений lat и lon
+                    setPosition([parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]);
                     setError('');
                 } else {
                     setError('Location not found. Please try another city.');
@@ -53,7 +57,7 @@ const ManualLocationInput = ({ setPosition, setError }) => {
 
     return (
         <div className="manual-location">
-            <div className={"manual-location-control"}>
+            <div className="manual-location-control">
                 <input
                     type="text"
                     value={manualLocation}
@@ -63,8 +67,7 @@ const ManualLocationInput = ({ setPosition, setError }) => {
                 />
                 <BigBtn onClick={handleManualLocationSubmit}>Set Location</BigBtn>
             </div>
-
-            <div className={"search-suggestion-container"}>
+            <div className="search-suggestion-container">
                 {locationSuggestions.length > 0 && (
                     <ul className="suggestions-list">
                         {locationSuggestions.map((suggestion, index) => (

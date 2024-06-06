@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-const useGeoLocation = (setError) => {
-    const [position, setPosition] = useState([53.242, 50.221]);
+const useGeoLocation = (setError: (error: string) => void): [number, number] | null => {
+    const [position, setPosition] = useState<[number, number] | null>(null);
 
     useEffect(() => {
         if (navigator.geolocation) {

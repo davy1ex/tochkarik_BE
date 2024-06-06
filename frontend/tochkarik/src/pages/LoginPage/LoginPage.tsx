@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, FC, FormEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axiosInstance from '../../hooks/axiosConfig';
 
+import '../../components/InputField/InputField.css';
+import "./LoginPage.css";
 
-import '../../components/InputField/InputField.css'
-import "./LoginPage.css"
+interface LoginPageProps {
+    setAuthToken: (token: string | null) => void;
+}
 
+const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const navigate = useNavigate();
 
-const LoginPage = ({ setAuthToken }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate(); // Use useNavigate for navigation
-
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
@@ -27,33 +29,40 @@ const LoginPage = ({ setAuthToken }) => {
             localStorage.setItem('token', token);
 
             setAuthToken(token);
-            navigate('/'); // Redirect user after successful login
+            navigate('/');
         } catch (error) {
-
             setError('Invalid credentials ' + error);
         }
     };
 
+    const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setUsername(e.target.value);
+    };
+
+    const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
+    };
+
     return (
-        <div className={"login-container"}>
+        <div className="login-container">
             <h2>Login</h2>
 
             <form onSubmit={handleSubmit}>
-                <div className={"login-container-item"}>
+                <div className="login-container-item">
                     <label>Username:</label>
                     <input
                         type="text"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={handleUsernameChange}
                         required
                     />
                 </div>
-                <div className={"login-container-item"}>
+                <div className="login-container-item">
                     <label>Password:</label>
                     <input
                         type="password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handlePasswordChange}
                         required
                     />
                 </div>

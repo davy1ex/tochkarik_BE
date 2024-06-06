@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Circle, Marker, useMap } from 'react-leaflet';
+
 import "leaflet/dist/leaflet.css";
+
 import "./Map.css";
 
-import RadiusSlider from '../Slider/RadiusSlider.jsx';
-import ManualLocationInput from './ManualLocation/ManualLocationInput.jsx';
-import ErrorMessage from '../ErrorMessage/ErrorMessage.jsx';
+import RadiusSlider from './Slider/RadiusSlider';
+import ManualLocationInput from './ManualLocation/ManualLocationInput';
+import ErrorMessage from './ErrorMessage/ErrorMessage';
 
-import useGeoLocation from './useGeoLocation.jsx';
-import useRandomCoordinates from './useRandomCoordinates.jsx';
+import useGeoLocation from './hooks/useGeoLocation';
+import useRandomCoordinates from './hooks/useRandomCoordinates';
 
-import BigBtn from "../../buttons/Button.jsx";
+import BigBtn from '../buttons/Button';
 
-const MapComponent = () => {
-    const [position, setPosition] = useState([53.242, 50.221]);
-    const [radius, setRadius] = useState(1000);
-
-    const [markerPosition, setMarkerPosition] = useState(null);
-    const [showCircle, setShowCircle] = useState(true);
-    const [showSlider, setShowSlider] = useState(true);
-
-    const [showGenerateBtn, setShowGenerateBtn] = useState(true);
-    const [showGenerateNewBtn, setShowGenerateNewBtn] = useState(false);
-
-    const [error, setError] = useState('');
+const MapComponent: React.FC = () => {
+    const [position, setPosition] = useState<[number, number]>([53.242, 50.221]);
+    const [radius, setRadius] = useState<number>(1000);
+    const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
+    const [showCircle, setShowCircle] = useState<boolean>(true);
+    const [showSlider, setShowSlider] = useState<boolean>(true);
+    const [showGenerateBtn, setShowGenerateBtn] = useState<boolean>(true);
+    const [showGenerateNewBtn, setShowGenerateNewBtn] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
 
     const geoLocation = useGeoLocation(setError);
     const generateRandomCoordinates = useRandomCoordinates();
@@ -34,8 +33,8 @@ const MapComponent = () => {
         }
     }, [geoLocation]);
 
-    const handleRadiusChange = (event) => {
-        setRadius(event.target.value);
+    const handleRadiusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRadius(Number(event.target.value));
     };
 
     const handleGenerate = () => {
@@ -46,11 +45,11 @@ const MapComponent = () => {
             setShowGenerateBtn(false);
             setShowGenerateNewBtn(true);
             setShowSlider(false);
-
         } else {
             setError('Position not determined. Please enter your location manually.');
         }
     };
+
     const handleGenerateNew = () => {
         setMarkerPosition(null);
         setShowCircle(true);
@@ -59,7 +58,7 @@ const MapComponent = () => {
         setShowSlider(true);
     };
 
-    const UpdateMapPosition = ({ position }) => {
+    const UpdateMapPosition: React.FC<{ position: [number, number] }> = ({ position }) => {
         const map = useMap();
 
         useEffect(() => {
@@ -85,16 +84,10 @@ const MapComponent = () => {
 
             <div className="controls-container">
                 {showSlider && <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange} />}
-
                 {showGenerateBtn && <BigBtn onClick={handleGenerate}>Generate</BigBtn>}
                 {showGenerateNewBtn && <BigBtn onClick={handleGenerateNew}>Generate new</BigBtn>}
-
                 {error && <ErrorMessage message={error} />}
-
-                <ManualLocationInput
-                    setPosition={setPosition}
-                    setError={setError}
-                />
+                <ManualLocationInput setPosition={setPosition} setError={setError} />
             </div>
         </div>
     );
