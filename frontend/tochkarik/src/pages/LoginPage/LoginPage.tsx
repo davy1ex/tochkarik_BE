@@ -18,10 +18,9 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const apiUrl = import.meta.env.VITE_API_URL;
 
         try {
-            const response = await axiosInstance.post(`${apiUrl}//auth/signin`, {
+            const response = await axiosInstance.post(`/auth/signin`, {
                 username,
                 password,
             });
@@ -30,6 +29,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
             localStorage.setItem('token', token);
 
             setAuthToken(token);
+
             navigate('/');
         } catch (error: 404) {
             setError(error.response?.data?.message || 'Incorrect login data');
