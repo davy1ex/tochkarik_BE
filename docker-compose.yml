@@ -30,8 +30,7 @@ services:
       context: .
       dockerfile: ./docker/postgres/Dockerfile
     volumes:
-      - ./backend/postgres_data:/var/lib/postgresql/data
-
+      - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -47,4 +46,9 @@ services:
       - ./frontend/tochkarik:/frontend
     ports:
       - "5173:5173"
+    environment:
+      - NODE_ENV=development
     command: npm run dev
+
+volumes:
+  postgres_data:
