@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
 import '../Style.css';
@@ -20,6 +21,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const navigate = useNavigate();
+    const redirect = (path: string) => {
+        navigate(path);
+    };
+
 
     useEffect(() => {
         const apiUrl = import.meta.env.VITE_API_URL;
@@ -60,7 +67,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                 <div className="container-buttons">
                     <BigBtn>Edit profile</BigBtn>
                     <BigBtn>My posts</BigBtn>
-                    <BigBtn>My bookmarks</BigBtn>
+                    <BigBtn onClick={() => redirect('/bookmarks')}>My bookmarks</BigBtn>
                     <BigBtn onClick={logoutHandler}>Logout</BigBtn>
                 </div>
             </div>

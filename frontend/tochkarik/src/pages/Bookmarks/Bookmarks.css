@@ -1,0 +1,21 @@
+.bookmarks-container {
+    display: flex;
+    width: 95%;
+    margin: auto;
+
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+
+.bookmarks-item {
+    display: flex;
+    justify-content: space-between;
+
+    background: #353535;
+    margin: 10px 0;
+
+    padding: 10px 30px;
+    border-radius: 5px;
+}
