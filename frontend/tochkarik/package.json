@@ -18,6 +18,7 @@
     "@types/node": "^20.14.2",
     "@types/react-leaflet": "^3.0.0",
     "@types/react-router-dom": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^7.12.0",
     "axios": "^1.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -42,6 +43,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }
