@@ -1,7 +1,7 @@
 import React, { useState, FC, FormEvent, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import {useNavigate} from 'react-router-dom';
 import axiosInstance from '../../hooks/axiosConfig';
+
 
 import '../../components/InputField/InputField.css';
 import "./LoginPage.css";
@@ -18,9 +18,10 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const apiUrl = import.meta.env.VITE_API_URL;
 
         try {
-            const response = await axiosInstance.post('/auth/signin', {
+            const response = await axiosInstance.post(`${apiUrl}//auth/signin`, {
                 username,
                 password,
             });
@@ -30,8 +31,8 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
             setAuthToken(token);
             navigate('/');
-        } catch (error) {
-            setError('Invalid credentials ' + error);
+        } catch (error: 404) {
+            setError(error.response?.data?.message || 'Incorrect login data');
         }
     };
 
@@ -67,7 +68,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
                     />
                 </div>
 
-                <button type="submit">Login</button>
+                <button onClick={handleSubmit}>Login</button>
                 <a href="/reg">Sign Up</a>
 
                 {error && <p>{error}</p>}
