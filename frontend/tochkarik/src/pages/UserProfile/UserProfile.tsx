@@ -29,27 +29,26 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
 
 
     useEffect(() => {
-        const apiUrl = import.meta.env.VITE_API_URL;
         const token = localStorage.getItem('token');
-        const url = `${apiUrl}/api/user/${userId}`;
+        if (token) {
+            setAuthToken(token);
+        }
 
-        axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
+        axiosInstance.get(`/user/get_user`, {
+            params: {
+                'user_id': 1,
             }
-        })
-            .then(response => {
-                setUser(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error.response ? error.response.data.message : 'Error fetching user');
-                setLoading(false);
-            });
+        }).then(response => {
+            setUser(response.data);
+            setLoading(false);
+        }).catch(error => {
+            setError(error.response ? error.response.data.message : 'Error fetching user');
+            setLoading(false);
+        });
     }, [userId]);
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading user data: {error}</p>;
+    // if (error) return <p>Error loading user data: {error}</p>;
 
     return (
         <div className="container-user-profile">
