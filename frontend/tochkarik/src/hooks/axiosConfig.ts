@@ -7,6 +7,13 @@ const axiosInstance: AxiosInstance = axios.create({
     baseURL: `${apiUrl}/api`,
 });
 
+const setAuthToken = (token: string | null): void => {
+    if (token) {
+        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+        delete axiosInstance.defaults.headers.common["Authorization"];
+    }
+}
 
 
 axiosInstance.interceptors.response.use(
@@ -32,4 +39,4 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export default axiosInstance;
+export {axiosInstance, setAuthToken};
