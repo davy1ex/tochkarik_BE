@@ -1,11 +1,11 @@
 import React, { useState, FC, FormEvent, ChangeEvent } from 'react';
 import {useNavigate} from 'react-router-dom';
-import axiosInstance from '../../hooks/axiosConfig';
 
 import {axiosInstance} from '../../hooks/axiosConfig';
 
 import '../../components/InputField/InputField.css';
 import "./LoginPage.css";
+
 
 interface LoginPageProps {
     setAuthToken: (token: string | null) => void;
