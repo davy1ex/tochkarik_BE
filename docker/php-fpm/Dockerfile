@@ -47,5 +47,3 @@ WORKDIR /application
 
 
 
-COPY ./php-fpm.conf /usr/local/etc/php-fpm.conf
-COPY ./www.conf /usr/local/etc/php-fpm.d/www.conf
