@@ -1,0 +1,40 @@
+.controls-container-generated {
+    border-radius: 10px 10px 0 0;
+    background: #6b85d8;
+}
+
+.controls-wrapper-generated {
+    width: 90%;
+    margin: 20px auto;
+}
+
+
+
+
+.controls-header-container {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+}
+.controls-header-container img {
+    width: 55px;
+    height: 100%;
+    margin-bottom: 10px;
+}
+.controls-container-generated h1 {
+    font-size: 30px;
+}
+
+
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-container-generated .bigBtn {
+    background: #a2b8ff;
+
+    margin-top: 10px;
+}

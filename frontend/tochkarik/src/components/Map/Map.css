@@ -1,3 +1,10 @@
+.map-component {
+    display: flex;
+    flex-direction: column;
+    background: black;
+    width: 100%;
+}
+
 .map-wrapper {
     width: 100%;
     height: 70vh;
@@ -6,7 +13,6 @@
 
 .map-container {
     width: 100%;
-    background: black;
 }
 
 .leaflet-control-container{
@@ -31,7 +37,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
+    padding-top: 10px;
+
+    width: 100%;
+
+    background: black;
+}
+
+.controls-container-wrapper {
+    width: 90%;
+    margin: 20px auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .slider {
@@ -40,6 +59,10 @@
 .controls-container input, input[type="range"]::-moz-range-progress, input[type="range"]::-ms-fill-lower {
     color: #6B85D8;
     background-color: #6B85D8;
+}
+
+.bigBtn {
+    width: 100%;
 }
 
 
