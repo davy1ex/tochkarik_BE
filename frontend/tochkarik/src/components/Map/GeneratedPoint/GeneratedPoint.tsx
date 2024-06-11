@@ -59,9 +59,9 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
                     <h1 className={"point-title"}>{pointTitle}</h1>
 
                     {isBookmarked ? (
-                        <div> <img src={bookmarked} alt={"Bookmarked"} /></div>
+                        <div className={"controls-header-img-container"}> <img src={bookmarked} alt={"Bookmarked"} /></div>
                     ):(
-                        <div onClick={() => handleAddBookmark(name, timeOfGenerate, coordinates)}><img src={bookmark} alt={"Bookmark"}/></div>
+                        <div className={"controls-header-img-container"} onClick={() => handleAddBookmark(name, timeOfGenerate, coordinates)}><img src={bookmark} alt={"Bookmark"}/></div>
                     )}
                 </div>
 
