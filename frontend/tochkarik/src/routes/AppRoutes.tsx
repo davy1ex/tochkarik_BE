@@ -15,13 +15,17 @@ interface AppRoutesProps {
     handleLogout: () => void;
 }
 
+const Logout: FC<{ handleLogout: () => void }> = ({ handleLogout }) => {
+    handleLogout();
+    return <Navigate to="/login" />;
+};
 
 const AppRoutes: FC <AppRoutesProps> = ({ isAuthenticated, setAuthToken, handleLogout }) => {
     return (
         <Routes>
             {isAuthenticated ? (
-                <Route path="*" element={<AuthenticatedRoutes logoutHandler={handleLogout} />} />
-            ) : (
+                    <Route path="*" element={<AuthenticatedRoutes logoutHandler={handleLogout} />} />
+                ) : (
                 <Route path="*" element={<UnauthenticatedRoutes setAuthToken={setAuthToken} />} />
             )}
             <Route path="/401" element={<Error401 />} />
@@ -29,6 +33,7 @@ const AppRoutes: FC <AppRoutesProps> = ({ isAuthenticated, setAuthToken, handleL
             <Route path="/501" element={<Error501 />} />
             <Route path="/502" element={<Error502 />} />
             <Route path="*" element={<Navigate to="/404" />} />
+            <Route path="/logout" element={<Logout handleLogout={handleLogout} />} />
         </Routes>
     );
 }
