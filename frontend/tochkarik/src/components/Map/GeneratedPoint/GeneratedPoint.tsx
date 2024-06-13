@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import BigBtn from '../../buttons/Button';
-import AddPoint from '../AddPoint/AddPoint'
+import AddPoint from '../AddPoint/AddPoint';
 
-import bookmark from '../../../icons/bookmark.svg'
-import bookmarked from '../../../icons/bookmarked.svg'
+import bookmark from '../../../icons/bookmark.svg';
+import bookmarked from '../../../icons/bookmarked.svg';
+
 import "./GeneratedPoint.css";
-
+import '../Map.css';
 
 
 interface GeneratedPointProps {
@@ -26,26 +27,25 @@ interface GeneratedPointProps {
 }
 
 const GeneratedPoint: React.FC<GeneratedPointProps> = ({
-    street,
-    pointTitle,
-    isNew,
-    hasReport,
-    onCancel,
-    onStartJourney,
-    onCreateReport,
-    onEditReport,
+   street,
+   pointTitle,
+   isNew,
+   hasReport,
+   onCancel,
+   onStartJourney,
+   onCreateReport,
+   onEditReport,
 
-    coordinates,
-    timeOfGenerate,
+   coordinates,
+   timeOfGenerate,
 
 }) => {
-    const [isBookmarked, setIsBookmarked] = useState<boolean>(false)
+    const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
     const [showAddPointDialog, setShowAddPointDialog] = useState<boolean>(false);
 
     const handleAddBookmark = () => {
         setShowAddPointDialog(true);
         setIsBookmarked(true);
-
     };
 
     const addButtonCancelHandler = () => {
@@ -58,10 +58,13 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
                 <div className={"controls-header-container"}>
                     <h1 className={"point-title"}>{pointTitle}</h1>
 
-                    {isBookmarked ? (
-                        <div className={"controls-header-img-container"}> <img src={bookmarked} alt={"Bookmarked"} /></div>
-                    ):(
-                        <div className={"controls-header-img-container"} onClick={() => handleAddBookmark(name, timeOfGenerate, coordinates)}><img src={bookmark} alt={"Bookmark"}/></div>
+                    {isBookmarked || !isNew ? (
+                        <div className={"controls-header-img-container"}><img src={bookmarked} alt={"Bookmarked"}/>
+                        </div>
+                    ) : (
+                        <div className={"controls-header-img-container"} onClick={handleAddBookmark}>
+                            <img src={bookmark} alt={"Bookmark"}/>
+                        </div>
                     )}
                 </div>
 
@@ -73,11 +76,9 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
                     ) : (
                         <BigBtn onClick={onCreateReport}>Create Report</BigBtn>
                     )}
-                    {isNew && (
                         <BigBtn onClick={onCancel}>Cancel</BigBtn>
-                    )}
                 </div>
-                {hasReport && <ErrorMessage message="Report exists" />}
+                {hasReport && <ErrorMessage message="Report exists"/>}
             </div>
 
             {showAddPointDialog && (

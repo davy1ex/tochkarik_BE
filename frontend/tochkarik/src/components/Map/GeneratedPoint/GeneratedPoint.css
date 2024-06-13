@@ -1,44 +1,42 @@
 .controls-container-generated {
     border-radius: 10px 10px 0 0;
     background: #6b85d8;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 20px 20px 0;
 }
+
 
 .controls-wrapper-generated {
-    width: 90%;
+    width: 100%;
     margin: 20px auto;
 }
-
-
-
 
 .controls-header-container {
     display: flex;
     flex-direction: row;
-
     justify-content: space-between;
 }
-.controls-header-img-container {
-    width: 50px; /* Устанавливаем ширину контейнера div */
-    height: 100%; /* Устанавливаем высоту контейнера div */
 
+.controls-header-img-container {
+    width: 50px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
+
 .controls-header-container img {
     max-width: 100%;
     max-height: 100%;
-
     width: auto;
     height: auto;
     margin-bottom: 10px;
 }
+
 .controls-container-generated h1 {
     font-size: 30px;
 }
-
-
 
 .button-group {
     display: flex;
@@ -47,23 +45,12 @@
 
 .controls-container-generated .bigBtn {
     background: #a2b8ff;
-
     margin-top: 10px;
 }
 
-
-
-
-
-
-
-
-
-
-
 .map-component {
     position: relative;
-    height: 90vh;
+    height: calc(100vh - 36px);
     display: flex;
     flex-direction: column;
 }
@@ -84,6 +71,11 @@
     z-index: 1000;
 }
 
+.controls-wrapper-generated {
+    position: relative;
+    z-index: 1;
+}
+
 .controls-header-container {
     display: flex;
     justify-content: space-between;
@@ -95,3 +87,17 @@
     flex-direction: column;
     gap: 10px;
 }
+
+.img-container {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-container img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
