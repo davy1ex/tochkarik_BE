@@ -20,7 +20,6 @@ class AuthenticationSuccessListener
             return;
         }
 
-        // Добавление дополнительных данных в ответ
         $data['user_data'] = [
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),
