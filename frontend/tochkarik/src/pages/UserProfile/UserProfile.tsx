@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom'
+import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
 
 import '../Style.css';
 import './UserProfile.css';
@@ -21,28 +22,33 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const token = localStorage.getItem('token');
-        const url = `${apiUrl}/api/user/${userId}`;
+    const navigate = useNavigate();
+    const redirect = (path: string) => {
+        navigate(path);
+    };
 
-        axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const user_id = parseInt(localStorage.getItem('user_id'), 10);
+        if (token) {
+            setAuthToken(token);
+        }
+
+        axiosInstance.get(`/user/get_user`, {
+            params: {
+                'user_id': user_id,
             }
-        })
-            .then(response => {
-                setUser(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error.response ? error.response.data.message : 'Error fetching user');
-                setLoading(false);
-            });
+        }).then(response => {
+            setUser(response.data);
+            setLoading(false);
+        }).catch(error => {
+            setError(error.response ? error.response.data.message : 'Error fetching user');
+            setLoading(false);
+        });
     }, [userId]);
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading user data: {error}</p>;
 
     return (
         <div className="container-user-profile">
@@ -60,7 +66,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                 <div className="container-buttons">
                     <BigBtn>Edit profile</BigBtn>
                     <BigBtn>My posts</BigBtn>
-                    <BigBtn>My bookmarks</BigBtn>
+                    <BigBtn onClick={() => redirect('/bookmarks')}>My bookmarks</BigBtn>
                     <BigBtn onClick={logoutHandler}>Logout</BigBtn>
                 </div>
             </div>

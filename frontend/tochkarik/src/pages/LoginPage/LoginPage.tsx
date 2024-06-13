@@ -1,10 +1,11 @@
-import React, { useState, FC, FormEvent, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {ChangeEvent, FC, FormEvent, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
-import axiosInstance from '../../hooks/axiosConfig';
+import {axiosInstance} from '../../hooks/axiosConfig';
 
 import '../../components/InputField/InputField.css';
 import "./LoginPage.css";
+
 
 interface LoginPageProps {
     setAuthToken: (token: string | null) => void;
@@ -20,18 +21,22 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
         event.preventDefault();
 
         try {
-            const response = await axiosInstance.post('/auth/signin', {
+            const response = await axiosInstance.post(`/login_check`, {
                 username,
                 password,
             });
 
             const token = response.data.token;
+            const user_id = response.data.user_data.user_id;
+            console.log(user_id)
             localStorage.setItem('token', token);
+            localStorage.setItem('user_id', user_id);
 
             setAuthToken(token);
+
             navigate('/');
-        } catch (error) {
-            setError('Invalid credentials ' + error);
+        } catch (error: 404) {
+            setError(error.response?.data?.message || 'Incorrect login data');
         }
     };
 
@@ -54,6 +59,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
                         type="text"
                         value={username}
                         onChange={handleUsernameChange}
+                        placeholder={"Login"}
                         required
                     />
                 </div>
@@ -63,11 +69,12 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
                         type="password"
                         value={password}
                         onChange={handlePasswordChange}
+                        placeholder={"Password"}
                         required
                     />
                 </div>
 
-                <button type="submit">Login</button>
+                <button onClick={handleSubmit}>Login</button>
                 <a href="/reg">Sign Up</a>
 
                 {error && <p>{error}</p>}

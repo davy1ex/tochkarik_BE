@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -45,6 +47,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
+
+    /**
+     * @var Collection<int, Points>
+     */
+    #[ORM\OneToMany(mappedBy: 'username', targetEntity: Points::class, cascade: ['persist', 'remove'])]
+    private Collection $points;
+
+    public function __construct()
+    {
+        $this->points = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -167,5 +180,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+
+    public function getPoints(): Collection
+    {
+        return $this->points;
+    }
+
+    public function addPoint(Points $point): static
+    {
+        if (!$this->points->contains($point)) {
+            $this->points->add($point);
+            $point->setUsername($this);
+        }
+
+        return $this;
+    }
+
+    public function removePoint(Points $point): static
+    {
+        if ($this->points->removeElement($point)) {
+            // set the owning side to null (unless already changed)
+            if ($point->getUsername() === $this) {
+                $point->setUsername(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->username;
     }
 }

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Points index{% endblock %}
+
+{% block body %}
+    <h1>Points index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>TimeOfGenerate</th>
+                <th>Coordinates</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for point in points %}
+            <tr>
+                <td>{{ point.id }}</td>
+                <td>{{ point.timeOfGenerate ? point.timeOfGenerate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ point.coordinates ? point.coordinates|json_encode : '' }}</td>
+                <td>{{ point.description }}</td>
+                <td>
+                    <a href="{{ path('app_points_show', {'id': point.id}) }}">show</a>
+                    <a href="{{ path('app_points_edit', {'id': point.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_points_new') }}">Create new</a>
+{% endblock %}
