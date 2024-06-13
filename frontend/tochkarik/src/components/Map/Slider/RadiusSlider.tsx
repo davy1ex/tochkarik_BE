@@ -1,5 +1,5 @@
 import React from 'react';
-import './Slider.css';
+import './RadiusSlider.css';
 
 interface RadiusSliderProps {
     radius: number;
@@ -16,7 +16,7 @@ const RadiusSlider: React.FC<RadiusSliderProps> = ({ radius, handleRadiusChange 
             onChange={handleRadiusChange}
             className="slider"
         />
-        <span>{radius} meters</span>
+        <div className={"slider-component"}>{radius} meters</div>
     </div>
 );
 

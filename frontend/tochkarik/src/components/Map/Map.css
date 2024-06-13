@@ -53,9 +53,6 @@
     justify-content: center;
 }
 
-.slider {
-    margin: 10px 0;
-}
 .controls-container input, input[type="range"]::-moz-range-progress, input[type="range"]::-ms-fill-lower {
     color: #6B85D8;
     background-color: #6B85D8;
