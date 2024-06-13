@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import {FC} from 'react';
+import {Navigate, Route, Routes} from 'react-router-dom';
 
 import Header from "../components/Header/Header";
 
@@ -19,7 +19,6 @@ const AuthenticatedRoutes: FC<AuthenticatedRoutesProps> = ({ logoutHandler }) =>
 
             <Routes>
                 <Route path="/profile" element={<UserProfile userId={1} logoutHandler={logoutHandler} />} />
-
                 <Route path="/bookmarks" element={<Bookmarks />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="*" element={<Navigate to="/" />} />
