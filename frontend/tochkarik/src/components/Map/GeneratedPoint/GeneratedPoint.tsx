@@ -21,7 +21,6 @@ interface GeneratedPointProps {
     onCreateReport: () => void;
     onEditReport: () => void;
 
-    name: string;
     coordinates: [number, number];
     timeOfGenerate: string;
 }
