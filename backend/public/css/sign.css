@@ -1,0 +1,97 @@
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+}
+
+a, a:visited {
+    color: white;
+}
+
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+}
+.form-group input {
+    align-items: center;
+}
+
+.container label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.container input[type="text"],
+.container input[type="password"],
+.container input[type="email"],
+.container input[type="checkbox"] {
+    width: 90%;
+    padding: 10px;
+    margin: auto;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+}
+
+.container .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.container .form-check input {
+    margin-right: 10px;
+}
+
+.form-check > div {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.form-check #registration_form_agreeTerms {
+    width: auto;
+    margin-left: 10px;
+}
+
+.container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #6200ea;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.container button:hover {
+    background-color: #3700b3;
+}
+
+.container .form-error {
+    color: #ff5252;
+    margin-bottom: 20px;
+}
