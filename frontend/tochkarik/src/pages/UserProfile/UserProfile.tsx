@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom'
 import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
 
@@ -30,13 +30,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const user_id = parseInt(localStorage.getItem('user_id'), 10);
         if (token) {
             setAuthToken(token);
         }
 
         axiosInstance.get(`/user/get_user`, {
             params: {
-                'user_id': 1,
+                'user_id': user_id,
             }
         }).then(response => {
             setUser(response.data);
@@ -48,7 +49,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
     }, [userId]);
 
     if (loading) return <p>Loading...</p>;
-    // if (error) return <p>Error loading user data: {error}</p>;
 
     return (
         <div className="container-user-profile">

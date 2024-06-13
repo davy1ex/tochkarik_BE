@@ -1,4 +1,4 @@
-import React, { useState, FC, FormEvent, ChangeEvent } from 'react';
+import {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import {axiosInstance} from '../../hooks/axiosConfig';
@@ -21,13 +21,16 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
         event.preventDefault();
 
         try {
-            const response = await axiosInstance.post(`/auth/signin`, {
+            const response = await axiosInstance.post(`/login_check`, {
                 username,
                 password,
             });
 
             const token = response.data.token;
+            const user_id = response.data.user_data.user_id;
+            console.log(user_id)
             localStorage.setItem('token', token);
+            localStorage.setItem('user_id', user_id);
 
             setAuthToken(token);
 
@@ -56,6 +59,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
                         type="text"
                         value={username}
                         onChange={handleUsernameChange}
+                        placeholder={"Login"}
                         required
                     />
                 </div>
@@ -65,6 +69,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
                         type="password"
                         value={password}
                         onChange={handlePasswordChange}
+                        placeholder={"Password"}
                         required
                     />
                 </div>

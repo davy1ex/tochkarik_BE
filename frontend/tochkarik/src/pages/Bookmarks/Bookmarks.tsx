@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react';
-import { axiosInstance, setAuthToken } from '../../hooks/axiosConfig';
+import {FC, useEffect, useState} from 'react';
+import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
 
 import GeneratedPoint from "../../components/Map/GeneratedPoint/GeneratedPoint";
 import MapComponent from "../../components/Map/MapComponent.tsx";
@@ -24,13 +24,15 @@ const Bookmarks: FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const user_id = localStorage.getItem('user_id');
+
         if (token) {
             setAuthToken(token);
         }
 
         axiosInstance.get('/user/get_points', {
             params: {
-                'user_id': 1,
+                'user_id': user_id,
             }
         }).then(response => {
             setBookmarks(response.data.points);
@@ -47,22 +49,32 @@ const Bookmarks: FC = () => {
     return (
         <div className={"bookmarks-container"}>
             {!selectedBookmark ? (
-                bookmarks.map((bookmark) => (
-                    <div key={bookmark.id} onClick={() => setSelectedBookmark(bookmark)} className="bookmarks-item">
-                        <div className="bookmark-title">{bookmark.name}</div>
-                        <div className="bookmark-date">{bookmark.timeOfGenerate}</div>
-                    </div>
-                ))
+                bookmarks.length > 0 ? (
+                    bookmarks.map((bookmark) => (
+                        <div key={bookmark.id} onClick={() => setSelectedBookmark(bookmark)} className="bookmarks-item">
+                            <div className="bookmark-title">{bookmark.name}</div>
+                            <div className="bookmark-date">{bookmark.timeOfGenerate}</div>
+                        </div>
+                    ))
+                ) : (
+                    <>
+                        <p>You do not have any bookmarks :c</p>
+                        <p>But u cannot create it in <a href={"/"} style={{
+                            color: "#a2b8ff !important",
+                            textDecoration: "underline"
+                        }}>generate page</a>!</p>
+                    </>
+                )
             ) : (
                 <>
                     <MapComponent
-                    coordinates={selectedBookmark.coordinates}
+                        coordinates={selectedBookmark.coordinates}
                     showRadius={false}
                     radius={0}
                     centerPosition={selectedBookmark.coordinates}/>
 
                     <GeneratedPoint
-                        street={selectedBookmark.description}  // Assuming 'description' contains street or change it to the appropriate field
+                        street={selectedBookmark.description}
                         pointTitle={selectedBookmark.name}
                         isNew={false}  // Assuming it's not a new point since it's already bookmarked
                         hasReport={false}  // Adjust based on your logic if report exists

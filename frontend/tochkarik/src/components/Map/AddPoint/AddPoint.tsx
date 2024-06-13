@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, {ChangeEvent, useState} from 'react';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -30,13 +30,14 @@ const AddPoint: React.FC<AddPointProps> = ({ addButtonCancelHandler, position, t
 
     const addButtonSaveHandler = async () => {
         const token = localStorage.getItem('token');
+        const user_id = localStorage.getItem('user_id');
         if (token) {
             setAuthToken(token);
         }
 
         setLoading(true);
         axiosInstance.post('/points/add_point', {
-            user_id: 1,
+            user_id: user_id,
             name: inputName,
             coordinates: position,
             timeOfGenerate: timeOfGenerate,
