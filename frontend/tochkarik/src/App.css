@@ -1,7 +1,3 @@
-* {
-  /*color: white;*/
-}
-
 body {
   height: 100vh;
 }
@@ -13,7 +9,7 @@ body, #root  {
 
 #root {
   color: white;
-  height: 100vh;
+  background: black;
 }
 
 
@@ -21,10 +17,11 @@ body, #root  {
 .root-container {
   display: flex;
   flex-direction: column;
-
+  height: 100vh;
 }
 
-@media only screen and (min-width: 992px) {
+
+@media only screen and (min-width: 535px) {
   .root-container {
     width: 470px;
 
