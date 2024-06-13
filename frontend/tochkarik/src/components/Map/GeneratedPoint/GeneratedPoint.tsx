@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import BigBtn from '../../buttons/Button';
@@ -39,6 +39,7 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
    timeOfGenerate,
 
 }) => {
+    const [isLogin, setIsLogin] = useState<boolean>(false);
     const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
     const [showAddPointDialog, setShowAddPointDialog] = useState<boolean>(false);
 
@@ -51,20 +52,28 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
         setShowAddPointDialog(false);
     };
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLogin(true)
+        }
+    })
+
     return (
         <div className="controls-container-generated">
             <div className={"controls-wrapper-generated"}>
                 <div className={"controls-header-container"}>
                     <h1 className={"point-title"}>{pointTitle}</h1>
 
-                    {isBookmarked || !isNew ? (
-                        <div className={"controls-header-img-container"}><img src={bookmarked} alt={"Bookmarked"}/>
+                    {isLogin && <>{isBookmarked || !isNew ? (
+                        <div className={"controls-header-img-container"}>
+                            <img src={bookmarked} alt={"Bookmarked"}/>
                         </div>
                     ) : (
                         <div className={"controls-header-img-container"} onClick={handleAddBookmark}>
                             <img src={bookmark} alt={"Bookmark"}/>
                         </div>
-                    )}
+                    )}</>}
                 </div>
 
                 <p>{street}</p>
@@ -73,7 +82,7 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
                     {hasReport ? (
                         <BigBtn onClick={onEditReport}>Edit Report</BigBtn>
                     ) : (
-                        <BigBtn onClick={onCreateReport}>Create Report</BigBtn>
+                        <>{isLogin && <BigBtn onClick={onCreateReport}>Create Report</BigBtn>}</>
                     )}
                         <BigBtn onClick={onCancel}>Cancel</BigBtn>
                 </div>

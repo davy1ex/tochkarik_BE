@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, {FC} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import './Header.css';
 
-import coin from '../../../public/coin.svg';
-import explore from '../../../public/explore.svg';
-import browse from '../../../public/browse.svg';
+import coin from '../../icons/coin.svg';
+import logo from '../../icons/logo.svg';
+import explore from '../../icons/explore.svg';
+import browse from '../../icons/browse.svg';
 
 import BigBtn from "../buttons/Button";
 
@@ -32,7 +33,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
 
             <a className="logo" onClick={() => navigate("/")}>
                 <div className="logo-image">
-                    <img alt="icon logo" src="../../../public/logo.svg" />
+                    <img alt="icon logo" src={logo}/>
                 </div>
                 TochKarik
             </a>
@@ -44,7 +45,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
                             300 <span className="icon"><img src={coin} alt="" /></span>
                         </a>
                         <a className="icon" onClick={() => navigate("/generate")}>
-                            <img alt="icon explore" src={explore} />
+                            <img alt="icon explore" width="22" src={explore}/>
                         </a>
                         <a className="icon" onClick={() => navigate("/posts")}>
                             <img alt="icon browse posts" src={browse} />
