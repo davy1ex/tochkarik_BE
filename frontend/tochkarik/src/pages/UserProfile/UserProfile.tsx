@@ -14,7 +14,6 @@ interface UserProfileProps {
 
 interface User {
     username: string;
-    // Добавьте другие поля пользователя, если они есть
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
@@ -30,7 +29,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const user_id = parseInt(localStorage.getItem('user_id'), 10);
+        const user_id = parseInt(localStorage.getItem('user_id') || '', 10);
         if (token) {
             setAuthToken(token);
         }
@@ -40,35 +39,46 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                 'user_id': user_id,
             }
         }).then(response => {
-            setUser(response.data);
-            setLoading(false);
+            if (!response.data) {
+                navigate('/');
+            } else {
+                setUser(response.data);
+                setLoading(false);
+            }
         }).catch(error => {
             setError(error.response ? error.response.data.message : 'Error fetching user');
             setLoading(false);
         });
-    }, [userId]);
+    }, [userId, navigate]);
+
+    const redirectToBookmarks = () => {
+        navigate('/bookmarks');
+    };
 
     if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
 
     return (
         <div className="container-user-profile">
-            <div>
-                {'< Profile'}
+            <div onClick={() => {
+                redirect('/')
+            }}>
+                {"< profile"}
             </div>
             <div className="content-container">
-                <div className="container-profile">
-                    {user && (
-                        <>
+                {user && (
+                    <>
+                        <div className="container-profile">
                             <p>@{user.username}</p>
-                        </>
-                    )}
-                </div>
-                <div className="container-buttons">
-                    <BigBtn>Edit profile</BigBtn>
-                    <BigBtn>My posts</BigBtn>
-                    <BigBtn onClick={() => redirect('/bookmarks')}>My bookmarks</BigBtn>
-                    <BigBtn onClick={logoutHandler}>Logout</BigBtn>
-                </div>
+                        </div>
+                        <div className="container-buttons">
+                            <BigBtn>Edit profile</BigBtn>
+                            <BigBtn>My posts</BigBtn>
+                            <BigBtn onClick={redirectToBookmarks}>My bookmarks</BigBtn>
+                            <BigBtn onClick={logoutHandler}>Logout</BigBtn>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
