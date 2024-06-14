@@ -48,7 +48,6 @@ class ApiPointController extends AbstractController
 
             return $this->json([
                 'status' => 'success',
-                'data' => $point,
             ], Response::HTTP_CREATED);
 //        } catch (\Exception $e) {
 //            $data = json_decode($request->getContent(), true);
