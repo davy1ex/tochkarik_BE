@@ -1,5 +1,5 @@
-import React, { useState, FC, FormEvent, ChangeEvent } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, {ChangeEvent, FC, FormEvent, useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import axios from 'axios';
 
 import '../../components/InputField/InputField.css';
@@ -94,6 +94,10 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
                 </div>
                 <button type="submit">Sign Up</button>
                 <a href="/login">Sign In</a>
+                <p>Or u cannot go to <a href={"/"} style={{
+                    color: "#a2b8ff !important",
+                    textDecoration: "underline"
+                }}>Home page</a> without authorization!</p>
 
                 {error && <p>{error}</p>}
             </form>

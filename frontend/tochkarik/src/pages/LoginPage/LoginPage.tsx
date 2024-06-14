@@ -1,4 +1,4 @@
-import {ChangeEvent, FC, FormEvent, useState} from 'react';
+import React, {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import {axiosInstance} from '../../hooks/axiosConfig';
@@ -76,6 +76,10 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
                 <button onClick={handleSubmit}>Login</button>
                 <a href="/reg">Sign Up</a>
+                <p>Or u cannot go to <a href={"/"} style={{
+                    color: "#a2b8ff !important",
+                    textDecoration: "underline"
+                }}>Home page</a> without authorization!</p>
 
                 {error && <p>{error}</p>}
             </form>
