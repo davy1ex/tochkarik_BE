@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import axios, {AxiosError, AxiosInstance, AxiosResponse} from 'axios';
 
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -15,6 +15,14 @@ const setAuthToken = (token: string | null): void => {
     }
 }
 
+const checkTokenValidity = async (): Promise<boolean> => {
+    try {
+        await axiosInstance.get('/user/check_token');
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
 
 axiosInstance.interceptors.response.use(
     (response: AxiosResponse) => response,
@@ -39,23 +47,30 @@ axiosInstance.interceptors.response.use(
             }
         }
 
+        if (!error.response) {
+            // if server error
+            console.error('Network error: Backend is not responding');
+            window.location.href = '/502'; // или другой маршрут для обработки ошибки сети
+            return Promise.reject(error);
+        }
+
         const currentPath = window.location.pathname;
 
         const showErrors = currentPath !== '/login' && currentPath !== '/reg';
 
-        // if (showErrors) {
-        //     if (status === 404) {
-        //         window.location.href = '/404';
-        //     } else if (status === 502) {
-        //         window.location.href = '/502';
-        //     } else if (status === 401) {
-        //         window.location.href = '/401';
-        //     } else if (status === 501) {
-        //         window.location.href = '/501';
-        //     }
-        // }
+        if (showErrors) {
+            if (status === 404) {
+                window.location.href = '/404';
+            } else if (status === 502) {
+                window.location.href = '/502';
+            } else if (status === 401) {
+                window.location.href = '/401';
+            } else if (status === 501) {
+                window.location.href = '/501';
+            }
+        }
         return Promise.reject(error);
     }
 );
 
-export {axiosInstance, setAuthToken};
+export {axiosInstance, setAuthToken, checkTokenValidity};
