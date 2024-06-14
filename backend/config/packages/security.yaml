@@ -50,6 +50,7 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/app_login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/auth/sign, roles: IS_AUTHENTICATED_ANONYMOUSLY }
