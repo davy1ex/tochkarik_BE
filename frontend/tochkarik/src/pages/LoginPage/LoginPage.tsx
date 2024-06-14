@@ -28,7 +28,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
             const token = response.data.token;
             const user_id = response.data.user_data.user_id;
-            console.log(user_id)
+
             localStorage.setItem('token', token);
             localStorage.setItem('user_id', user_id);
 
