@@ -17,9 +17,9 @@ interface GeneratedPointProps {
     isNew: boolean;
     hasReport: boolean;
     onCancel: () => void;
-    onStartJourney: () => void;
-    onCreateReport: () => void;
-    onEditReport: () => void;
+    onStartJourney?: () => void;
+    onCreateReport?: () => void;
+    onEditReport?: () => void;
 
     coordinates: [number, number];
     timeOfGenerate: string;
@@ -59,6 +59,11 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
         }
     })
 
+    const defaultOnStartJourney = () => {
+        const [lat, lon] = coordinates;
+        window.location.href = `https://www.google.com/maps?q=${lat},${lon}\n`
+    }
+
     return (
         <div className="controls-container-generated">
             <div className={"controls-wrapper-generated"}>
@@ -78,7 +83,7 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
 
                 <p>{street}</p>
                 <div className="button-group">
-                    <BigBtn onClick={onStartJourney}>Start Journey</BigBtn>
+                    <BigBtn onClick={onStartJourney || defaultOnStartJourney}>Start Journey</BigBtn>
                     {hasReport ? (
                         <BigBtn onClick={onEditReport}>Edit Report</BigBtn>
                     ) : (

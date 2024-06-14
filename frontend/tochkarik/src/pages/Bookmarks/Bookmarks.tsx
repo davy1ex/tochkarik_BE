@@ -79,10 +79,9 @@ const Bookmarks: FC = () => {
                         isNew={false}  // Assuming it's not a new point since it's already bookmarked
                         hasReport={false}  // Adjust based on your logic if report exists
                         onCancel={() => setSelectedBookmark(null)}
-                        onStartJourney={() => { /* Implement start journey logic */ }}
+
                         onCreateReport={() => { /* Implement create report logic */ }}
                         onEditReport={() => { /* Implement edit report logic */ }}
-                        name={selectedBookmark.name}
                         coordinates={selectedBookmark.coordinates}
                         timeOfGenerate={selectedBookmark.timeOfGenerate}
                     />
