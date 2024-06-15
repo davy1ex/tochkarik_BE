@@ -52,8 +52,9 @@ security:
 
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/auth/sign, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/auth/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
 when@test:
     security:
