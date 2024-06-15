@@ -67,9 +67,6 @@ const HomePage: FC = () => {
         setTimeOfGenerate(null);
     };
 
-    const handleStartJourney = () => {
-        // Implement start journey logic here
-    };
 
     const handleCreateReport = () => {
         // Implement create report logic here
@@ -104,7 +101,7 @@ const HomePage: FC = () => {
                     isNew={true}
                     hasReport={false}  // Change this based on your logic
                     onCancel={handleCancel}
-                    onStartJourney={handleStartJourney}
+                    
                     onCreateReport={handleCreateReport}
                     onEditReport={handleEditReport}
                     coordinates={markerPosition}
