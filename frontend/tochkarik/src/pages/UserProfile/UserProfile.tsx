@@ -5,7 +5,7 @@ import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
 import '../Style.css';
 import './UserProfile.css';
 
-import BigButton from '../../components/Buttons/BigButton.tsx';
+import BigBtn from '../../components/buttons/Button';
 
 interface UserProfileProps {
     userId: number;
@@ -72,10 +72,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                             <p>@{user.username}</p>
                         </div>
                         <div className="container-buttons">
-                            <BigButton>Edit profile</BigButton>
-                            <BigButton>My posts</BigButton>
-                            <BigButton onClick={redirectToBookmarks}>My bookmarks</BigButton>
-                            <BigButton onClick={logoutHandler}>Logout</BigButton>
+                            <BigBtn>Edit profile</BigBtn>
+                            <BigBtn>My posts</BigBtn>
+                            <BigBtn onClick={redirectToBookmarks}>My bookmarks</BigBtn>
+                            <BigBtn onClick={logoutHandler}>Logout</BigBtn>
                         </div>
                     </>
                 )}

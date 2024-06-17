@@ -7,7 +7,7 @@ import logo from '../../icons/logo.svg';
 import explore from '../../icons/explore.svg';
 import browse from '../../icons/browse.svg';
 
-import BigButton from "../Buttons/BigButton.tsx";
+import BigBtn from "../buttons/Button";
 
 interface HeaderProps {
     user_login: boolean;
@@ -53,7 +53,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
                     </>
                 ) : (
                     showJoinInButton && (
-                        <BigButton onClick={handleJoinInClick}>Join In</BigButton>
+                        <BigBtn onClick={handleJoinInClick}>Join In</BigBtn>
                     )
                 )}
             </div>

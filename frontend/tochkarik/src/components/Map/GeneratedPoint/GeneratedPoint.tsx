@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import BigButton from '../../Buttons/BigButton.tsx';
+import BigBtn from '../../buttons/Button';
 import AddPoint from '../AddPoint/AddPoint';
 
 import bookmark from '../../../icons/bookmark.svg';
@@ -83,13 +83,13 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
 
                 <p>{street}</p>
                 <div className="button-group">
-                    <BigButton onClick={onStartJourney || defaultOnStartJourney}>Start Journey</BigButton>
+                    <BigBtn onClick={onStartJourney || defaultOnStartJourney}>Start Journey</BigBtn>
                     {hasReport ? (
-                        <BigButton onClick={onEditReport}>Edit Report</BigButton>
+                        <BigBtn onClick={onEditReport}>Edit Report</BigBtn>
                     ) : (
-                        <>{isLogin && <BigButton onClick={onCreateReport}>Create Report</BigButton>}</>
+                        <>{isLogin && <BigBtn onClick={onCreateReport}>Create Report</BigBtn>}</>
                     )}
-                    <BigButton onClick={onCancel}>Cancel</BigButton>
+                        <BigBtn onClick={onCancel}>Cancel</BigBtn>
                 </div>
                 {hasReport && <ErrorMessage message="Report exists"/>}
             </div>

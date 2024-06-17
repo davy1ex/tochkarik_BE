@@ -1,8 +1,8 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 
 import '../../../components/InputField/InputField.css';
-import BigButton from '../../Buttons/BigButton.tsx';
+import BigBtn from '../../../components/buttons/Button';
 
 import './ManualLocationInput.css';
 
@@ -65,7 +65,7 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
                     placeholder="Enter city name"
                     className="manual-location-input"
                 />
-                <BigButton onClick={handleManualLocationSubmit}>Set Location</BigButton>
+                <BigBtn onClick={handleManualLocationSubmit}>Set Location</BigBtn>
             </div>
             <div className="search-suggestion-container">
                 {locationSuggestions.length > 0 && (
