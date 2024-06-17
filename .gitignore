@@ -31,3 +31,5 @@
 
 /docker/volumes/logs/nginx/error.log
 /docker/volumes/logs/nginx/access.log
+/docker/nginx/ssl/selfsigned.crt
+/docker/nginx/ssl/selfsigned.key
