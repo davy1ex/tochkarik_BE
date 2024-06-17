@@ -17,7 +17,7 @@ const setAuthToken = (token: string | null): void => {
 
 const checkTokenValidity = async (): Promise<boolean> => {
     try {
-        await axiosInstance.get('/user/check_token');
+        await axiosInstance.get('/auth/check_token');
         return true;
     } catch (error) {
         return false;
