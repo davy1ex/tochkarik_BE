@@ -1,12 +1,11 @@
 <?php
-// src/EventListener/AuthenticationSuccessListener.php
 
 namespace App\EventListener;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AuthenticationSuccessListener
+class       AuthenticationSuccessListener
 {
     /**
      * @param AuthenticationSuccessEvent $event
