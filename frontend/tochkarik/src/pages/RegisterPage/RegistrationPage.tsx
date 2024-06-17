@@ -27,6 +27,13 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
             return;
         }
 
+        const cyrillicPattern = /[А-Яа-яЁё]/;
+
+        if (cyrillicPattern.test(username) || cyrillicPattern.test(password)) {
+            setError('Username and password must not contain Cyrillic characters.');
+            return;
+        }
+
         try {
             const response = await axios.post(`${apiUrl}/api/auth/signup`, {
                 username,
@@ -36,7 +43,11 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
         } catch (error: any) {
             if (error.response) {
                 console.error('Error response:', error.response);
-                setError(`Error: ${error.response.statusText}`);
+                if (error.response.status === 400) {
+                    setError('Username already exists. Please choose another one.');
+                } else {
+                    setError(`Error: ${error.response.data.message}`);
+                }
             } else if (error.request) {
                 console.error('Error request:', error.request);
                 setError('No response received from server.');
@@ -94,7 +105,7 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
                 </div>
                 <button type="submit">Sign Up</button>
                 <a href="/login">Sign In</a>
-                <p>Or u cannot go to <a href={"/"} style={{
+                <p style={{color: "lightgray"}}>Or u can go to <a href={"/"} style={{
                     color: "#a2b8ff !important",
                     textDecoration: "underline"
                 }}>Home page</a> without authorization!</p>
