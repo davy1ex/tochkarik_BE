@@ -99,6 +99,8 @@ class Points
     }
 
     public function __toString(): String {
+        if ($this->name == null)
+            return "null";
         return $this->name;
     }
 }
