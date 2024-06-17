@@ -76,7 +76,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
                 <button onClick={handleSubmit}>Login</button>
                 <a href="/reg">Sign Up</a>
-                <p>Or u cannot go to <a href={"/"} style={{
+                <p style={{color: "lightgray"}}>Or u can go to <a href={"/"} style={{
                     color: "#a2b8ff !important",
                     textDecoration: "underline"
                 }}>Home page</a> without authorization!</p>
