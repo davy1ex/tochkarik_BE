@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import tzlookup from 'tz-lookup';
@@ -9,7 +9,7 @@ import RadiusSlider from '../../components/Map/Slider/RadiusSlider';
 import ManualLocationInput from '../../components/Map/ManualLocation/ManualLocationInput';
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
 import GeneratedPoint from '../../components/Map/GeneratedPoint/GeneratedPoint';
-import BigBtn from '../../components/buttons/Button';
+import BigButton from '../../components/Buttons/BigButton.tsx';
 import useGeoLocation from '../../components/Map/hooks/useGeoLocation';
 import useRandomCoordinates from '../../components/Map/hooks/useRandomCoordinates';
 
@@ -89,7 +89,7 @@ const HomePage: FC = () => {
                     <div className={"controls-container-wrapper"}>
                         {street}
                         <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange} />
-                        <BigBtn onClick={handleGenerate}>Generate</BigBtn>
+                        <BigButton onClick={handleGenerate}>Generate</BigButton>
                         <ManualLocationInput setPosition={setPosition} setError={setError} />
                         {error && <ErrorMessage message={error} />}
                     </div>
