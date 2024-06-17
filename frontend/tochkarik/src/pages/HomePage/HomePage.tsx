@@ -41,7 +41,7 @@ const HomePage: FC = () => {
 
     const handleGenerate = async () => {
         if (position) {
-            const [newLatitude, newLongitude] = generateRandomCoordinates(position, radius);
+            const [newLatitude, newLongitude] = await generateRandomCoordinates(position, radius);
             setMarkerPosition([newLatitude, newLongitude]);
 
             axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${newLatitude} ${newLongitude}`)
