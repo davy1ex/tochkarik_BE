@@ -17,7 +17,8 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
 
     const navigate = useNavigate();
 
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const apiUrl = process.env.VITE_API_URL;
+    ;
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
