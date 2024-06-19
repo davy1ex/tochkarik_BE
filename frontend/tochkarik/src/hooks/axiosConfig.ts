@@ -15,6 +15,18 @@ const setAuthToken = (token: string | null): void => {
     }
 }
 
+const refreshToken = async (): Promise<string | null> => {
+    try {
+        const response = await axios.post(`${apiUrl}/api/token/refresh`, {
+            refresh_token: localStorage.getItem('refresh_token'),
+        });
+        return response.data.refresh_token;
+    } catch (error) {
+        console.error('Failed to refresh token', error);
+        return null;
+    }
+};
+
 const checkTokenValidity = async (): Promise<boolean> => {
     try {
         await axiosInstance.get('/auth/check_token');
@@ -31,7 +43,11 @@ axiosInstance.interceptors.response.use(
         const originalRequest = error.config;
 
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         if (status === 401 && error.response.data.message == "Expired JWT Token") {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             originalRequest._retry = true;
             window.location.href = '/logout'
 
@@ -39,7 +55,11 @@ axiosInstance.interceptors.response.use(
             const newToken = await refreshToken();
             if (newToken) {
                 setAuthToken(newToken);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 return axiosInstance(originalRequest);
             } else {
                 window.location.href = '/401';

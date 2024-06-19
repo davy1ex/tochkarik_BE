@@ -7,7 +7,8 @@ import logo from '../../icons/logo.svg';
 import explore from '../../icons/explore.svg';
 import browse from '../../icons/browse.svg';
 
-import BigButton from "../Buttons/BigButton.tsx";
+import BigButton from "../Buttons/BigButton";
+
 
 interface HeaderProps {
     user_login: boolean;

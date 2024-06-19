@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
 
 import GeneratedPoint from "../../components/Map/GeneratedPoint/GeneratedPoint";
-import MapComponent from "../../components/Map/MapComponent.tsx";
+import MapComponent from "../../components/Map/MapComponent";
 
 import './Bookmarks.css'
 import '../../components/Map/Map.css'

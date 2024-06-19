@@ -1,13 +1,13 @@
 import React, {FC} from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 
 import AuthenticatedRoutes from './AuthenticatedRoutes';
 import UnauthenticatedRoutes from './UnauthenticatedRoutes';
 
-import Error401 from '../pages/Errors/Error401.tsx'
-import Error404 from '../pages/Errors/Error404.tsx'
-import Error501 from '../pages/Errors/Error501.tsx'
-import Error502 from '../pages/Errors/Error502.tsx'
+import Error401 from '../pages/Errors/Error401'
+import Error404 from '../pages/Errors/Error404'
+import Error501 from '../pages/Errors/Error501'
+import Error502 from '../pages/Errors/Error502'
 
 interface AppRoutesProps {
     isAuthenticated: boolean;

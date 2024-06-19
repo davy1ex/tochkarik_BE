@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, {FC} from 'react';
+import {Navigate, Route, Routes} from 'react-router-dom';
 
-import LoginPage from "../pages/LoginPage/LoginPage.tsx";
+import LoginPage from "../pages/LoginPage/LoginPage";
 import HomePage from "../pages/HomePage/HomePage";
 import RegistrationPage from "../pages/RegisterPage/RegistrationPage";
 
