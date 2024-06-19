@@ -26,12 +26,7 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
     fi;
 
 
-# Additional enabling Xdebug
-RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
+RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
 
 # enable posgres
 RUN docker-php-ext-install pdo_pgsql
@@ -42,8 +37,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 
 # Copy php.ini to container
-#COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY ./docker/php-fpm/php.ini /usr/local/etc/php/php.ini
 WORKDIR /application
+USER www
+EXPOSE 9000
 
-
+CMD ["php-fpm"]
 
