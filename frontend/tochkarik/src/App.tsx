@@ -1,10 +1,11 @@
 import {useEffect} from 'react';
 import {BrowserRouter as Router} from 'react-router-dom';
 
-import './App.css';
 import useAuth from './hooks/useAuth';
 import AppRoutes from './routes/AppRoutes';
 import {checkTokenValidity} from './hooks/axiosConfig'
+import './App.css';
+
 
 function App() {
     const { isAuthenticated, setAuthToken, handleLogout } = useAuth();
