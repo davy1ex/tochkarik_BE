@@ -18,6 +18,15 @@ class ApiPointController extends AbstractController
     #[Route('/add_point', name: 'api_points_add', methods: ['POST'])]
     public function api_add(Request $request, EntityManagerInterface $entityManager, PointsRepository $pointsRepository, UserRepository $userRepository): JsonResponse
     {
+        $this->security = $security;
+    }
+
+    #[Route('/add_point', name: 'apiPointAdd', methods: ['POST'])]
+    public function apiPointAdd(
+        Request                $request,
+        EntityManagerInterface $entityManager
+    ): JsonResponse
+    {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
             $data = json_decode($request->getContent(), true);
@@ -57,8 +66,8 @@ class ApiPointController extends AbstractController
         }
     }
 
-    #[Route('/get_points', name: 'api_points_get', methods: ['GET'])]
-    public function get_points(Request $request, UserRepository $userRepository): JsonResponse
+    #[Route('/get_points', name: 'apiGetPoints', methods: ['GET'])]
+    public function apiGetPoints(): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
