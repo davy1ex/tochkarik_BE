@@ -12,16 +12,20 @@ security:
                 property: username
     firewalls:
         login:
-            pattern: ^/api/auth/signin
+            pattern: ^/api/login
             stateless: true
             provider: app_user_provider
             json_login:
                 username_path: username
-                check_path: /api/auth/signin
+                check_path: /api/login_check
                 success_handler:
                     lexik_jwt_authentication.handler.authentication_success
                 failure_handler:
                     lexik_jwt_authentication.handler.authentication_failure
+        signup:
+            pattern: ^/api/auth/signup
+            stateless: true
+            security: false
         api:
             pattern: ^/api
             stateless: true
@@ -45,29 +49,20 @@ security:
                 path: app_logout
                 target: /
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, roles:  }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/app_login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/auth/signup, roles:  }
+        - { path: ^/api/auth/signup, roles: PUBLIC_ACCESS }
 
 when@test:
     security:
         password_hashers:
-            # By default, password hashers are resource intensive and take time. This is
-            # important to generate secure password hashes. In tests however, secure hashes
-            # are not important, waste resources and increase test times. The following
-            # reduces the work factor to the lowest possible values.
             Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
                 algorithm: auto
                 cost: 4 # Lowest possible value for bcrypt

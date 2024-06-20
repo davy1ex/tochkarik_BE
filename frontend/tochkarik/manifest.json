@@ -3,7 +3,7 @@
   "name": "TochKarik",
   "icons": [
     {
-      "src": "public/logo.svg",
+      "src": "src/icons/logo.svg",
       "type": "image/png",
       "sizes": "192x192"
     },

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom'
+import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
 
 import '../Style.css';
 import './UserProfile.css';
 
-import BigBtn from '../../components/buttons/Button';
+import BigButton from '../../components/Buttons/BigButton';
 
 interface UserProfileProps {
     userId: number;
@@ -13,7 +14,6 @@ interface UserProfileProps {
 
 interface User {
     username: string;
-    // Добавьте другие поля пользователя, если они есть
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
@@ -21,48 +21,64 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const token = localStorage.getItem('token');
-        const url = `${apiUrl}/api/user/${userId}`;
+    const navigate = useNavigate();
+    const redirect = (path: string) => {
+        navigate(path);
+    };
 
-        axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const user_id = parseInt(localStorage.getItem('user_id') || '', 10);
+        if (token) {
+            setAuthToken(token);
+        }
+
+        axiosInstance.get(`/user/get_user`, {
+            params: {
+                'user_id': user_id,
             }
-        })
-            .then(response => {
+        }).then(response => {
+            if (!response.data) {
+                navigate('/');
+            } else {
                 setUser(response.data);
                 setLoading(false);
-            })
-            .catch(error => {
-                setError(error.response ? error.response.data.message : 'Error fetching user');
-                setLoading(false);
-            });
-    }, [userId]);
+            }
+        }).catch(error => {
+            setError(error.response ? error.response.data.message : 'Error fetching user');
+            setLoading(false);
+        });
+    }, [userId, navigate]);
+
+    const redirectToBookmarks = () => {
+        navigate('/bookmarks');
+    };
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading user data: {error}</p>;
+    if (error) return <p>{error}</p>;
 
     return (
         <div className="container-user-profile">
-            <div>
-                {'< Profile'}
+            <div onClick={() => {
+                redirect('/')
+            }}>
+                {"< profile"}
             </div>
             <div className="content-container">
-                <div className="container-profile">
-                    {user && (
-                        <>
+                {user && (
+                    <>
+                        <div className="container-profile">
                             <p>@{user.username}</p>
-                        </>
-                    )}
-                </div>
-                <div className="container-buttons">
-                    <BigBtn>Edit profile</BigBtn>
-                    <BigBtn>My posts</BigBtn>
-                    <BigBtn>My bookmarks</BigBtn>
-                    <BigBtn onClick={logoutHandler}>Logout</BigBtn>
-                </div>
+                        </div>
+                        <div className="container-buttons">
+                            <BigButton>Edit profile</BigButton>
+                            <BigButton>My posts</BigButton>
+                            <BigButton onClick={redirectToBookmarks}>My bookmarks</BigButton>
+                            <BigButton onClick={logoutHandler}>Logout</BigButton>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

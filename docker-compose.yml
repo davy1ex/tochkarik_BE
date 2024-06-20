@@ -19,8 +19,9 @@ services:
       - ./backend:/application
       - ./frontend:/frontend
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl
     ports:
-      - "50000:80"
+      - "50001:443"
     depends_on:
       - php-fpm
 
@@ -30,8 +31,7 @@ services:
       context: .
       dockerfile: ./docker/postgres/Dockerfile
     volumes:
-      - ./backend/postgres_data:/var/lib/postgresql/data
-
+      - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -45,6 +45,12 @@ services:
       dockerfile: ./docker/node/Dockerfile
     volumes:
       - ./frontend/tochkarik:/frontend
+      - ./docker/nginx/ssl:/frontend/ssl
     ports:
       - "5173:5173"
+    environment:
+      - NODE_ENV=development
     command: npm run dev
+
+volumes:
+  postgres_data:
