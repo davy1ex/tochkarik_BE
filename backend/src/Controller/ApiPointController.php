@@ -10,13 +10,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 
 #[Route('/api/points')]
 class ApiPointController extends AbstractController
 {
-    #[Route('/add_point', name: 'api_points_add', methods: ['POST'])]
-    public function api_add(Request $request, EntityManagerInterface $entityManager, PointsRepository $pointsRepository, UserRepository $userRepository): JsonResponse
+    private $security;
+
+    public function __construct(Security $security)
     {
         $this->security = $security;
     }
@@ -29,24 +31,16 @@ class ApiPointController extends AbstractController
     {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
             $data = json_decode($request->getContent(), true);
-            $user_id = $data['user_id'];
-
-            if (!$user_id) {
-                return $this->json(['error' => 'Incorrect user_id', "user_id" => $user_id, 'name'=>$request->query->get('name')], Response::HTTP_BAD_REQUEST);
-            }
-
-            $user_id = (int) $user_id;
-            $user = $userRepository->find($user_id);
-
-            if (!$user || !is_numeric($user_id)) {
-                return $this->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
-            }
-
             $name = $data['name'];
             $coordinates = $data['coordinates'];
             $timeOfGenerate = $data['timeOfGenerate'];
 
+            $user = $this->security->getUser();
+            if (!$user) {
+                return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+            }
             $point = new Points();
             $point->setName($name);
             $point->setUsername($user);
@@ -72,18 +66,7 @@ class ApiPointController extends AbstractController
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            $user_id = $request->query->get('user_id');
-            if (!$user_id || !is_numeric($user_id)) {
-                return $this->json(['error' => 'Invalid user_id'], JsonResponse::HTTP_BAD_REQUEST);
-            }
-
-            $user_id = (int)$user_id;
-            $currentUser = $this->getUser();
-            if ($currentUser->getId() !== $user_id) {
-                return $this->json(['error' => 'Forbidden'], JsonResponse::HTTP_FORBIDDEN);
-            }
-
-            $user = $userRepository->find($user_id);
+            $user = $this->security->getUser();
             if (!$user) {
                 return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
             }
