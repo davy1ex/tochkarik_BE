@@ -44,18 +44,18 @@ security:
             provider: app_user_provider
 
             form_login:
-                login_path: app_login
-                check_path: app_login
+                login_path: appLoginPage
+                check_path: appLoginPage
 
                 enable_csrf: true
             logout:
-                path: app_logout
+                path: appLogout
                 target: /
 
     access_control:
         - { path: ^/login, roles:  }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/app_login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/appLoginPage, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }

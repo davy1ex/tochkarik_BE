@@ -11,8 +11,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    #[Route('/login', name: 'app_login')]
-     public function index(AuthenticationUtils $authenticationUtils, Security $security): Response
+    #[Route('/login', name: 'appLoginPage')]
+    public function appLoginPage(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
             $this->addFlash('info', 'U have logged in!');
@@ -30,8 +30,8 @@ class LoginController extends AbstractController
         ]);
     }
 
-    #[Route('/logout', name: 'app_logout')]
-    public function logout(AuthenticationUtils $authenticationUtils): Response
+    #[Route('/logout', name: 'appLogout')]
+    public function appLogout(AuthenticationUtils $authenticationUtils): Response
     {
         return $this->render();
     }
