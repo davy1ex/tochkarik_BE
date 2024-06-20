@@ -25,15 +25,9 @@ class ApiUserController extends AbstractController
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            $user_id = $request->query->get('user_id');
-            if (!$user_id || !is_numeric($user_id)) {
-                return $this->json(['error' => 'Invalid user_id'], JsonResponse::HTTP_BAD_REQUEST);
-            }
-
-            $user_id = (int)$user_id;
             $currentUser = $this->security->getUser();
-            if ($currentUser->getId() !== $user_id) {
-                return $this->json(['error' => 'Forbidden'], JsonResponse::HTTP_FORBIDDEN);
+            if (!$currentUser) {
+                return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
             }
 
             $user = $userRepository->find($user_id);
@@ -42,7 +36,7 @@ class ApiUserController extends AbstractController
             }
 
             return $this->json([
-                'username' => $user->getUsername(),
+                'username' => $currentUser->getUsername(),
             ]);
 
         } catch (\Exception $e) {
