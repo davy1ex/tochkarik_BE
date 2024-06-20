@@ -22,6 +22,8 @@ security:
                     lexik_jwt_authentication.handler.authentication_success
                 failure_handler:
                     lexik_jwt_authentication.handler.authentication_failure
+            refresh_jwt:
+                check_path: /api/token/api_refresh
         signup:
             pattern: ^/api/auth/signup
             stateless: true
@@ -49,7 +51,7 @@ security:
 
                 enable_csrf: true
             logout:
-                path: app_logout
+                path: api_token_invalidate
                 target: /
 
     access_control:
@@ -62,7 +64,7 @@ security:
         - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/auth/signup, roles: PUBLIC_ACCESS }
-        - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
+        - { path: ^/api/token/api_refresh, roles: PUBLIC_ACCESS }
 
 when@test:
     security:
