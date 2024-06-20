@@ -30,11 +30,6 @@ class ApiUserController extends AbstractController
                 return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
             }
 
-            $user = $userRepository->find($user_id);
-            if (!$user) {
-                return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
-            }
-
             return $this->json([
                 'username' => $currentUser->getUsername(),
             ]);
