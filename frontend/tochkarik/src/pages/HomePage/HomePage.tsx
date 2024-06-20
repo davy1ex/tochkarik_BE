@@ -23,7 +23,7 @@ const HomePage: FC = () => {
     const [street, setStreet] = useState<string>('');
     const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
     const [showControls, setShowControls] = useState<boolean>(true);
-    const [timeOfGenerate, setTimeOfGenerate] = useState<string | null>(null);
+    const [timeOfGenerate, setTimeOfGenerate] = useState<string>('');
     const [error, setError] = useState<string>('');
 
     const geoLocation = useGeoLocation(setError);
@@ -64,7 +64,7 @@ const HomePage: FC = () => {
         setMarkerPosition(null);
         setShowControls(true);
         setStreet('');
-        setTimeOfGenerate(null);
+        setTimeOfGenerate('');
     };
 
 

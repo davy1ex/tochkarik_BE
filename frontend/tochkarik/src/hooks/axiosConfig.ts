@@ -1,7 +1,8 @@
 import axios, {AxiosError, AxiosInstance, AxiosResponse} from 'axios';
 
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = process.env.VITE_API_URL;
+
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: `${apiUrl}/api`,
@@ -14,6 +15,18 @@ const setAuthToken = (token: string | null): void => {
         delete axiosInstance.defaults.headers.common["Authorization"];
     }
 }
+
+const refreshToken = async (): Promise<string | null> => {
+    try {
+        const response = await axios.post(`${apiUrl}/api/token/refresh`, {
+            refresh_token: localStorage.getItem('refresh_token'),
+        });
+        return response.data.refresh_token;
+    } catch (error) {
+        console.error('Failed to refresh token', error);
+        return null;
+    }
+};
 
 const checkTokenValidity = async (): Promise<boolean> => {
     try {
@@ -31,7 +44,11 @@ axiosInstance.interceptors.response.use(
         const originalRequest = error.config;
 
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         if (status === 401 && error.response.data.message == "Expired JWT Token") {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             originalRequest._retry = true;
             window.location.href = '/logout'
 
@@ -39,7 +56,11 @@ axiosInstance.interceptors.response.use(
             const newToken = await refreshToken();
             if (newToken) {
                 setAuthToken(newToken);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 return axiosInstance(originalRequest);
             } else {
                 window.location.href = '/401';

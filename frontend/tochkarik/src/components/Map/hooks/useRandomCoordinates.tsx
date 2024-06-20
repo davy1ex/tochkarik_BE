@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const useRandomCoordinates = () => {
     const generateRandomCoordinates = async (center: [number, number], radius: number): Promise<[number, number]> => {
-        let coordinates: [number, number];
+        let coordinates: [number, number] = [0, 0];
         let isPassable = false;
 
         while (!isPassable) {

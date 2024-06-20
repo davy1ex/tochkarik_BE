@@ -32,6 +32,9 @@ security:
             jwt: ~
             provider: app_user_provider
 
+        refresh:
+          pattern: ^/api/token/refresh
+          stateless: true
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -59,6 +62,7 @@ security:
         - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/auth/signup, roles: PUBLIC_ACCESS }
+        - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
 
 when@test:
     security:

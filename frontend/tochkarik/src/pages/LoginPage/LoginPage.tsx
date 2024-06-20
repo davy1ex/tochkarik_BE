@@ -1,6 +1,7 @@
-import React, {ChangeEvent, FC, FormEvent, useState} from 'react';
+import {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
+import axios from 'axios';
 import {axiosInstance} from '../../hooks/axiosConfig';
 
 import '../../components/InputField/InputField.css';
@@ -10,6 +11,11 @@ import "./LoginPage.css";
 interface LoginPageProps {
     setAuthToken: (token: string | null) => void;
 }
+
+interface ErrorResponse {
+    message: string;
+}
+
 
 const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
     const [username, setUsername] = useState<string>('');
@@ -35,8 +41,13 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
             setAuthToken(token);
 
             navigate('/');
-        } catch (error: 404) {
-            setError(error.response?.data?.message || 'Incorrect login data');
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                const errorResponse = err.response?.data as ErrorResponse;
+                setError(errorResponse.message || 'Incorrect login data');
+            } else {
+                setError('An unexpected error occurred');
+            }
         }
     };
 
@@ -74,7 +85,7 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
                     />
                 </div>
 
-                <button onClick={handleSubmit}>Login</button>
+                <button>Login</button>
                 <a href="/reg">Sign Up</a>
                 <p style={{color: "lightgray"}}>Or u can go to <a href={"/"} style={{
                     color: "#a2b8ff !important",

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import BigButton from '../../Buttons/BigButton.tsx';
+import BigButton from '../../Buttons/BigButton';
 import AddPoint from '../AddPoint/AddPoint';
 
 import bookmark from '../../../icons/bookmark.svg';
@@ -21,7 +21,7 @@ interface GeneratedPointProps {
     onCreateReport?: () => void;
     onEditReport?: () => void;
 
-    coordinates: [number, number];
+    coordinates: [number, number] | null;
     timeOfGenerate: string;
 }
 
@@ -60,8 +60,10 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
     })
 
     const defaultOnStartJourney = () => {
-        const [lat, lon] = coordinates;
-        window.location.href = `https://www.google.com/maps?q=${lat},${lon}\n`
+        if (coordinates) {
+            const [lat, lon] = coordinates;
+            window.location.href = `https://www.google.com/maps?q=${lat},${lon}`;
+        }
     }
 
     return (
