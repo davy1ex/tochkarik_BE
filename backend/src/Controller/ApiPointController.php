@@ -45,6 +45,7 @@ class ApiPointController extends AbstractController
             if (!$user) {
                 return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
             }
+
             $point = new Points();
             $point->setName($name);
             $point->setUsername($user);
@@ -59,7 +60,6 @@ class ApiPointController extends AbstractController
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             $data = json_decode($request->getContent(), true);
-
             return $this->json(['error' => 'Internal Server Error', 'time' => $data['timeOfGenerate']], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -90,7 +90,6 @@ class ApiPointController extends AbstractController
                     'description' => $point->getDescription(),
                 ];
             }
-
             return $this->json(['points' => $pointsData], JsonResponse::HTTP_OK);
         } catch (\Exception $e) {
             return $this->json(['error' => 'Internal Server Error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
