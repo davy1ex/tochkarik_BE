@@ -24,7 +24,6 @@ class ApiUserController extends AbstractController
     {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
             $user_id = $request->query->get('user_id');
             if (!$user_id || !is_numeric($user_id)) {
                 return $this->json(['error' => 'Invalid user_id'], JsonResponse::HTTP_BAD_REQUEST);

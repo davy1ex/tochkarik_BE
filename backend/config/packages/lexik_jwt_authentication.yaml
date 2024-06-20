@@ -10,3 +10,15 @@ lexik_jwt_authentication:
         check_path: /api/login_check
         username_path: username
         password_path: security.credentials.password
+
+    token_extractors:
+        authorization_header:
+            enabled: true
+            prefix: Bearer
+            name: Authorization
+        cookie:
+            enabled: false
+            name: BEARER
+        query_parameter:
+            enabled: false
+            name: bearer

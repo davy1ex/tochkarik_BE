@@ -84,5 +84,8 @@ module.exports = {
         host: '0.0.0.0',
         hot: true,
         historyApiFallback: true,
+        client: {
+            webSocketURL: 'wss://localhost:5173/ws',
+        },
     },
 };
