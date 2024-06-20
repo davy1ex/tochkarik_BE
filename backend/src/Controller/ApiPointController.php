@@ -37,6 +37,10 @@ class ApiPointController extends AbstractController
             $coordinates = $data['coordinates'];
             $timeOfGenerate = $data['timeOfGenerate'];
 
+            if (!($name || $coordinates || $timeOfGenerate)) {
+                return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
+            }
+
             $user = $this->security->getUser();
             if (!$user) {
                 return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
@@ -72,6 +76,10 @@ class ApiPointController extends AbstractController
             }
 
             $points = $user->getPoints();
+            if ($points === null) {
+                return $this->json(['points' => []], JsonResponse::HTTP_OK);
+            }
+
             $pointsData = [];
             foreach ($points as $point) {
                 $pointsData[] = [
