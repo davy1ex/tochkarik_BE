@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PointsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,17 +10,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 
 #[ORM\Entity(repositoryClass: PointsRepository::class)]
-#[ApiResource(
-    operations: [
-        new \ApiPlatform\Metadata\GetCollection(),
-        new \ApiPlatform\Metadata\Post(),
-        new \ApiPlatform\Metadata\Get(),
-        new \ApiPlatform\Metadata\Put(),
-        new \ApiPlatform\Metadata\Delete()
-    ],
-    normalizationContext: ['groups' => ['points']],
-    denormalizationContext: ['groups' => ['points']]
-)]
 class Points
 {
     #[ORM\Id]
