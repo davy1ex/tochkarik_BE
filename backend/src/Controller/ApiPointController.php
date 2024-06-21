@@ -38,7 +38,7 @@ class ApiPointController extends AbstractController
             $coordinates = $data['coordinates'];
             $timeOfGenerate = $data['timeOfGenerate'];
 
-            if (empty($name) || empty($coordinates) || empty($timeOfGenerate)) {
+            if (!($name || $coordinates || $timeOfGenerate)) {
                 return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
             }
 
@@ -66,9 +66,12 @@ class ApiPointController extends AbstractController
                     'description' => $point->getDescription(),
                 ],
             ], Response::HTTP_CREATED);
+        } catch (\Doctrine\DBAL\Exception\ConnectionException $e) {
+            return $this->json(['error' => 'Database connection error: ' . $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            return $this->json(['error' => 'Database error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
-            $data = json_decode($request->getContent(), true);
-            return $this->json(['error' => 'Internal Server Error', 'time' => $data['timeOfGenerate']], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['error' => 'Internal Server Error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
