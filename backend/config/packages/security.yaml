@@ -53,9 +53,10 @@ security:
                 target: /
 
     access_control:
-        - { path: ^/login, roles:  }
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/appLoginPage, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/auth/signin, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/auth/signup, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/auth/logout, roles: ROLE_ADMIN }
+        - { path: ^/adminboard, roles: ROLE_ADMIN }
 
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }

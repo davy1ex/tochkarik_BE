@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 
-class LoginController extends AbstractController
+#[Route('/admin/auth')]
+class AuthController extends AbstractController
 {
-    #[Route('/login', name: 'appLoginPage')]
+    #[Route('/signin', name: 'appLoginPage')]
     public function appLoginPage(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
