@@ -22,7 +22,7 @@ const Bookmarks: FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
 
-    useEffect(() => {
+    const fetchBookmarks = () => {
         const token = localStorage.getItem('token');
         const user_id = localStorage.getItem('user_id');
 
@@ -41,7 +41,23 @@ const Bookmarks: FC = () => {
             setError(err.message);
             setLoading(false);
         });
+    };
+
+    const handleCancel = () => {
+        setSelectedBookmark(null);
+        fetchBookmarks();
+    };
+
+    useEffect(() => {
+        fetchBookmarks();
     }, []);
+
+    const handlePointDeletion = (pointId: number | null) => {
+        if (pointId) {
+            setBookmarks(bookmarks.filter(bookmark => bookmark.id !== pointId));
+            setSelectedBookmark(null);
+        }
+    };
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading user data: {error}</p>;
@@ -69,21 +85,25 @@ const Bookmarks: FC = () => {
                 <>
                     <MapComponent
                         coordinates={selectedBookmark.coordinates}
-                    showRadius={false}
-                    radius={0}
-                    centerPosition={selectedBookmark.coordinates}/>
+                        showRadius={false}
+                        radius={0}
+                        centerPosition={selectedBookmark.coordinates}
+                    />
 
                     <GeneratedPoint
-                        street={selectedBookmark.description}
+                        pointId={selectedBookmark.id}
                         pointTitle={selectedBookmark.name}
-                        isNew={false}  // Assuming it's not a new point since it's already bookmarked
-                        hasReport={false}  // Adjust based on your logic if report exists
-                        onCancel={() => setSelectedBookmark(null)}
-
-                        onCreateReport={() => { /* Implement create report logic */ }}
-                        onEditReport={() => { /* Implement edit report logic */ }}
+                        street={selectedBookmark.description}
                         coordinates={selectedBookmark.coordinates}
                         timeOfGenerate={selectedBookmark.timeOfGenerate}
+
+                        isNew={false}  // Assuming it's not a new point since it's already bookmarked
+                        hasReport={false}  // Adjust based on your logic if report exists
+
+                        onCancel={handleCancel}
+                        onCreateReport={() => { /* Implement create report logic */ }}
+                        onEditReport={() => { /* Implement edit report logic */ }}
+                        onSave={handlePointDeletion}
                     />
                 </>
             )}

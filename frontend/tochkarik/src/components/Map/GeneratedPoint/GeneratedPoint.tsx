@@ -9,9 +9,11 @@ import bookmarked from '../../../icons/bookmarked.svg';
 
 import "./GeneratedPoint.css";
 import '../Map.css';
+import {axiosInstance} from "../../../hooks/axiosConfig";
 
 
 interface GeneratedPointProps {
+    pointId: number | null;
     street: string;
     pointTitle: string;
     isNew: boolean;
@@ -20,35 +22,60 @@ interface GeneratedPointProps {
     onStartJourney?: () => void;
     onCreateReport?: () => void;
     onEditReport?: () => void;
-
     coordinates: [number, number] | null;
     timeOfGenerate: string;
+    onSave: (id: number) => void;
 }
 
 const GeneratedPoint: React.FC<GeneratedPointProps> = ({
-   street,
-   pointTitle,
-   isNew,
-   hasReport,
-   onCancel,
-   onStartJourney,
-   onCreateReport,
-   onEditReport,
-
-   coordinates,
-   timeOfGenerate,
-
+                                                           pointId,
+                                                           street,
+                                                           pointTitle,
+                                                           isNew,
+                                                           hasReport,
+                                                           onCancel,
+                                                           onStartJourney,
+                                                           onCreateReport,
+                                                           onEditReport,
+                                                           coordinates,
+                                                           timeOfGenerate,
+                                                           onSave
 }) => {
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
     const [showAddPointDialog, setShowAddPointDialog] = useState<boolean>(false);
+    const [localPointId, setLocalPointId] = useState<number | null>(pointId);
 
     const handleAddBookmark = () => {
         setShowAddPointDialog(true);
         setIsBookmarked(true);
     };
 
+    const handleRemoveBookmark = (pointId: number | null) => {
+        if (!pointId) {
+            console.error("No pointId provided");
+            return;
+        }
+        axiosInstance.delete(`/points/${pointId}`)
+            .then(response => {
+                setIsBookmarked(false);
+                onSave(null);
+                onCancel();
+            })
+            .catch(error => {
+                console.error(`Error deleting point with ID: ${pointId}`, error);
+            });
+    }
+
     const addButtonCancelHandler = () => {
+        setShowAddPointDialog(false);
+    };
+
+    const handleSave = (id: number) => {
+        console.log('on save ' + id)
+        setLocalPointId(id);
+        setIsBookmarked(true);
+        onSave(id);
         setShowAddPointDialog(false);
     };
 
@@ -73,7 +100,8 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
                     <h1 className={"point-title"}>{pointTitle}</h1>
 
                     {isLogin && <>{isBookmarked || !isNew ? (
-                        <div className={"controls-header-img-container"}>
+                        <div className={"controls-header-img-container"}
+                             onClick={() => handleRemoveBookmark(localPointId)}>
                             <img src={bookmarked} alt={"Bookmarked"}/>
                         </div>
                     ) : (
@@ -101,6 +129,7 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
                     addButtonCancelHandler={addButtonCancelHandler}
                     position={coordinates}
                     timeOfGenerate={timeOfGenerate}
+                    onSave={handleSave}
                 />
             )}
         </div>
