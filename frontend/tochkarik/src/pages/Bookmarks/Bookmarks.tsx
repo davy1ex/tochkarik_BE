@@ -30,7 +30,7 @@ const Bookmarks: FC = () => {
             setAuthToken(token);
         }
 
-        axiosInstance.get('/points/get_points', {
+        axiosInstance.get('/points', {
             params: {
                 'user_id': user_id,
             }

@@ -36,7 +36,7 @@ const AddPoint: React.FC<AddPointProps> = ({ addButtonCancelHandler, position, t
         }
 
         setLoading(true);
-        axiosInstance.post('/points/add_point', {
+        axiosInstance.post('/points', {
             user_id: user_id,
             name: inputName,
             coordinates: position,

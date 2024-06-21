@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Points;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
 
-#[Route('/api/points')]
+#[Route('/api')]
 class ApiPointController extends AbstractController
 {
     private $security;
@@ -23,8 +24,41 @@ class ApiPointController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/add_point', name: 'apiPointAdd', methods: ['POST'])]
-    public function apiPointAdd(
+    #[Route('/points', name: 'apiGetPoints', methods: ['GET'])]
+    public function apiGetPoints(EntityManagerInterface $entityManager): JsonResponse
+    {
+        try {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+            $user = $this->security->getUser();
+            if (!$user) {
+                return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+            }
+
+            $points = $entityManager->getRepository(Points::class)->findBy(['username' => $user]);
+
+            $pointsData = [];
+            foreach ($points as $point) {
+                $pointsData[] = [
+                    'id' => $point->getId(),
+                    'name' => $point->getName(),
+                    'coordinates' => $point->getCoordinates(),
+                    'timeOfGenerate' => $point->getTimeOfGenerate()->format('Y-m-d H:i:s'),
+                    'description' => $point->getDescription(),
+                ];
+            }
+            return $this->json(['points' => $pointsData], JsonResponse::HTTP_OK);
+        } catch (\Doctrine\DBAL\Exception\ConnectionException $e) {
+            return $this->json(['error' => 'Database connection error: ' . $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            return $this->json(['error' => 'Database error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Internal Server Error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('/points', name: 'apiPointCreate', methods: ['POST'])]
+    public function apiPointCreate(
         Request                $request,
         EntityManagerInterface $entityManager
     ): JsonResponse
@@ -37,7 +71,7 @@ class ApiPointController extends AbstractController
             $coordinates = $data['coordinates'];
             $timeOfGenerate = $data['timeOfGenerate'];
 
-            if (!($name || $coordinates || $timeOfGenerate)) {
+            if (empty($name) || empty($coordinates) || empty($timeOfGenerate)) {
                 return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
             }
 
@@ -64,35 +98,5 @@ class ApiPointController extends AbstractController
         }
     }
 
-    #[Route('/get_points', name: 'apiGetPoints', methods: ['GET'])]
-    public function apiGetPoints(): JsonResponse
-    {
-        try {
-            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            $user = $this->security->getUser();
-            if (!$user) {
-                return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
-            }
-
-            $points = $user->getPoints();
-            if ($points === null) {
-                return $this->json(['points' => []], JsonResponse::HTTP_OK);
-            }
-
-            $pointsData = [];
-            foreach ($points as $point) {
-                $pointsData[] = [
-                    'id' => $point->getId(),
-                    'name' => $point->getName(),
-                    'coordinates' => $point->getCoordinates(),
-                    'timeOfGenerate' => $point->getTimeOfGenerate()->format('Y-m-d H:i:s'),
-                    'description' => $point->getDescription(),
-                ];
-            }
-            return $this->json(['points' => $pointsData], JsonResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            return $this->json(['error' => 'Internal Server Error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
 }

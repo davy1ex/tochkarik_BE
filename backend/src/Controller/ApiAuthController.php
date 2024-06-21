@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/auth')]
 class ApiAuthController extends AbstractController
 {
-    #[Route('/check_token', name: 'api_check_token', methods: ['GET'])]
-    public function checkToken()
+    #[Route('/check_token', name: 'apiCheckToken', methods: ['GET'])]
+    public function apiCheckToken()
     {
         return new JsonResponse(['status' => 'Token is valid']);
     }
