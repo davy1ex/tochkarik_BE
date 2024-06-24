@@ -1,0 +1,10 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content %}
+    <div id="location-rules-widget"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/locationRulesWidget.js') }}"></script>
+{% endblock %}
