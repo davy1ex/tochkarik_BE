@@ -19,29 +19,19 @@ class ApiUserController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/get_user', name: 'app_user_show', methods: ['GET'])]
-    public function get_user(Request $request, UserRepository $userRepository): JsonResponse
+    #[Route('/current_user', name: 'apiGetCurrentUserGet', methods: ['GET'])]
+    public function apiGetCurrentUserGet(Request $request, UserRepository $userRepository): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-            $user_id = $request->query->get('user_id');
-            if (!$user_id || !is_numeric($user_id)) {
-                return $this->json(['error' => 'Invalid user_id'], JsonResponse::HTTP_BAD_REQUEST);
-            }
 
-            $user_id = (int)$user_id;
             $currentUser = $this->security->getUser();
-            if ($currentUser->getId() !== $user_id) {
-                return $this->json(['error' => 'Forbidden'], JsonResponse::HTTP_FORBIDDEN);
-            }
-
-            $user = $userRepository->find($user_id);
-            if (!$user) {
+            if (!$currentUser) {
                 return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
             }
 
             return $this->json([
-                'username' => $user->getUsername(),
+                'username' => $currentUser->getUsername(),
             ]);
 
         } catch (\Exception $e) {

@@ -29,16 +29,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const user_id = parseInt(localStorage.getItem('user_id') || '', 10);
         if (token) {
             setAuthToken(token);
         }
 
-        axiosInstance.get(`/user/get_user`, {
-            params: {
-                'user_id': user_id,
-            }
-        }).then(response => {
+        axiosInstance.get(`/user/current_user`, {}).then(response => {
             if (!response.data) {
                 navigate('/');
             } else {
@@ -53,6 +48,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
 
     const redirectToBookmarks = () => {
         navigate('/bookmarks');
+    };
+
+    const redirectToUserPosts = () => {
+        navigate('/user_posts');
     };
 
     if (loading) return <p>Loading...</p>;
@@ -73,7 +72,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                         </div>
                         <div className="container-buttons">
                             <BigButton>Edit profile</BigButton>
-                            <BigButton>My posts</BigButton>
+                            <BigButton onClick={redirectToUserPosts}>My posts</BigButton>
                             <BigButton onClick={redirectToBookmarks}>My bookmarks</BigButton>
                             <BigButton onClick={logoutHandler}>Logout</BigButton>
                         </div>

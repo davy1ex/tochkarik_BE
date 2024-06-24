@@ -13,8 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'admin')]
+    #[Route('/', name: 'index')]
     public function index(): Response
+    {
+        return $this->redirectToRoute('admin');
+    }
+
+    #[Route('/adminboard', name: 'admin')]
+    public function admin(): Response
     {
         return $this->render('admin/index.html.twig');
     }
@@ -28,7 +34,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-         yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
-         yield MenuItem::linkToCrud('Points', 'fas fa-list', Points::class);
+        yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
+        yield MenuItem::linkToCrud('Points', 'fas fa-list', Points::class);
     }
 }

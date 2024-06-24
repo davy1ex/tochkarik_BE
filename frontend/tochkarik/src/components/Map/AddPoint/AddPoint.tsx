@@ -15,9 +15,10 @@ interface AddPointProps {
     addButtonCancelHandler: () => void;
     position: [number, number] | null;
     timeOfGenerate: string | null;
+    onSave: (pointId: number) => void;
 }
 
-const AddPoint: React.FC<AddPointProps> = ({ addButtonCancelHandler, position, timeOfGenerate }) => {
+const AddPoint: React.FC<AddPointProps> = ({addButtonCancelHandler, position, timeOfGenerate, onSave}) => {
     const [inputName, setName] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -36,30 +37,26 @@ const AddPoint: React.FC<AddPointProps> = ({ addButtonCancelHandler, position, t
         }
 
         setLoading(true);
-        axiosInstance.post('/points/add_point', {
+        axiosInstance.post('/points', {
             user_id: user_id,
             name: inputName,
             coordinates: position,
             timeOfGenerate: timeOfGenerate,
         })
             .then(response => {
+                console.log('Response from server:', response.data);
+                onSave(response.data.data.id);
                 setLoading(false);
                 setError(null);
                 handleClose();
                 console.log(response)
             })
-            .catch(error => {
-                console.log(error)
+            .catch(() => {
                 setLoading(false);
                 setError('Error occurred while saving the point.');
             });
     };
-    console.log({
-        user_id: 1,
-        name: inputName,
-        coordinates: position,
-        timeOfGenerate: timeOfGenerate ? new Date(timeOfGenerate).toISOString() : null,
-    })
+
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };

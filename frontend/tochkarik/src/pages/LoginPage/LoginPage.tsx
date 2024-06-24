@@ -35,12 +35,8 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
             const token = response.data.token;
             const refresh_token = response.data.refresh_token;
 
-            const user_id = response.data.user_data.user_id;
-
             localStorage.setItem('token', token);
             localStorage.setItem('refresh_token', refresh_token);
-
-            localStorage.setItem('user_id', user_id);
 
             setAuthToken(token);
 

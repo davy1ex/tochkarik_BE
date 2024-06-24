@@ -16,14 +16,18 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/auth')]
 class ApiAuthController extends AbstractController
 {
-    #[Route('/check_token', name: 'api_check_token', methods: ['GET'])]
-    public function checkToken()
+    #[Route('/check_token', name: 'apiCheckToken', methods: ['GET'])]
+    public function apiCheckToken()
     {
         return new JsonResponse(['status' => 'Token is valid']);
     }
 
-    #[Route('/signup', name: 'api_register', methods: ['POST'])]
-    public function api_register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/signup', name: 'apiRegister', methods: ['POST'])]
+    public function apiRegister(
+        Request                     $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface      $entityManager
+    ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -57,6 +61,4 @@ class ApiAuthController extends AbstractController
 
         return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
     }
-
-
 }

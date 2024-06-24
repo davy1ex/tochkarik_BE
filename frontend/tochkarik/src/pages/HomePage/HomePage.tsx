@@ -29,6 +29,8 @@ const HomePage: FC = () => {
     const geoLocation = useGeoLocation(setError);
     const generateRandomCoordinates = useRandomCoordinates();
 
+    const [pointId, setPointId] = useState<number | null>(null)
+
     useEffect(() => {
         if (geoLocation) {
             setPosition(geoLocation);
@@ -65,6 +67,7 @@ const HomePage: FC = () => {
         setShowControls(true);
         setStreet('');
         setTimeOfGenerate('');
+        setPointId(null)
     };
 
 
@@ -96,6 +99,8 @@ const HomePage: FC = () => {
                 </div>
             ) : (
                 <GeneratedPoint
+                    pointId={pointId}
+                    onSave={(id: number | null) => setPointId(id)}
                     street={street}
                     pointTitle="Point Generated"
                     isNew={true}

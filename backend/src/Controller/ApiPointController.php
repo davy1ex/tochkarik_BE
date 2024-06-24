@@ -1,42 +1,49 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Points;
-use App\Repository\PointsRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 
-#[Route('/api/points')]
+#[Route('/api')]
 class ApiPointController extends AbstractController
 {
-    #[Route('/add_point', name: 'api_points_add', methods: ['POST'])]
-    public function api_add(Request $request, EntityManagerInterface $entityManager, PointsRepository $pointsRepository, UserRepository $userRepository): JsonResponse
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+    #[Route('/points', name: 'apiAddPoint', methods: ['POST'])]
+    public function apiPointAdd(
+        Request                $request,
+        EntityManagerInterface $entityManager
+    ): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
             $data = json_decode($request->getContent(), true);
-            $user_id = $data['user_id'];
-
-            if (!$user_id) {
-                return $this->json(['error' => 'Incorrect user_id', "user_id" => $user_id, 'name'=>$request->query->get('name')], Response::HTTP_BAD_REQUEST);
-            }
-
-            $user_id = (int) $user_id;
-            $user = $userRepository->find($user_id);
-
-            if (!$user || !is_numeric($user_id)) {
-                return $this->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
-            }
-
             $name = $data['name'];
             $coordinates = $data['coordinates'];
             $timeOfGenerate = $data['timeOfGenerate'];
+
+            if (!($name || $coordinates || $timeOfGenerate)) {
+                return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $user = $this->security->getUser();
+            if (!$user) {
+                return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+            }
 
             $point = new Points();
             $point->setName($name);
@@ -49,37 +56,39 @@ class ApiPointController extends AbstractController
 
             return $this->json([
                 'status' => 'success',
+                'data' => [
+                    'id' => $point->getId(),
+                    'name' => $point->getName(),
+                    'coordinates' => $point->getCoordinates(),
+                    'timeOfGenerate' => $point->getTimeOfGenerate()->format('Y-m-d H:i:s'),
+                    'description' => $point->getDescription(),
+                ],
             ], Response::HTTP_CREATED);
+        } catch (\Doctrine\DBAL\Exception\ConnectionException $e) {
+            return $this->json(['error' => 'Database connection error: ' . $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            return $this->json(['error' => 'Database error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
-            $data = json_decode($request->getContent(), true);
-
-            return $this->json(['error' => 'Internal Server Error', 'time' => $data['timeOfGenerate']], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['error' => 'Internal Server Error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    #[Route('/get_points', name: 'api_points_get', methods: ['GET'])]
-    public function get_points(Request $request, UserRepository $userRepository): JsonResponse
+    #[Route('/points', name: 'apiGetPoints', methods: ['GET'])]
+    public function apiGetAllPoints(): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            $user_id = $request->query->get('user_id');
-            if (!$user_id || !is_numeric($user_id)) {
-                return $this->json(['error' => 'Invalid user_id'], JsonResponse::HTTP_BAD_REQUEST);
-            }
-
-            $user_id = (int)$user_id;
-            $currentUser = $this->getUser();
-            if ($currentUser->getId() !== $user_id) {
-                return $this->json(['error' => 'Forbidden'], JsonResponse::HTTP_FORBIDDEN);
-            }
-
-            $user = $userRepository->find($user_id);
+            $user = $this->security->getUser();
             if (!$user) {
                 return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
             }
 
             $points = $user->getPoints();
+            if ($points === null) {
+                return $this->json(['points' => []], JsonResponse::HTTP_OK);
+            }
+
             $pointsData = [];
             foreach ($points as $point) {
                 $pointsData[] = [
@@ -90,10 +99,113 @@ class ApiPointController extends AbstractController
                     'description' => $point->getDescription(),
                 ];
             }
-
             return $this->json(['points' => $pointsData], JsonResponse::HTTP_OK);
+        } catch (\Doctrine\DBAL\Exception\ConnectionException $e) {
+            return $this->json(['error' => 'Database connection error: ' . $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            return $this->json(['error' => 'Database error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
-            return $this->json(['error' => 'Internal Server Error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['error' => 'Internal Server Error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('/points/{id}', name: 'apiGetPoint', methods: ['GET'])]
+    public function apiGetPointById(Points $point): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->security->getUser();
+        if (!$user || $point->getUsername() !== $user) {
+            return $this->json(['error' => 'Unauthorized access'], JsonResponse::HTTP_FORBIDDEN);
+        }
+
+        return $this->json([
+            'id' => $point->getId(),
+            'name' => $point->getName(),
+            'coordinates' => $point->getCoordinates(),
+            'timeOfGenerate' => $point->getTimeOfGenerate()->format('Y-m-d H:i:s'),
+            'description' => $point->getDescription(),
+        ], JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/points/{id}', name: 'api_points_update', methods: ['PUT'])]
+    public function update(
+        Request                $request,
+        Points                 $point,
+        EntityManagerInterface $entityManager
+    ): JsonResponse
+    {
+        try {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+            $user = $this->security->getUser();
+            if (!$user || $point->getUsername() !== $user) {
+                return $this->json(['error' => 'Unauthorized access'], JsonResponse::HTTP_FORBIDDEN);
+            }
+
+            $data = json_decode($request->getContent(), true);
+            $name = $data['name'];
+            $coordinates = $data['coordinates'];
+            $timeOfGenerate = $data['timeOfGenerate'];
+
+            if (!empty($name)) {
+                $point->setName($data['name']);
+            }
+            if (!empty($coordinates)) {
+                $point->setCoordinates($data['coordinates']);
+            }
+            if (!empty($timeOfGenerate)) {
+                $point->setTimeOfGenerate(new \DateTimeImmutable($data['timeOfGenerate']));
+            }
+            if (!empty($description)) {
+                $point->setDescription($data['description']);
+            }
+
+            $entityManager->flush();
+
+            return $this->json([
+                'status' => 'success',
+                'data' => [
+                    'id' => $point->getId(),
+                    'name' => $point->getName(),
+                    'coordinates' => $point->getCoordinates(),
+                    'timeOfGenerate' => $point->getTimeOfGenerate()->format('Y-m-d H:i:s'),
+                    'description' => $point->getDescription(),
+                ],
+            ], JsonResponse::HTTP_OK);
+        } catch (ConnectionException $e) {
+            return $this->json(['error' => 'Database connection error: ' . $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            return $this->json(['error' => 'Database error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Internal Server Error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('/points/{id}', name: 'api_points_delete', methods: ['DELETE'])]
+    public function delete(
+        Points                 $point,
+        EntityManagerInterface $entityManager
+    ): JsonResponse
+    {
+        try {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+            $user = $this->security->getUser();
+            if (!$user || $point->getUsername() !== $user) {
+                return $this->json(['error' => 'Unauthorized access'], JsonResponse::HTTP_FORBIDDEN);
+            }
+
+            $entityManager->remove($point);
+            $entityManager->flush();
+
+            return $this->json(['status' => 'success'], JsonResponse::HTTP_NO_CONTENT);
+        } catch (ConnectionException $e) {
+            return $this->json(['error' => 'Database connection error: ' . $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            return $this->json(['error' => 'Database error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Internal Server Error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
