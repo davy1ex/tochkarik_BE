@@ -1,8 +1,6 @@
-import axios, {AxiosError, AxiosInstance, AxiosResponse} from 'axios';
-
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 
 const apiUrl = process.env.VITE_API_URL;
-
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: `${apiUrl}/api`,
@@ -16,51 +14,79 @@ const setAuthToken = (token: string | null): void => {
     }
 }
 
+const clearAuthTokens = (): void => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
+}
+
 const refreshToken = async (): Promise<string | null> => {
     try {
-        const response = await axios.post(`${apiUrl}/api/token/refresh`, {
-            refresh_token: localStorage.getItem('refresh_token'),
-        });
-        return response.data.refresh_token;
+        const params = new URLSearchParams();
+        params.append('refresh_token', localStorage.getItem('refresh_token') || '');
+        params.append('token', localStorage.getItem('token') || '');
+
+        const response = await axiosInstance.post('/token/refresh', params, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+
+
+        localStorage.setItem('access_token', response.data.token);
+        localStorage.setItem('refresh_token', response.data.refresh_token);
+        return response.data.token;
     } catch (error) {
-        console.error('Failed to refresh token', error);
+        clearAuthTokens();
+
         return null;
     }
+
 };
 
-const checkTokenValidity = async (): Promise<boolean> => {
+const checkTokenValidity = async (handleLogout: () => void): Promise<boolean> => {
     try {
         await axiosInstance.get('/auth/check_token');
         return true;
     } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response && axiosError.response.status === 401) {
+
+            const newToken = await refreshToken();
+            if (newToken) {
+                setAuthToken(newToken);
+                return true;
+            } else {
+                clearAuthTokens();
+                handleLogout();
+                return false;
+            }
+        }
         return false;
     }
 };
+
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+    _retry?: boolean;
+}
 
 axiosInstance.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
         const status = error.response ? error.response.status : null;
-        const originalRequest = error.config;
+        const originalRequest = error.config as CustomAxiosRequestConfig;
 
-
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        if (status === 401 && error.response.data.message == "Expired JWT Token") {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
+        if (status === 401 && error.response?.data && (error.response.data as any).message === "Expired JWT Token" && originalRequest) {
             originalRequest._retry = true;
-            window.location.href = '/logout'
-
-
             const newToken = await refreshToken();
             if (newToken) {
                 setAuthToken(newToken);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
+
+                if (originalRequest.headers) {
+                    originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+                } else {
+                    originalRequest.headers = {"Authorization": `Bearer ${newToken}`};
+                }
+
                 return axiosInstance(originalRequest);
             } else {
                 window.location.href = '/401';
@@ -69,27 +95,10 @@ axiosInstance.interceptors.response.use(
         }
 
         if (!error.response) {
-            // if server error
-            console.error('Network error: Backend is not responding');
-            window.location.href = '/502'; // или другой маршрут для обработки ошибки сети
+            window.location.href = '/502';
             return Promise.reject(error);
         }
 
-        const currentPath = window.location.pathname;
-
-        const showErrors = currentPath !== '/login' && currentPath !== '/reg';
-
-        if (showErrors) {
-            if (status === 404) {
-                window.location.href = '/404';
-            } else if (status === 502) {
-                window.location.href = '/502';
-            } else if (status === 401) {
-                window.location.href = '/401';
-            } else if (status === 501) {
-                window.location.href = '/501';
-            }
-        }
         return Promise.reject(error);
     }
 );

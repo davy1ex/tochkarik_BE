@@ -3,17 +3,17 @@ import {BrowserRouter as Router} from 'react-router-dom';
 
 import useAuth from './hooks/useAuth';
 import AppRoutes from './routes/AppRoutes';
-import {checkTokenValidity} from './hooks/axiosConfig'
+import {checkTokenValidity, setAuthToken} from './hooks/axiosConfig'
 import './App.css';
 
 
 function App() {
-    const { isAuthenticated, setAuthToken, handleLogout } = useAuth();
+    const {isAuthenticated, setAuthToken: setAuthTokenInState, handleLogout} = useAuth();
 
     useEffect(() => {
         if (isAuthenticated) {
             const interval = setInterval(async () => {
-                const isValid = await checkTokenValidity();
+                const isValid = await checkTokenValidity(handleLogout);
                 if (!isValid) {
                     handleLogout();
                 }
@@ -23,12 +23,20 @@ function App() {
         }
     }, [isAuthenticated, handleLogout]);
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setAuthToken(token);
+            setAuthTokenInState(token);
+        }
+    }, [setAuthTokenInState]);
+
     return (
         <Router>
             <div className="root-container">
                 <AppRoutes
                     isAuthenticated={isAuthenticated}
-                    setAuthToken={setAuthToken}
+                    setAuthToken={setAuthTokenInState}
                     handleLogout={handleLogout}
                 />
             </div>

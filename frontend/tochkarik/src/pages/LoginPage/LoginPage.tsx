@@ -33,8 +33,10 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
             });
 
             const token = response.data.token;
+            const refresh_token = response.data.refresh_token;
 
             localStorage.setItem('token', token);
+            localStorage.setItem('refresh_token', refresh_token);
 
             setAuthToken(token);
 
