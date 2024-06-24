@@ -100,7 +100,7 @@ const HomePage: FC = () => {
             ) : (
                 <GeneratedPoint
                     pointId={pointId}
-                    onSave={(id: number) => setPointId(id)}
+                    onSave={(id: number | null) => setPointId(id)}
                     street={street}
                     pointTitle="Point Generated"
                     isNew={true}

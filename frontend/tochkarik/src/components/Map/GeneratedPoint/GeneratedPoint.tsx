@@ -24,7 +24,7 @@ interface GeneratedPointProps {
     onEditReport?: () => void;
     coordinates: [number, number] | null;
     timeOfGenerate: string;
-    onSave: (id: number) => void;
+    onSave: (id: number | null) => void;
 }
 
 const GeneratedPoint: React.FC<GeneratedPointProps> = ({
@@ -57,7 +57,7 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
             return;
         }
         axiosInstance.delete(`/points/${pointId}`)
-            .then(response => {
+            .then(() => {
                 setIsBookmarked(false);
                 onSave(null);
                 onCancel();
