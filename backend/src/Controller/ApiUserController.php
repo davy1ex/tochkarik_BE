@@ -19,8 +19,8 @@ class ApiUserController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/get_user', name: 'apiUserGet', methods: ['GET'])]
-    public function apiUserGet(Request $request, UserRepository $userRepository): JsonResponse
+    #[Route('/current_user', name: 'apiGetCurrentUserGet', methods: ['GET'])]
+    public function apiGetCurrentUserGet(Request $request, UserRepository $userRepository): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
