@@ -7,16 +7,16 @@ import logo from '../../icons/logo.svg';
 import explore from '../../icons/explore.svg';
 import browse from '../../icons/browse.svg';
 
+import {useAuth} from '../../services/AuthContext';
+
 import BigButton from "../Buttons/BigButton";
 
 
-interface HeaderProps {
-    user_login: boolean;
-}
-
-const Header: FC<HeaderProps> = ({ user_login }) => {
+const Header: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const {isAuthenticated} = useAuth();
 
     const handleJoinInClick = () => {
         navigate('/login');
@@ -26,7 +26,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
 
     return (
         <header className="header">
-            {user_login && (
+            {isAuthenticated && (
                 <div className="menu-icon" onClick={() => navigate("/profile")}>
                     ☰
                 </div>
@@ -40,7 +40,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
             </a>
 
             <div className="headerContainer">
-                {user_login ? (
+                {isAuthenticated ? (
                     <>
                         <a className="points" onClick={() => alert('Перейти в магазин')}>
                             300 <span className="icon"><img src={coin} alt="" /></span>

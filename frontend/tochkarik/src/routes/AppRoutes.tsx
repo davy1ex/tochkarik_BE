@@ -32,6 +32,7 @@ const AppRoutes: FC <AppRoutesProps> = ({ isAuthenticated, setAuthToken, handleL
             <Route path="/404" element={<Error404 />} />
             <Route path="/501" element={<Error501 />} />
             <Route path="/502" element={<Error502 />} />
+            <Route path="/logout" element={<Logout handleLogout={handleLogout}/>}/>
             <Route path="*" element={<Navigate to="/404" />} />
             <Route path="/logout" element={<Logout handleLogout={handleLogout} />} />
         </Routes>
