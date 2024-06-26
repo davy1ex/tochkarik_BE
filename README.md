@@ -33,7 +33,31 @@ docker-compose run --rm node sh
 npm install
 ```
 2. Make simmilar with `composer install` for `php-fpm` container
-3. Rerun docker-compose with 
+<br>[optional] If u not have prefered JWT setup - create new:
+3. 
+  ```bash
+openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_bits:2048
+openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+```
+Then add JWT to `backend/.env`
+```bash
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=your_jwt_passphrase
+###< lexik/jwt-authentication-bundle ###
+
+```
+Also add to `backend/config/packages/lexik_jwt_authentication.yaml` something like below:
+```yaml
+lexik_jwt_authentication:
+    secret_key: '%kernel.project_dir%/config/jwt/private.pem' # path to the private key
+    public_key: '%kernel.project_dir%/config/jwt/public.pem'  # path to the public key
+    pass_phrase: 'your_jwt_passphrase' # this is the passphrase you used when generating the keys
+    token_ttl: 3600
+
+```
+4. Rerun docker-compose with 
 ```bash
 docker-compose down && docker-compose up -d
 ```
