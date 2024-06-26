@@ -81,6 +81,7 @@ const HomePage: FC = () => {
 
     return (
         <div className="home-container">
+            <a href={"/GenerateByRule"}>click</a>
             <MapComponent
                 coordinates={markerPosition}
                 showRadius={showControls}
@@ -91,10 +92,10 @@ const HomePage: FC = () => {
                 <div className="controls-container">
                     <div className={"controls-container-wrapper"}>
                         {street}
-                        <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange} />
+                        <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange}/>
                         <BigButton onClick={handleGenerate}>Generate</BigButton>
-                        <ManualLocationInput setPosition={setPosition} setError={setError} />
-                        {error && <ErrorMessage message={error} />}
+                        <ManualLocationInput setPosition={setPosition} setError={setError}/>
+                        {error && <ErrorMessage message={error}/>}
                     </div>
                 </div>
             ) : (
@@ -106,7 +107,7 @@ const HomePage: FC = () => {
                     isNew={true}
                     hasReport={false}  // Change this based on your logic
                     onCancel={handleCancel}
-                    
+
                     onCreateReport={handleCreateReport}
                     onEditReport={handleEditReport}
                     coordinates={markerPosition}
