@@ -25,7 +25,7 @@ const locationTypes = [
 const TestLocationRulesWidget: React.FC = () => {
     const [locationType, setLocationType] = useState('mall'); // "mall" as default type
     const [places, setPlaces] = useState<any[]>([{}]);
-    const [position, setPosition] = useState<[number, number]>([53.242, 50.221]);
+    const [position, setPosition] = useState<[number, number] | null>(null);
     const [radius, setRadius] = useState<number>(500);
     const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
     const [street, setStreet] = useState<string>('');
@@ -54,33 +54,39 @@ const TestLocationRulesWidget: React.FC = () => {
         const maxRetries = 3;
         let attempt = 0;
 
+        if (!position) {
+            alert('Position not available');
+        }
+
         while (attempt < maxRetries) {
             try {
+
                 console.log(position)
                 console.log("RADIUS NEARBY PLACES", radius)
                 const nearbyPlaces = await getNearbyPlaces(position[0], position[1], radius, locationType);
                 setPlaces(nearbyPlaces);
 
-                if (nearbyPlaces.length === 0) {
-                    throw new Error('No nearby places found');
-                }
 
                 console.log("NEARBY", nearbyPlaces[0]);
 
-                let placePosition;
                 if (nearbyPlaces[0].type === 'node') {
-                    placePosition = [nearbyPlaces[0].lat, nearbyPlaces[0].lon];
+                    setPosition([nearbyPlaces[0].lat, nearbyPlaces[0].lon])
                 } else if (nearbyPlaces[0].type === 'way' && nearbyPlaces[0].center) {
-                    placePosition = [nearbyPlaces[0].center.lat, nearbyPlaces[0].center.lon];
+                    setPosition([nearbyPlaces[0].center.lat, nearbyPlaces[0].center.lon])
+
                 } else {
                     throw new Error('Unknown place type');
                 }
 
-                setPosition(placePosition);
 
-                if (placePosition) {
-                    console.log("RADIUS RANDOM COORDINATES ", radius)
-                    const [newLatitude, newLongitude] = await generateRandomCoordinates(placePosition, 100);
+                if (nearbyPlaces[0].lat !== undefined || nearbyPlaces[0].center.lat !== undefined) {
+                    console.log("AFFILATION POSITION: ", position);
+
+                    const updatedPosition = nearbyPlaces[0].type === 'node'
+                        ? [nearbyPlaces[0].lat, nearbyPlaces[0].lon]
+                        : [nearbyPlaces[0].center.lat, nearbyPlaces[0].center.lon];
+
+                    const [newLatitude, newLongitude] = await generateRandomCoordinates(updatedPosition, 100);
                     setMarkerPosition([newLatitude, newLongitude]);
 
                     const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${newLatitude},${newLongitude}`);
@@ -92,20 +98,20 @@ const TestLocationRulesWidget: React.FC = () => {
                     const zonedTime = moment.tz(new Date(), timeZone);
                     const formattedTime = zonedTime.format('YYYY-MM-DD HH:mm:ss');
                     setTimeOfGenerate(formattedTime);
-                } else {
-                    setError('Position not determined. Please enter your location manually.');
+
+                    break;
+
                 }
 
-                // Если всё прошло успешно, выход из цикла
-                break;
+
             } catch (error) {
                 console.error('Error generating point:', error);
                 attempt++;
-                if (attempt >= maxRetries) {
-                    setError('Failed to generate a point after multiple attempts.');
-                }
             }
+
+
         }
+
     };
 
     const handleCancel = () => {
@@ -127,16 +133,13 @@ const TestLocationRulesWidget: React.FC = () => {
     return (
         <div>
             <h2>Select Location Type</h2>
-            {places.length > 0 ?
+            {position != null ? (
                 <>
-
-
                     <MapComponent
                         coordinates={markerPosition}
                         showRadius={true}
                         radius={radius}
                         centerPosition={position}
-                        places={places}
                     />
                     {showControls ? (
                         <div className="controls-container">
@@ -160,11 +163,11 @@ const TestLocationRulesWidget: React.FC = () => {
 
                             onCreateReport={handleCreateReport}
                             onEditReport={handleEditReport}
-                            coordinates={markerPosition}
+                            coordinates={position}
                             timeOfGenerate={timeOfGenerate}
                         />
                     )}
-                </> : [42, 42]}
+                </>) : (<> WAIT </>)}
             {error && <p className="error-message">{error}</p>}
         </div>
     );
