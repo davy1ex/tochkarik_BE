@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
 #[Route('/api')]
-class GenerationRulesController extends AbstractController
+class ApiGenerationRulesController extends AbstractController
 {
     private Security $security;
 
@@ -21,7 +21,7 @@ class GenerationRulesController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/generation_rules', name: 'generation_rule_index', methods: ['GET'])]
+    #[Route('/generation_rules', name: 'generationRules', methods: ['GET'])]
     public function index(GenerationRulesRepository $generationRulesRepository): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -34,7 +34,7 @@ class GenerationRulesController extends AbstractController
         ], JsonResponse::HTTP_OK);
     }
 
-    #[Route('/generation_rules', name: 'generation_rule_new', methods: ['POST'])]
+    #[Route('/generation_rules', name: 'generationRulesNew', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -54,7 +54,7 @@ class GenerationRulesController extends AbstractController
         ], JsonResponse::HTTP_CREATED);
     }
 
-    #[Route('/generation_rules/{id}', name: 'generation_rule_show', methods: ['GET'])]
+    #[Route('/generation_rules/{id}', name: 'generationRulesShow', methods: ['GET'])]
     public function show(GenerationRules $generationRules): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -65,7 +65,7 @@ class GenerationRulesController extends AbstractController
         ], JsonResponse::HTTP_OK);
     }
 
-    #[Route('/generation_rules/{id}', name: 'generation_rule_edit', methods: ['PUT'])]
+    #[Route('/generation_rules/{id}', name: 'generationRulesEdit', methods: ['PUT'])]
     public function edit(Request $request, GenerationRules $generationRules, EntityManagerInterface $entityManager): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
