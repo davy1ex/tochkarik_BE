@@ -26,13 +26,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
         navigate(path);
     };
 
-
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setAuthToken(token);
-        }
-
         axiosInstance.get(`/user/current_user`, {}).then(response => {
             if (!response.data) {
                 navigate('/');

@@ -24,20 +24,16 @@ const Bookmarks: FC = () => {
 
     const fetchBookmarks = () => {
         const token = localStorage.getItem('token');
-        const user_id = localStorage.getItem('user_id');
 
         if (token) {
             setAuthToken(token);
         }
 
-        axiosInstance.get('/points', {
-            params: {
-                'user_id': user_id,
-            }
-        }).then(response => {
-            setBookmarks(response.data.points);
-            setLoading(false);
-        }).catch(err => {
+        axiosInstance.get('/points')
+            .then(response => {
+                setBookmarks(response.data.points);
+                setLoading(false);
+            }).catch(err => {
             setError(err.message);
             setLoading(false);
         });

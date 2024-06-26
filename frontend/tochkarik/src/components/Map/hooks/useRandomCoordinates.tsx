@@ -49,7 +49,6 @@ const useRandomCoordinates = () => {
                     }
                 });
             const data = response.data;
-            console.log('Raw Overpass API response:', JSON.stringify(data, null, 2));
             return data.elements && data.elements.length > 0;
         } catch (error) {
             console.error('Error checking passability:', error);
