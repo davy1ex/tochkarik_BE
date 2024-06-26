@@ -1,31 +1,39 @@
 <!-- TOC -->
 * [How run it?](#how-run-it)
-    * [In first - run docker:](#in-first---run-docker)
-    * [In second (if it ur first run)](#in-second-if-it-ur-first-run)
+  * [In first - prepare files:](#in-first---prepare-files)
+  * [In second:](#in-second)
 <!-- TOC -->
 
 # How run it?
-## In first - run docker:
+## In first - prepare files:
+1. create `.env` file in root project dir:
+```env
+POSTGRES_USER=yourvalue
+POSTGRES_PASSWORD=yourvalue
+POSTGRES_DB=yourvalue
+VITE_API_URL=https://localhost:8443
+```
+2. Copy or create your ssl files to `docker/nginx/ssl`, like below:
+```bash
+$ ls -l docker/nginx/ssl
+total 16
+-rwxrwxrwx  1 davy1ex  staff  1119 Jun 14 15:51 selfsigned.crt
+-rwxrwxrwx  1 davy1ex  staff  1704 Jun 14 15:51 selfsigned.key
+```
+
+
+## In second:
 ```bash
 docker-compose up -d --build
 ```
-
-## In second (if it ur first run)
-Go to php container and install Symfony.
-For that u need know id of your docker container. For these u should run:
+After first build:
+1. Enter in your docker node container like below and exec `npm install`
 ```bash
-docker ps
+docker-compose run --rm node sh
+npm install
 ```
-And u see smth like that:
-```Bash
-➜  2task git:(master) ✗ docker ps               
-CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS          PORTS                NAMES
-d0f5a881afe0   2task-nginx   "/docker-entrypoint.…"   10 minutes ago   Up 10 minutes   0.0.0.0:80->80/tcp   2task-nginx-1
-fbec090ab18a   2task-php     "docker-php-entrypoi…"   10 minutes ago   Up 10 minutes   9000/tcp             2task-php-1
-```
-Then u need put CONTAINER ID of ur php image *(in my case it 2task-php)* to next command:
+2. Make simmilar with `composer install` for `php-fpm` container
+3. Rerun docker-compose with 
 ```bash
-docker exec -it CONTAINER_ID bash 
+docker-compose down && docker-compose up -d
 ```
-Where `CONTAINER_ID` is ur CONTAINER ID from `docker ps`
-
