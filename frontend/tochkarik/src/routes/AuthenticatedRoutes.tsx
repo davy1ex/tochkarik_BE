@@ -9,6 +9,8 @@ import HomePage from '../pages/HomePage/HomePage';
 import Bookmarks from '../pages/Bookmarks/Bookmarks'
 import TestLocationRulesWidget from '../components/LocationRulesWidget/TestGenerationAlgoritmComponent';
 
+import AdminDashboard from "../components/LocationRulesWidget/AdminDashboard";
+
 interface AuthenticatedRoutesProps {
     logoutHandler: () => void;
 }
@@ -23,7 +25,9 @@ const AuthenticatedRoutes: FC<AuthenticatedRoutesProps> = ({ logoutHandler }) =>
                 <Route path="/profile" element={<UserProfile userId={1} logoutHandler={logoutHandler} />} />
                 <Route path="/user_posts" element={ <UserPosts /> } />
                 <Route path="/bookmarks" element={<Bookmarks />} />
+
                 <Route path="/GenerateByRule" element={<TestLocationRulesWidget/>}/>
+                <Route path="/AdminDashboard" element={<AdminDashboard/>}/>
 
                 <Route path="/logout" logoutHandler/>
 
