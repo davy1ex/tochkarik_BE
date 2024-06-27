@@ -34,6 +34,8 @@ class ApiPointTelemetryController extends AbstractController
             $coordinates = $data['coordinates'];
             $timeOfGenerate = $data['timeOfGenerate'];
             $description = $data['description'] ?? '';
+            $isVisited = $data['isVisited'] ?? false;
+            $generatedByRule = $data['generatedByRule'] ?? false;
 
             if (!($coordinates && $timeOfGenerate)) {
                 return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
@@ -48,6 +50,8 @@ class ApiPointTelemetryController extends AbstractController
             $telemetry->setCoordinates($coordinates);
             $telemetry->setTimeOfGenerate(new \DateTimeImmutable($timeOfGenerate));
             $telemetry->setDescription($description);
+            $telemetry->setVisited($isVisited);
+            $telemetry->setGeneratedByRule($generatedByRule);
 
             $entityManager->persist($telemetry);
             $entityManager->flush();
@@ -133,8 +137,19 @@ class ApiPointTelemetryController extends AbstractController
                 $telemetry->setTimeOfGenerate(new \DateTimeImmutable($data['timeOfGenerate']));
             }
             if (!empty($description)) {
+
+            if (isset($data['visited'])) {
+                $isVisited = $data['visited'];
+                $telemetry->setVisited($isVisited);
+            }
                 $telemetry->setDescription($description);
             }
+
+            if (isset($data['generatedByRule'])) {
+                $generatedByRule = $data['generatedByRule'];
+                $telemetry->setDescription($generatedByRule);
+            }
+
 
             $entityManager->flush();
 
