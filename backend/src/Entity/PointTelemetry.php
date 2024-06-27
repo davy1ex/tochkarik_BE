@@ -23,6 +23,12 @@ class PointTelemetry
     #[ORM\Column]
     private array $coordinates = [];
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $visited = false;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $generatedByRule = false;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -63,6 +69,28 @@ class PointTelemetry
         $this->coordinates = $coordinates;
         return $this;
     }
+
+    public function isVisited(): bool
+    {
+        return $this->visited;
+    }
+
+    public function setVisited(bool $visited): static
+    {
+        $this->visited = $visited;
+        return $this;
+    }
+
+    public function isGeneratedByRule(): bool
+    {
+        return $this->generatedByRule;
+    }
+
+    public function setGeneratedByRule(bool $generatedByRule): void
+    {
+        $this->generatedByRule = $generatedByRule;
+    }
+
 
     public function getDescription(): ?string
     {
