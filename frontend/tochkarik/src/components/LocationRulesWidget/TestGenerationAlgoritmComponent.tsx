@@ -4,25 +4,20 @@ import RadiusSlider from '../../components/Map/Slider/RadiusSlider';
 import ManualLocationInput from '../../components/Map/ManualLocation/ManualLocationInput';
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
 import GeneratedPoint from '../../components/Map/GeneratedPoint/GeneratedPoint';
-import useGeoLocation from '../../components/Map/hooks/useGeoLocation';
 import BigButton from "../Buttons/BigButton";
+
+import axiosInstance from "../../services/authService";
+
 import useLocationHandler from './hooks/useLocationHandler';
 
 import axiosInstance from "../../services/authService";
 
 import '../../pages/HomePage/HomePage.css';
 import '../../components/Map/Map.css'
-import {alignProperty} from "@mui/material/styles/cssUtils";
-const locationTypes = [
-    {value: 'mall', label: 'Mall'},
-    {value: 'supermarket', label: 'Supermarket'},
-    {value: 'restaurant', label: 'Restaurant'},
-    {value: 'park', label: 'Park'},
-];
+
 
 const TestLocationRulesWidget: React.FC = () => {
     const [locationType, setLocationType] = useState('mall'); // "mall" as default type
-    const [places, setPlaces] = useState<any[]>([]);
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [radius, setRadius] = useState<number>(500);
     const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
@@ -31,10 +26,8 @@ const TestLocationRulesWidget: React.FC = () => {
     const [telemetryId, setTelemetryId] = useState<string>(0);
 
     const [showControls, setShowControls] = useState<boolean>(true);
-    const [timeOfGenerate, setTimeOfGenerate] = useState<string>('');
     const [error, setError] = useState<string>('');
 
-    const geoLocation = useGeoLocation(setError);
     const { generateRandomCoordinates, getStreetName, getFormattedTime, updatePositionWithNearbyPlace } = useLocationHandler();
 
     const [pointId, setPointId] = useState<number | null>(null);
@@ -51,7 +44,7 @@ const TestLocationRulesWidget: React.FC = () => {
     };
 
     const handleGenerate = async () => {
-        const { newPosition, generatedByRule } = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition, setPlaces);
+        const { newPosition, generatedByRule } = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition);
         let finalPosition = newPosition
         let radiusForGenerate = radius;
         if (!newPosition) {
@@ -71,6 +64,7 @@ const TestLocationRulesWidget: React.FC = () => {
         setTimeOfGenerate(formattedTime);
 
         setShowControls(false);
+
         axiosInstance.post('/point_telemetry', {
             name: 'Generated Point',
             coordinates: position,
