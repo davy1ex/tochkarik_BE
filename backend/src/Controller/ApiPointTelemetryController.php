@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\PointTelemetry;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -126,22 +127,24 @@ class ApiPointTelemetryController extends AbstractController
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
             $data = json_decode($request->getContent(), true);
-            $coordinates = $data['coordinates'];
-            $timeOfGenerate = $data['timeOfGenerate'];
-            $description = $data['description'] ?? '';
 
-            if (!empty($coordinates)) {
+            if (isset($data['coordinates'])) {
+                $coordinates = $data['coordinates'];
                 $telemetry->setCoordinates($coordinates);
             }
-            if (!empty($timeOfGenerate)) {
-                $telemetry->setTimeOfGenerate(new \DateTimeImmutable($data['timeOfGenerate']));
+
+            if (isset($data['timeOfGenerate'])) {
+                $timeOfGenerate = $data['timeOfGenerate'];
+                $telemetry->setTimeOfGenerate(new \DateTimeImmutable($timeOfGenerate));
             }
-            if (!empty($description)) {
 
             if (isset($data['visited'])) {
                 $isVisited = $data['visited'];
                 $telemetry->setVisited($isVisited);
             }
+
+            if (isset($data['description'])) {
+                $description = $data['description'];
                 $telemetry->setDescription($description);
             }
 
