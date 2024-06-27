@@ -28,18 +28,18 @@ interface GeneratedPointProps {
 }
 
 const GeneratedPoint: React.FC<GeneratedPointProps> = ({
-                                                           pointId,
-                                                           street,
-                                                           pointTitle,
-                                                           isNew,
-                                                           hasReport,
-                                                           onCancel,
-                                                           onStartJourney,
-                                                           onCreateReport,
-                                                           onEditReport,
-                                                           coordinates,
-                                                           timeOfGenerate,
-                                                           onSave
+   pointId,
+   street,
+   pointTitle,
+   isNew,
+   hasReport,
+   onCancel,
+   onStartJourney,
+   onCreateReport,
+   onEditReport,
+   coordinates,
+   timeOfGenerate,
+   onSave
 }) => {
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
@@ -84,7 +84,7 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
         if (token) {
             setIsLogin(true)
         }
-    })
+    }, [])
 
     const defaultOnStartJourney = () => {
         if (coordinates) {
