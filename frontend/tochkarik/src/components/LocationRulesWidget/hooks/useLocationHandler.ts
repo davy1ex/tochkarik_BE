@@ -79,7 +79,7 @@ const useLocationHandler = () => {
     const updatePositionWithNearbyPlace = async (position: [number, number], radius: number, locationType: string, setPosition: (pos: [number, number]) => void, setPlaces: (places: any[]) => void): Promise<[number, number] | null> => {
         if (!position) {
             alert('Position not available');
-            return null;
+            return { newPosition: null, generatedByRule: false };
         }
 
         try {
@@ -94,13 +94,13 @@ const useLocationHandler = () => {
                     : [place.center.lat, place.center.lon];
 
                 setPosition(newPosition);
-                return newPosition;
+                return { newPosition, generatedByRule: true };
             } else {
                 throw new Error('No nearby places found');
             }
         } catch (error) {
             console.error('Error finding nearby places:', error);
-            return null;
+            return { newPosition: null, generatedByRule: false };
         }
     };
 

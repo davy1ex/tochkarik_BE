@@ -8,6 +8,8 @@ import useGeoLocation from '../../components/Map/hooks/useGeoLocation';
 import BigButton from "../Buttons/BigButton";
 import useLocationHandler from './hooks/useLocationHandler';
 
+import axiosInstance from "../../services/authService";
+
 import '../../pages/HomePage/HomePage.css';
 import '../../components/Map/Map.css'
 import {alignProperty} from "@mui/material/styles/cssUtils";
@@ -25,6 +27,9 @@ const TestLocationRulesWidget: React.FC = () => {
     const [radius, setRadius] = useState<number>(500);
     const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
     const [street, setStreet] = useState<string>('');
+    const [timeOfGenerate, setTimeOfGenerate] = useState<string>('');
+    const [telemetryId, setTelemetryId] = useState<string>(0);
+
     const [showControls, setShowControls] = useState<boolean>(true);
     const [timeOfGenerate, setTimeOfGenerate] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -46,15 +51,17 @@ const TestLocationRulesWidget: React.FC = () => {
     };
 
     const handleGenerate = async () => {
-        let newPosition = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition, setPlaces);
+        const { newPosition, generatedByRule } = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition, setPlaces);
+        let finalPosition = newPosition
+        let radiusForGenerate = radius;
         if (!newPosition) {
-            newPosition = position;
+            finalPosition = position;
         }
         else {
-            setRadius(100);
+            radiusForGenerate = 100;
         }
 
-        const [newLatitude, newLongitude] = await generateRandomCoordinates(newPosition!, radius);
+        const [newLatitude, newLongitude] = await generateRandomCoordinates(finalPosition!, radiusForGenerate);
         setMarkerPosition([newLatitude, newLongitude]);
 
         const streetName = await getStreetName(newLatitude, newLongitude);
@@ -64,7 +71,26 @@ const TestLocationRulesWidget: React.FC = () => {
         setTimeOfGenerate(formattedTime);
 
         setShowControls(false);
+        axiosInstance.post('/point_telemetry', {
+            name: 'Generated Point',
+            coordinates: position,
+            timeOfGenerate: formattedTime,
+            description: street,
+            isVisited: false,
+            generatedByRule: generatedByRule
+        }).then(response => {
+            setTelemetryId(response.data.data.id);
+            console.log("RETURNED POINTTELEMETRY: ", response.data.data)
+        });
     };
+
+    const handleCreateReport = () => {
+        console.log("TRY PUT: ", telemetryId)
+
+        axiosInstance.put(`/point_telemetry/${telemetryId}`, {
+            visited: true
+        });
+    }
 
     const handleCancel = () => {
         setMarkerPosition(null);
@@ -104,7 +130,7 @@ const TestLocationRulesWidget: React.FC = () => {
                             isNew={true}
                             hasReport={false}  // Change this based on your logic
                             onCancel={handleCancel}
-                            onCreateReport={}
+                            onCreateReport={(pointId: number) => handleCreateReport(pointId)}
                             onEditReport={}
                             coordinates={markerPosition}
                             timeOfGenerate={timeOfGenerate}
