@@ -76,7 +76,7 @@ const useLocationHandler = () => {
         return zonedTime.format('YYYY-MM-DD HH:mm:ss');
     };
 
-    const updatePositionWithNearbyPlace = async (position: [number, number], radius: number, locationType: string, setPosition: (pos: [number, number]) => void, setPlaces: (places: any[]) => void): Promise<[number, number] | null> => {
+    const updatePositionWithNearbyPlace = async (position: [number, number], radius: number, locationType: string, setPosition: (pos: [number, number]) => void) => {
         if (!position) {
             alert('Position not available');
             return { newPosition: null, generatedByRule: false };
@@ -85,7 +85,6 @@ const useLocationHandler = () => {
         try {
             const nearbyPlaces = await getNearbyPlaces(position[0], position[1], radius, locationType);
             console.log("FINDED RULES POSITION: ", nearbyPlaces[0])
-            setPlaces(nearbyPlaces);
 
             if (nearbyPlaces.length > 0) {
                 const place = nearbyPlaces[0];
