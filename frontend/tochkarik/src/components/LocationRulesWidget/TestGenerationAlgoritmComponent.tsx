@@ -10,8 +10,6 @@ import axiosInstance from "../../services/authService";
 
 import useLocationHandler from './hooks/useLocationHandler';
 
-import axiosInstance from "../../services/authService";
-
 import '../../pages/HomePage/HomePage.css';
 import '../../components/Map/Map.css'
 
