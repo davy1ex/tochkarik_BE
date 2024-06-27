@@ -96,7 +96,7 @@ const TestLocationRulesWidget: React.FC = () => {
 
     return (
         <div className="home-container">
-            <h2>AffilArik</h2>
+            <h2>SimalaRik</h2>
             {position ? (
                 <>
                     <MapComponent
