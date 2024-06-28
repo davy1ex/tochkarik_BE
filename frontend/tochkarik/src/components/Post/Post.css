@@ -1,0 +1,17 @@
+.post-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-map,  .leaflet-container {
+    height: 50vh;
+}
+
+.post-container .map-container {
+    padding: 10px;
+}
+
+.post-description {
+    color: white;
+}
