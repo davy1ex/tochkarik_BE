@@ -95,7 +95,7 @@ axiosInstance.interceptors.response.use(
         }
 
         if (!error.response) {
-            window.location.href = '/502';
+            // window.location.href = '/502';
             return Promise.reject(error);
         }
 
