@@ -150,7 +150,7 @@ class ApiPointTelemetryController extends AbstractController
 
             if (isset($data['generatedByRule'])) {
                 $generatedByRule = $data['generatedByRule'];
-                $telemetry->setDescription($generatedByRule);
+                $telemetry->setGeneratedByRule($generatedByRule);
             }
 
 

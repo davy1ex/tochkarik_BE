@@ -19,6 +19,9 @@ const locationTypes = [
 const AdminDashboard: React.FC = () => {
     const [rules, setRules] = useState<Rule[]>([]);
     const [newRuleName, setNewRuleName] = useState<string>('');
+    const [newRuleTypes, setNewRuleTypes] = useState<string[]>([]);
+
+    const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
 
     const [error, setError] = useState<string>('');
 
