@@ -81,7 +81,8 @@ const HomePage: FC = () => {
 
     return (
         <div className="home-container">
-            <a href={"/GenerateByRule"}>click</a>
+            <a href={"/generatebyrule"}>SimalaRik</a>
+            <a href={"/admindashboard"}>AdminDashboard</a>
             <MapComponent
                 coordinates={markerPosition}
                 showRadius={showControls}

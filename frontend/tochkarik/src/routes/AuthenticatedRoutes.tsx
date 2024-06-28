@@ -26,8 +26,8 @@ const AuthenticatedRoutes: FC<AuthenticatedRoutesProps> = ({ logoutHandler }) =>
                 <Route path="/user_posts" element={ <UserPosts /> } />
                 <Route path="/bookmarks" element={<Bookmarks />} />
 
-                <Route path="/GenerateByRule" element={<TestLocationRulesWidget/>}/>
-                <Route path="/AdminDashboard" element={<AdminDashboard/>}/>
+                <Route path="/generatebyrule" element={<TestLocationRulesWidget/>}/>
+                <Route path="/admindashboard" element={<AdminDashboard/>}/>
 
                 <Route path="/logout" logoutHandler/>
 
