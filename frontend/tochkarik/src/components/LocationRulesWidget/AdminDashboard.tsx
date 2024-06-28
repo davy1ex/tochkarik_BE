@@ -3,6 +3,8 @@ import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
 import BigButton from "../Buttons/BigButton";
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
 
+import './AdminDashboard.css'
+
 interface Rule {
     id: number;
     name: string;
