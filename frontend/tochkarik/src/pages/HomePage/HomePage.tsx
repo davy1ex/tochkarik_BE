@@ -3,7 +3,6 @@ import axios from 'axios';
 import moment from 'moment-timezone';
 import tzlookup from 'tz-lookup';
 
-
 import MapComponent from '../../components/Map/MapComponent';
 import RadiusSlider from '../../components/Map/Slider/RadiusSlider';
 import ManualLocationInput from '../../components/Map/ManualLocation/ManualLocationInput';
