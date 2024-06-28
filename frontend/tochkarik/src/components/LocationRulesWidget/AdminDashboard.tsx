@@ -18,6 +18,8 @@ const locationTypes = [
 
 const AdminDashboard: React.FC = () => {
     const [rules, setRules] = useState<Rule[]>([]);
+    const [newRuleName, setNewRuleName] = useState<string>('');
+
     const [error, setError] = useState<string>('');
 
     const [newRuleName, setNewRuleName] = useState<string>('');
@@ -28,8 +30,8 @@ const AdminDashboard: React.FC = () => {
             .then(response => {
                 setRules(response.data.data);
             }).catch (error => {
-            console.error('Error fetching rules:', error);
-            setError('Error fetching rules');
+                console.error('Error fetching rules:', error);
+                setError('Error fetching rules');
             });
     }
 
@@ -39,13 +41,15 @@ const AdminDashboard: React.FC = () => {
 
     const handleAddRule = async () => {
         try {
-            const response = await axiosInstance.post('/generation_rules', {
+            axiosInstance.post('/generation_rules', {
                 name: newRuleName,
                 rules: { type: newRuleTypes }
+            }).then(response => {
+                setRules([...rules, response.data.data]);
+                setNewRuleName('');
+                setNewRuleTypes([]);
             });
-            setRules([...rules, response.data.data]);
-            setNewRuleName('');
-            setNewRuleTypes([]);
+
         } catch (error) {
             console.error('Error adding rule:', error);
             setError('Error adding rule');
@@ -54,8 +58,10 @@ const AdminDashboard: React.FC = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            await axiosInstance.delete(`/generation_rules/${id}`);
-            setRules(rules.filter(rule => rule.id !== id));
+            axiosInstance.delete(`/generation_rules/${id}`)
+                .then(response => {
+                    setRules(rules.filter(rule => rule.id !== id));
+                });
         } catch (error) {
             console.error('Error deleting rule:', error);
             setError('Error deleting rule');
