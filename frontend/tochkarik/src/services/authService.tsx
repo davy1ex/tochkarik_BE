@@ -20,22 +20,22 @@ export const setAuthToken = (token: string | null) => {
 };
 
 export const refreshToken = async (): Promise<string | null> => {
-    try {
-        const refreshToken = localStorage.getItem('refresh_token');
-        if (!refreshToken) throw new Error("No refresh token available");
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) throw new Error("No refresh token available");
 
     axiosPrivateInstance.post('/token/refresh', {
         refresh_token: refreshToken,
     }).then(response => {
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('refresh_token', response.data.refreshToken);
+        localStorage.setItem('refresh_token', response.data.refresh_token);
         setAuthToken(response.data.token);
         return response.data.token;
-    } catch (error) {
+    }).catch( error => {
         console.error("Failed to refresh token", error);
         clearAuthTokens();
+        logoutHandler()
         return null;
-    }
+    })
 };
 
 export const clearAuthTokens = () => {
@@ -46,8 +46,10 @@ export const clearAuthTokens = () => {
 };
 
 const logoutHandler = () => {
-    clearAuthTokens();
-    window.location.href = '/login';
+    if (window.location.pathname !== '/login') {
+        clearAuthTokens();
+        window.location.href = '/login';
+    }
 };
 
 // Interceptor for the private API instance

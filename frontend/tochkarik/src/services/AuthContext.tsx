@@ -10,7 +10,7 @@ export const AuthProvider = ({children}) => {
         if (token) {
             setIsAuthenticated(true);  // Set authenticated true if token exists
         }
-    }, []);
+    }, [localStorage.getItem('token')]);
 
     const login = (token) => {
         localStorage.setItem('token', token);
