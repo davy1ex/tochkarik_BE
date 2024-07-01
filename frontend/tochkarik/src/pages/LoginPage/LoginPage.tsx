@@ -47,6 +47,8 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
             setAuthToken(token);
 
             navigate('/');
+            window.location.href = '/';
+            window.location.reload();
         } catch (err) {
             console.log(err)
             if (axios.isAxiosError(err)) {
