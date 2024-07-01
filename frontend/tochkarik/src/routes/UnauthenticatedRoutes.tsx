@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
 
 import LoginPage from "../pages/LoginPage/LoginPage";
-import HomePage from "../pages/HomePage/HomePage";
+import NewHomePage from "../pages/HomePage/NewHomePage";
 import RegistrationPage from "../pages/RegisterPage/RegistrationPage";
 
 import Header from "../components/Header/Header";
@@ -16,7 +16,7 @@ const UnauthenticatedRoutes: FC<UnauthenticatedRoutesProps> = ({ setAuthToken })
         <>
             <Header user_login={false} />
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<NewHomePage />} />
                 <Route path="/login" element={<LoginPage setAuthToken={setAuthToken} />} />
                 <Route path="/reg" element={<RegistrationPage setAuthToken={setAuthToken} />} />
                 <Route path="*" element={<Navigate to="/login" />} />

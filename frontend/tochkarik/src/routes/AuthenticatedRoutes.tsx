@@ -6,7 +6,7 @@ import Header from '../components/Header/Header';
 import UserProfile from '../pages/UserProfile/UserProfile'
 import UserPosts from '../pages/UserPosts/UserPosts'
 import Post from '../components/Post/Post'
-import HomePage from '../pages/HomePage/HomePage';
+import NewHomePage from '../pages/HomePage/NewHomePage';
 import Bookmarks from '../pages/Bookmarks/Bookmarks'
 import TestLocationRulesWidget from '../components/LocationRulesWidget/TestGenerationAlgoritmComponent';
 
@@ -23,6 +23,7 @@ const AuthenticatedRoutes: FC<AuthenticatedRoutesProps> = ({ logoutHandler }) =>
             <Header/>
 
             <Routes>
+                <Route path="/" element={<NewHomePage />} />
                 <Route path="/profile" element={<UserProfile userId={1} logoutHandler={logoutHandler} />} />
                 <Route path="/user_posts" element={ <UserPosts /> } />
                 <Route path="/post" element={ <Post /> } />
