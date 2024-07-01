@@ -22,6 +22,14 @@ class GenerationRulesController extends AbstractController
     }
 
 
+    /**
+     * Creates a new generation rule based on the provided request data.
+     *
+     * @param Request $request The request object containing the data.
+     * @param EntityManagerInterface $entityManager The entity manager for persisting the generation rule.
+     * @throws AccessDeniedException If the user is not fully authenticated.
+     * @return JsonResponse The JSON response with the status and the newly created generation rule data.
+     */
     #[Route('/generation_rules', name: 'generationRulesNew', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -42,6 +50,13 @@ class GenerationRulesController extends AbstractController
         ], JsonResponse::HTTP_CREATED);
     }
 
+    /**
+     * Retrieves a generation rule by its ID and returns it as a JSON response.
+     *
+     * @param GenerationRules $generationRules The generation rule to retrieve.
+     * @return JsonResponse The JSON response containing the status and the retrieved generation rule.
+     * @throws AccessDeniedException If the user is not fully authenticated.
+     */
     #[Route('/generation_rules/{id}', name: 'generationRulesShow', methods: ['GET'])]
     public function show(GenerationRules $generationRules): JsonResponse
     {
@@ -53,6 +68,15 @@ class GenerationRulesController extends AbstractController
         ], JsonResponse::HTTP_OK);
     }
 
+    /**
+     * Updates a generation rule with the provided data.
+     *
+     * @param Request $request The request object containing the data.
+     * @param GenerationRules $generationRules The generation rule to update.
+     * @param EntityManagerInterface $entityManager The entity manager for persisting the changes.
+     * @return JsonResponse The JSON response with the status and the updated generation rule.
+     * @throws AccessDeniedException If the user is not fully authenticated.
+     */
     #[Route('/generation_rules/{id}', name: 'generationRulesEdit', methods: ['PUT'])]
     public function edit(Request $request, GenerationRules $generationRules, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -71,6 +95,14 @@ class GenerationRulesController extends AbstractController
         ], JsonResponse::HTTP_OK);
     }
 
+    /**
+     * Deletes a generation rule.
+     *
+     * @param Request $request The request object.
+     * @param GenerationRules $generationRules The generation rule to delete.
+     * @param EntityManagerInterface $entityManager The entity manager.
+     * @return JsonResponse The JSON response.
+     */
     #[Route('/generation_rules/{id}', name: 'generation_rule_delete', methods: ['DELETE'])]
     public function delete(Request $request, GenerationRules $generationRules, EntityManagerInterface $entityManager): JsonResponse
     {

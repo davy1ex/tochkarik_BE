@@ -17,6 +17,12 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
+    /**
+     * Configures the fields for the admin panel.
+     *
+     * @param string $pageName The name of the page.
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         return [

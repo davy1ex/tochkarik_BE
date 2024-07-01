@@ -17,6 +17,12 @@ interface ErrorResponse {
 }
 
 
+/**
+ * Handles the form submission for user login.
+ *
+ * @param {FormEvent<HTMLFormElement>} event - The form submission event.
+ * @return {void} No return value.
+ */
 const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -25,6 +31,12 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
     const navigate = useNavigate();
 
+    /**
+     * Handles the form submission for user login.
+     *
+     * @param {FormEvent<HTMLFormElement>} event - The form submission event.
+     * @return {void} No return value.
+     */
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -60,10 +72,22 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
         }
     };
 
+    /**
+     * Updates the state with the new value of the username input field.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object containing the new value.
+     * @return {void}
+     */
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
     };
 
+    /**
+     * Updates the state with the new value of the password input field.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object containing the new value.
+     * @return {void}
+     */
     const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };

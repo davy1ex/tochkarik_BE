@@ -14,11 +14,24 @@ class UserController extends AbstractController
 {
     private Security $security;
 
+    /**
+     * Constructs a new instance of the class and initializes the security property.
+     *
+     * @param Security $security The security service to be used.
+     */
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
 
+    /**
+     * A description of the entire PHP function.
+     *
+     * @param Request $request description
+     * @param UserRepository $userRepository description
+     * @throws \Exception description of exception
+     * @return JsonResponse
+     */
     #[Route('/current_user', name: 'apiGetCurrentUserGet', methods: ['GET'])]
     public function apiGetCurrentUserGet(Request $request, UserRepository $userRepository): JsonResponse
     {

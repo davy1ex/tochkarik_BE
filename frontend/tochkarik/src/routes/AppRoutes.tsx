@@ -15,11 +15,27 @@ interface AppRoutesProps {
     handleLogout: () => void;
 }
 
+/**
+ * A functional component that handles the logout functionality.
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.handleLogout - The function to handle the logout.
+ * @return {JSX.Element} The JSX element representing the logout component.
+ */
 const Logout: FC<{ handleLogout: () => void }> = ({ handleLogout }) => {
     handleLogout();
     return <Navigate to="/login" />;
 };
 
+/**
+ * Renders the routes based on the authentication status.
+ *
+ * @param {AppRoutesProps} props - The props object containing the following properties:
+ *   - isAuthenticated: A boolean indicating if the user is authenticated.
+ *   - setAuthToken: A function to set the authentication token.
+ *   - handleLogout: A function to handle logout.
+ * @return {JSX.Element} The JSX element representing the routes.
+ */
 const AppRoutes: FC <AppRoutesProps> = ({ isAuthenticated, setAuthToken, handleLogout }) => {
     return (
         <Routes>

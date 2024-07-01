@@ -14,6 +14,16 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/public/api')]
 class PointTelemetryController extends AbstractController
 {
+    /**
+     * Adds a new telemetry record to the database.
+     *
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $entityManager The entity manager.
+     * @throws \Doctrine\DBAL\Exception\ConnectionException If there is a database connection error.
+     * @throws \Doctrine\DBAL\Exception If there is a database error.
+     * @throws \Exception If there is an internal server error.
+     * @return JsonResponse The JSON response.
+     */
     #[Route('/point_telemetry', name: 'apiAddTelemetry', methods: ['POST'])]
     public function addTelemetry(
         Request $request,

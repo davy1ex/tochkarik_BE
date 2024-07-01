@@ -16,6 +16,14 @@ interface User {
     username: string;
 }
 
+/**
+ * Renders the user profile page.
+ *
+ * @param {UserProfileProps} props - The props object containing the following properties:
+ *   - userId: The ID of the user.
+ *   - logoutHandler: The function to handle logout.
+ * @return {JSX.Element} The rendered user profile page.
+ */
 const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);

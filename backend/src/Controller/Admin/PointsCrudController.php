@@ -12,12 +12,22 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class PointsCrudController extends AbstractCrudController
 {
+    /**
+     * Returns the fully-qualified class name of the entity for EasyAdmin.
+     *
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return Points::class;
     }
 
-
+    /**
+     * Configures the fields for the given page name.
+     *
+     * @param string $pageName The name of the page.
+     * @return iterable Returns an iterable containing the configured fields.
+     */
     public function configureFields(string $pageName): iterable
     {
         return [

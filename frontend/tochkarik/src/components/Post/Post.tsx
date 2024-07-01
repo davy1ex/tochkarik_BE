@@ -14,6 +14,19 @@ interface Post {
 }
 
 
+/**
+ * Define the Post component with specified props.
+ *
+ * @param {Post} id - The unique identifier for the post
+ * @param {string} name - The name of the post (default: 'bookmark1')
+ * @param {string} postTitle - The title of the post
+ * @param {number[]} coordinates - The coordinates for the post location (default: [42, 42])
+ * @param {string} description - The description of the post
+ * @param {string} username - The username associated with the post
+ * @param {string} postDesc - The detailed description of the post
+ * @param {string} linkToBack - The link to navigate back to the home page
+ * @return {JSX.Element} The JSX element representing the Post component
+ */
 const Post: FC<Post> = ({
     id,
     name='bookmark1',

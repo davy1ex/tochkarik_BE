@@ -16,12 +16,25 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/auth')]
 class AuthController extends AbstractController
 {
+    /**
+     * Checks the validity of the token.
+     *
+     * @return JsonResponse Returns a JSON response with the status of the token.
+     */
     #[Route('/check_token', name: 'apiCheckToken', methods: ['GET'])]
     public function apiCheckToken()
     {
         return new JsonResponse(['status' => 'Token is valid']);
     }
 
+    /**
+     * Registers a new user based on the provided request data.
+     *
+     * @param Request                     $request The request object
+     * @param UserPasswordHasherInterface $userPasswordHasher The user password hasher
+     * @param EntityManagerInterface      $entityManager The entity manager
+     * @return JsonResponse
+     */
     #[Route('/signup', name: 'apiRegister', methods: ['POST'])]
     public function apiRegister(
         Request                     $request,

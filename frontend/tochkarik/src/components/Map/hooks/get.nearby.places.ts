@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+/**
+ * Retrieves nearby places based on latitude, longitude, radius, and type.
+ *
+ * @param {number} latitude - The latitude of the location.
+ * @param {number} longitude - The longitude of the location.
+ * @param {number} radius - The radius in meters to search for places.
+ * @param {string} type - The type of places to search for.
+ * @return {Promise<Array<any>>} - A promise that resolves to an array of nearby places.
+ * @throws {Error} - If an invalid location type is provided.
+ */
 const getNearbyPlaces = async (latitude: number, longitude: number, radius: number, type: string) => {
     let typeQuery = '';
     console.log(type)

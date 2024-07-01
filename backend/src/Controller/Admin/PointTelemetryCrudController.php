@@ -16,7 +16,11 @@ class PointTelemetryCrudController extends AbstractCrudController
         return PointTelemetry::class;
     }
 
-
+    /**
+     * Returns the fully-qualified class name of the entity for EasyAdmin.
+     *
+     * @return string The fully-qualified class name of the entity.
+     */
     public function configureFields(string $pageName): iterable
     {
         return [

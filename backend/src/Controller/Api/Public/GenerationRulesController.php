@@ -10,6 +10,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/public/api')]
 class GenerationRulesController extends AbstractController
 {
+    /**
+     * Retrieves all generation rules from the database and returns them as a JSON response.
+     *
+     * @param GenerationRulesRepository $generationRulesRepository The repository for accessing generation rules.
+     * @return JsonResponse The JSON response containing the generation rules or an error message.
+     * @throws \Doctrine\DBAL\Exception\ConnectionException If there is a database connection error.
+     * @throws \Doctrine\DBAL\Exception If there is a database error.
+     * @throws \Exception If there is an internal server error.
+     */
     #[Route('/generation_rules', name: 'generationRules', methods: ['GET'])]
     public function index(GenerationRulesRepository $generationRulesRepository): JsonResponse
     {

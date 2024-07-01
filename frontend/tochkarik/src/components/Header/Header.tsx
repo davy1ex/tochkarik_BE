@@ -12,12 +12,24 @@ import {useAuth} from '../../services/AuthContext';
 import BigButton from "../Buttons/BigButton";
 
 
+/**
+ * Renders the header component.
+ *
+ * @return {JSX.Element} The header component.
+ */
 const Header: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
     const {isAuthenticated} = useAuth();
 
+    /**
+     * Handles the click event for the "Join In" button.
+     *
+     * This function is called when the "Join In" button is clicked. It uses the `navigate` function from the `react-router-dom` library to navigate to the `/login` route.
+     *
+     * @return {void} This function does not return a value.
+     */
     const handleJoinInClick = () => {
         navigate('/login');
     };

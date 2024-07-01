@@ -17,6 +17,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 #[Route('/admin/auth')]
 class AuthController extends AbstractController
 {
+    /**
+     * Renders the login page and handles user authentication.
+     *
+     * @param AuthenticationUtils $authenticationUtils The authentication utility service.
+     * @return Response The HTTP response containing the login page.
+     */
     #[Route('/signin', name: 'appLoginPage')]
     public function appLoginPage(AuthenticationUtils $authenticationUtils): Response
     {
@@ -36,6 +42,15 @@ class AuthController extends AbstractController
         ]);
     }
 
+    /**
+     * Registers a new user by handling the registration form submission.
+     *
+     * @param Request $request The HTTP request object.
+     * @param UserPasswordHasherInterface $userPasswordHasher The password hasher service.
+     * @param Security $security The security service.
+     * @param EntityManagerInterface $entityManager The entity manager service.
+     * @return Response The HTTP response.
+     */
     #[Route('/signup', name: 'appRegisterPage')]
     public function appRegisterPage(
         Request                     $request,
@@ -69,6 +84,12 @@ class AuthController extends AbstractController
         ]);
     }
 
+    /**
+     * Logs out the user from the application.
+     *
+     * @param AuthenticationUtils $authenticationUtils The authentication utility service.
+     * @return Response The HTTP response.
+     */
     #[Route('/logout', name: 'appLogout')]
     public function appLogout(AuthenticationUtils $authenticationUtils): Response
     {

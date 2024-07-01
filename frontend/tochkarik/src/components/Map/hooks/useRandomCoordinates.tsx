@@ -1,6 +1,22 @@
 import axios from 'axios';
 
+/**
+ * Generates random coordinates within a given radius from a center point,
+ * ensuring that the generated coordinates are passable.
+ *
+ * @param {Array<number>} center - The center coordinates of the radius.
+ * @param {number} radius - The radius in meters.
+ * @return {Promise<Array<number>>} A Promise that resolves to an array of latitude and longitude coordinates.
+ */
 const useRandomCoordinates = () => {
+    /**
+     * Generates random coordinates within a given radius from a center point,
+     * ensuring that the generated coordinates are passable.
+     *
+     * @param {Array<number>} center - The center coordinates of the radius.
+     * @param {number} radius - The radius in meters.
+     * @return {Promise<Array<number>>} A Promise that resolves to an array of latitude and longitude coordinates.
+     */
     const generateRandomCoordinates = async (center: [number, number], radius: number): Promise<[number, number]> => {
         let coordinates: [number, number] = [0, 0];
         let isPassable = false;
@@ -29,6 +45,12 @@ const useRandomCoordinates = () => {
         return coordinates;
     };
 
+    /**
+     * Checks the passability of a given set of coordinates.
+     *
+     * @param {[number, number]} coordinates - The coordinates to check.
+     * @return {Promise<boolean>} A Promise that resolves to a boolean indicating whether the coordinates are passable.
+     */
     const checkPassability = async (coordinates: [number, number]): Promise<boolean> => {
         const [lat, lng] = coordinates;
         const overpassQuery = `

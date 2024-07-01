@@ -17,6 +17,13 @@ class TokenController extends AbstractController
     private $jwtManager;
     private $userProvider;
 
+    /**
+     * Constructs a new instance of the class.
+     *
+     * @param RefreshTokenManagerInterface $refreshTokenManager The refresh token manager.
+     * @param JWTTokenManagerInterface     $jwtManager The JWT token manager.
+     * @param UserProviderInterface        $userProvider The user provider interface.
+     */
     public function __construct(
         RefreshTokenManagerInterface $refreshTokenManager,
         JWTTokenManagerInterface     $jwtManager,
@@ -28,6 +35,13 @@ class TokenController extends AbstractController
         $this->userProvider = $userProvider;
     }
 
+    /**
+     * A description of the entire PHP function.
+     *
+     * @param Request $request description
+     * @throws InvalidArgumentException description of exception
+     * @return JsonResponse
+     */
     #[Route('/api/token/refresh', name: 'api_token_refresh', methods: ['POST'])]
     public function refresh(Request $request): JsonResponse
     {

@@ -2,6 +2,13 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 
 const AuthContext = createContext(null);
 
+/**
+ * Component that wraps its children with an AuthContext.
+ *
+ * @param {Object} props - The props object.
+ * @param {ReactNode} props.children - The children to be rendered.
+ * @return {JSX.Element} The AuthProvider component.
+ */
 export const AuthProvider = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 

@@ -8,6 +8,16 @@ interface PostPreviewProps {
     postTitle?: string;
     postDesc?: string;
 }
+
+/**
+ * Renders a preview of a post with user information, post details, and interaction features.
+ *
+ * @param {string} userPhoto - The URL of the user's profile photo.
+ * @param {string} username - The username of the post author.
+ * @param {string} postTitle - The title of the post.
+ * @param {string} postDesc - The description of the post.
+ * @return {JSX.Element} The JSX element representing the post preview.
+ */
 const PostPreview: FC<PostPreviewProps> = ({
     userPhoto = '',
     username = '',
@@ -26,8 +36,6 @@ const PostPreview: FC<PostPreviewProps> = ({
     }
 
     return (
-
-
         <div className={"post-item"}
              onClick={() => redirectToPost()}>
             <div className={"post-header"}>

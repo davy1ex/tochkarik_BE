@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * Retrieves the user's geolocation and updates the position state accordingly.
+ *
+ * @param {(error: string) => void} setError - A function to handle errors.
+ * @return {[number, number] | null} The current position coordinates or null if unavailable.
+ */
 const useGeoLocation = (setError: (error: string) => void): [number, number] | null => {
     const [position, setPosition] = useState<[number, number] | null>(null);
 
