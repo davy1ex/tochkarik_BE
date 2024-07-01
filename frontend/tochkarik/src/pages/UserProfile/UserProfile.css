@@ -5,7 +5,6 @@
 .content-container {
     width: 100%;
     margin: 100px auto;
-
     display: flex;
     flex-direction: column;
 }
@@ -18,16 +17,11 @@
 .container-buttons {
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: space-between;
-
     margin: auto;
-
     width: 70%;
-    height: 170px;
-
-
+    height: 250px;
 }
 
 .bigBtn {

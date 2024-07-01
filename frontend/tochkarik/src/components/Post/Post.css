@@ -4,7 +4,7 @@
     flex-direction: column;
 }
 
-.post-map,  .leaflet-container {
+.post-map {
     height: 50vh;
 }
 
