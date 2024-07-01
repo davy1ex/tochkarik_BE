@@ -48,6 +48,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
         navigate('/user_posts');
     };
 
+    const redirectToAdminDashboard = () => {
+        navigate('/admindashboard');
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
 
@@ -66,6 +70,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                         </div>
                         <div className="container-buttons">
                             <BigButton>Edit profile</BigButton>
+                            <BigButton onClick={redirectToAdminDashboard}>Simillarik</BigButton>
                             <BigButton onClick={redirectToUserPosts}>My posts</BigButton>
                             <BigButton onClick={redirectToBookmarks}>My bookmarks</BigButton>
                             <BigButton onClick={logoutHandler}>Logout</BigButton>

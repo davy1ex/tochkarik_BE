@@ -100,9 +100,6 @@ const TestLocationRulesWidget: React.FC = () => {
 
     return (
         <div className="home-container">
-            <h2>SimalaRik</h2>
-            <a href={"/admindashboard"}>AdminDashboard</a>
-            <a href={"/"}>{"< Home"}</a>
             {position ? (
                 <>
                     <MapComponent
