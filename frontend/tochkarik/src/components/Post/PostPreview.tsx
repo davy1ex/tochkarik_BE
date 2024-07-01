@@ -18,10 +18,17 @@ const PostPreview: FC<PostPreviewProps> = ({
     const postLikeImg = 'https://via.placeholder.com/20';
     const postCommentCountImg = 'https://via.placeholder.com/20';
 
+    const navigate = useNavigate();
+
+    const redirectToPost = () => {
+        navigate('/post')
+    }
+
     return (
 
 
-        <div className={"post-item"}>
+        <div className={"post-item"}
+             onClick={() => redirectToPost()}>
             <div className={"post-header"}>
                 <div className={"post-user-info-container"}>
                     <div className={"post-user-photo"}>
