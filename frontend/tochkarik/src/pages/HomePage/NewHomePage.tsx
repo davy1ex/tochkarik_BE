@@ -15,8 +15,8 @@ import '../../components/Map/Map.css'
 
 
 const TestLocationRulesWidget: React.FC = () => {
-    const [locationType, setLocationType] = useState('mall'); // "mall" as default type
-    const [position, setPosition] = useState<[number, number] | null>(null);
+    const [locationType, setLocationType] = useState<string | null>(null);
+    const [position, setPosition] = useState<[number, number] | null>([55.54885516305257, 37.54244046838186]);
     const [radius, setRadius] = useState<number>(500);
     const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
     const [street, setStreet] = useState<string>('');
