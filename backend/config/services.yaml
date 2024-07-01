@@ -11,8 +11,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    App\Controller\Admin\LocationRulesDashboard:
-        tags: [ 'controller.service_arguments' ]
 
     App\EventListener\AuthenticationSuccessListener:
         tags:
