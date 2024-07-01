@@ -1,4 +1,5 @@
 import {FC} from "react";
+import {useNavigate} from "react-router-dom";
 
 
 interface PostPreviewProps {

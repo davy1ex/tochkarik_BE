@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const getNearbyPlaces = async (latitude: number, longitude: number, radius: number, type: string) => {
     let typeQuery = '';
@@ -39,6 +39,5 @@ const getNearbyPlaces = async (latitude: number, longitude: number, radius: numb
     const response = await axios.get(url);
     return response.data.elements;
 };
-
 
 export default getNearbyPlaces;
