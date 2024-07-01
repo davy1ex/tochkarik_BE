@@ -28,6 +28,12 @@ security:
             pattern: ^/api/auth/signup
             stateless: true
             security: false
+
+        public_api:
+            pattern: ^/public/api
+            stateless: true
+            security: false
+
         api:
             pattern: ^/api
             stateless: true
@@ -60,12 +66,20 @@ security:
         - { path: ^/admin/auth/logout, roles: ROLE_ADMIN }
         - { path: ^/adminboard, roles: ROLE_ADMIN }
 
+
+        - { path: ^/public/api, roles: PUBLIC_ACCESS }
+        - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
+        
+
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
+
         - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/auth/signup, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/api_refresh, roles: PUBLIC_ACCESS }
+
+        - { path: ^/, roles: ROLE_ADMIN }
+
 
 when@test:
     security:
