@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from "react";
-import MapComponent from '../Map/MapComponent';
+import MapComponent from '../../components/Map/MapComponent';
 import RadiusSlider from '../../components/Map/Slider/RadiusSlider';
 import ManualLocationInput from '../../components/Map/ManualLocation/ManualLocationInput';
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
-import GeneratedPoint from '../../components/Map/GeneratedPoint/GeneratedPoint';
-import BigButton from "../Buttons/BigButton";
+import GeneratedPoint from '../../components/Map/GeneratedPoint/GeneratedPoint'
+import BigButton from "../../components/Buttons/BigButton";
 
 import {axiosPublicInstance} from "../../services/authService";
 
-import useLocationHandler from './hooks/useLocationHandler';
+import useLocationHandler from '../../components/LocationRulesWidget/hooks/useLocationHandler';
 
-import '../../pages/HomePage/HomePage.css';
+import './HomePage.css';
 import '../../components/Map/Map.css'
 
 
