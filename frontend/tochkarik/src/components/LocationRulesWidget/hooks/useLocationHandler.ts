@@ -76,9 +76,9 @@ const useLocationHandler = () => {
         return zonedTime.format('YYYY-MM-DD HH:mm:ss');
     };
 
-    const updatePositionWithNearbyPlace = async (position: [number, number], radius: number, locationType: string, setPosition: (pos: [number, number]) => void) => {
-        if (!position) {
-            alert('Position not available');
+    const updatePositionWithNearbyPlace = async (position: [number, number], radius: number, locationType: string | null, setPosition: (pos: [number, number]) => void) => {
+        if (!position || locationType == null) {
+            alert('Position not available. Generate in state random mode');
             return { newPosition: null, generatedByRule: false };
         }
 
