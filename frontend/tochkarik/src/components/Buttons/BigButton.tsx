@@ -1,5 +1,5 @@
 import React, {FC, ReactNode} from 'react';
-import "./Button.css";
+import "./BigButton.css";
 
 interface BigButtonProps {
     children: ReactNode;
