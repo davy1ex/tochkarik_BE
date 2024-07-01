@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api\Public;
 
 use App\Entity\User;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 #[Route('/api/auth')]
-class ApiAuthController extends AbstractController
+class AuthController extends AbstractController
 {
     #[Route('/check_token', name: 'apiCheckToken', methods: ['GET'])]
     public function apiCheckToken()

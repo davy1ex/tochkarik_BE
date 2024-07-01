@@ -6,7 +6,7 @@ import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
 import GeneratedPoint from '../../components/Map/GeneratedPoint/GeneratedPoint';
 import BigButton from "../Buttons/BigButton";
 
-import axiosInstance from "../../services/authService";
+import {axiosPublicInstance} from "../../services/authService";
 
 import useLocationHandler from './hooks/useLocationHandler';
 
@@ -42,6 +42,12 @@ const TestLocationRulesWidget: React.FC = () => {
     };
 
     const handleGenerate = async () => {
+        await axiosPublicInstance.get('/generation_rules')
+            .then(response => {
+                setLocationType(response.data.data[0].rules.type[0]);
+
+            })
+
         const { newPosition, generatedByRule } = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition);
         let finalPosition = newPosition
         let radiusForGenerate = radius;
@@ -63,7 +69,7 @@ const TestLocationRulesWidget: React.FC = () => {
 
         setShowControls(false);
 
-        axiosInstance.post('/point_telemetry', {
+        axiosPublicInstance.post('/point_telemetry', {
             name: 'Generated Point',
             coordinates: position,
             timeOfGenerate: formattedTime,
@@ -79,7 +85,7 @@ const TestLocationRulesWidget: React.FC = () => {
     const handleCreateReport = () => {
         console.log("TRY PUT: ", telemetryId)
 
-        axiosInstance.put(`/point_telemetry/${telemetryId}`, {
+        axiosPublicInstance.put(`/point_telemetry/${telemetryId}`, {
             visited: true
         });
     }

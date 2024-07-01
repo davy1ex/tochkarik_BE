@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom'
-import axiosInstance from '../../services/authService';
+import { useNavigate  } from 'react-router-dom'
+import {axiosPrivateInstance} from '../../services/authService';
 
 import '../Style.css';
 import './UserProfile.css';
@@ -27,18 +27,18 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
     };
 
     useEffect(() => {
-        axiosInstance.get(`/user/current_user`, {}).then(response => {
-            if (!response.data) {
-                navigate('/');
-            } else {
-                setUser(response.data);
-                setLoading(false);
-            }
-        }).catch(error => {
-            setError(error.response ? error.response.data.message : 'Error fetching user');
-            setLoading(false);
-        });
-    }, [userId, navigate]);
+        axiosPrivateInstance.get(`/user/current_user`, {})
+            .then(response => {
+                if (!response.data) {
+                    navigate('/');
+                } else {
+                    setUser(response.data);
+                    setLoading(false);
+                }
+            }).catch(error => {
+                navigate('/')
+            })
+        }, [userId, navigate]);
 
     const redirectToBookmarks = () => {
         navigate('/bookmarks');

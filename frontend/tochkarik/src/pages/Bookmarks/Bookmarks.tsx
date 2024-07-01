@@ -1,5 +1,6 @@
 import {FC, useEffect, useState} from 'react';
-import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
+import {setAuthToken} from '../../hooks/axiosConfig';
+import {axiosPrivateInstance} from '../../services/authService'
 
 import GeneratedPoint from "../../components/Map/GeneratedPoint/GeneratedPoint";
 import MapComponent from "../../components/Map/MapComponent";
@@ -29,7 +30,7 @@ const Bookmarks: FC = () => {
             setAuthToken(token);
         }
 
-        axiosInstance.get('/points')
+        axiosPrivateInstance.get('/points')
             .then(response => {
                 setBookmarks(response.data.points);
                 setLoading(false);

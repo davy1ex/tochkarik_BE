@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
-import BigButton from "../Buttons/BigButton";
+import { setAuthToken } from '../../services/authService';
+import { axiosPrivateInstance } from '../../services/authService';
+import { axiosPublicInstance } from '../../services/authService';
+
+import BigButton from "../../components/Buttons/BigButton";
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
 
 import './AdminDashboard.css'
@@ -36,7 +39,7 @@ const AdminDashboard: React.FC = () => {
     const [error, setError] = useState<string>('');
 
     const fetchRules = async () => {
-        axiosInstance.get('/generation_rules')
+        axiosPublicInstance.get('/generation_rules')
             .then(response => {
                 setRules(response.data.data);
             }).catch (error => {
@@ -47,7 +50,7 @@ const AdminDashboard: React.FC = () => {
 
     const fetchAnalytics = () => {
         try {
-            axiosInstance.get('/point_telemetry_analytics')
+            axiosPrivateInstance.get('/point_telemetry_analytics')
                 .then(response => {
                     setAnalyticsData(response.data.analytics);
                 });
@@ -70,7 +73,7 @@ const AdminDashboard: React.FC = () => {
 
     const handleAddRule = async () => {
         try {
-            axiosInstance.post('/generation_rules', {
+            axiosPrivateInstance.post('/generation_rules', {
                 name: newRuleName,
                 rules: { type: newRuleTypes }
             }).then(response => {
@@ -87,7 +90,7 @@ const AdminDashboard: React.FC = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            axiosInstance.delete(`/generation_rules/${id}`)
+            axiosPrivateInstance.delete(`/generation_rules/${id}`)
                 .then(response => {
                     setRules(rules.filter(rule => rule.id !== id));
                 });

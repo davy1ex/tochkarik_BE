@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api\Private;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
 #[Route('/api/user')]
-class ApiUserController extends AbstractController
+class UserController extends AbstractController
 {
     private Security $security;
 

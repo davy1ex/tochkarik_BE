@@ -1,22 +1,21 @@
 import axios, {AxiosInstance} from 'axios';
 
-interface AuthResponse {
-    token: string;
-    refreshToken: string;
-}
+const API_URL = process.env.VITE_API_URL;
 
+const axiosPublicInstance: AxiosInstance = axios.create({
+    baseURL: `${API_URL}/public/api`,
+});
 
-const API_URL = process.env.VITE_API_URL
-const axiosInstance: AxiosInstance = axios.create({
+const axiosPrivateInstance: AxiosInstance = axios.create({
     baseURL: `${API_URL}/api`,
 });
 
 
 export const setAuthToken = (token: string | null) => {
     if (token) {
-        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        axiosPrivateInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
-        delete axiosInstance.defaults.headers.common["Authorization"];
+        delete axiosPrivateInstance.defaults.headers.common["Authorization"];
     }
 };
 
@@ -25,10 +24,9 @@ export const refreshToken = async (): Promise<string | null> => {
         const refreshToken = localStorage.getItem('refresh_token');
         if (!refreshToken) throw new Error("No refresh token available");
 
-        const response = await axiosInstance.post<AuthResponse>('/token/refresh', {
-            refresh_token: refreshToken,
-        });
-
+    axiosPrivateInstance.post('/token/refresh', {
+        refresh_token: refreshToken,
+    }).then(response => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('refresh_token', response.data.refreshToken);
         setAuthToken(response.data.token);
@@ -52,8 +50,8 @@ const logoutHandler = () => {
     window.location.href = '/login';
 };
 
-
-axiosInstance.interceptors.response.use(
+// Interceptor for the private API instance
+axiosPrivateInstance.interceptors.response.use(
     response => response,
     async (error) => {
         if (error.response?.status === 401) {
@@ -65,9 +63,9 @@ axiosInstance.interceptors.response.use(
                     const newToken = await refreshToken();
                     if (newToken) {
                         console.log('Token refreshed successfully.');
-                        axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+                        axiosPrivateInstance.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
                         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-                        return axiosInstance(originalRequest);
+                        return axiosPrivateInstance(originalRequest);
                     }
                 } catch (refreshError) {
                     console.error('Token refresh failed, logging out.');
@@ -80,4 +78,4 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export default axiosInstance;
+export { axiosPublicInstance, axiosPrivateInstance };

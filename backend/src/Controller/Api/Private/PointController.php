@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api\Private;
 
+use App\Controller\ConnectionException;
 use App\Entity\Points;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,7 @@ use Symfony\Component\Security\Core\Security;
 
 
 #[Route('/api')]
-class ApiPointController extends AbstractController
+class PointController extends AbstractController
 {
     private $security;
 
@@ -112,20 +113,28 @@ class ApiPointController extends AbstractController
     #[Route('/points/{id}', name: 'apiGetPoint', methods: ['GET'])]
     public function apiGetPointById(Points $point): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        try {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $user = $this->security->getUser();
-        if (!$user || $point->getUsername() !== $user) {
-            return $this->json(['error' => 'Unauthorized access'], JsonResponse::HTTP_FORBIDDEN);
+            $user = $this->security->getUser();
+            if (!$user || $point->getUsername() !== $user) {
+                return $this->json(['error' => 'Unauthorized access'], JsonResponse::HTTP_FORBIDDEN);
+            }
+
+            return $this->json([
+                'id' => $point->getId(),
+                'name' => $point->getName(),
+                'coordinates' => $point->getCoordinates(),
+                'timeOfGenerate' => $point->getTimeOfGenerate()->format('Y-m-d H:i:s'),
+                'description' => $point->getDescription(),
+            ], JsonResponse::HTTP_OK);
+        } catch (ConnectionException $e) {
+            return $this->json(['error' => 'Database connection error: ' . $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            return $this->json(['error' => 'Database error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Internal Server Error: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $this->json([
-            'id' => $point->getId(),
-            'name' => $point->getName(),
-            'coordinates' => $point->getCoordinates(),
-            'timeOfGenerate' => $point->getTimeOfGenerate()->format('Y-m-d H:i:s'),
-            'description' => $point->getDescription(),
-        ], JsonResponse::HTTP_OK);
     }
 
     #[Route('/points/{id}', name: 'api_points_update', methods: ['PUT'])]
