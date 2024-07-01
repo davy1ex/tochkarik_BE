@@ -8,7 +8,7 @@ import BigButton from "../../components/Buttons/BigButton";
 
 import {axiosPublicInstance} from "../../services/authService";
 
-import useLocationHandler from '../../components/LocationRulesWidget/hooks/useLocationHandler';
+import useLocationHandler from '../../components/Map/hooks/useLocationHandler';
 
 import './HomePage.css';
 import '../../components/Map/Map.css'
