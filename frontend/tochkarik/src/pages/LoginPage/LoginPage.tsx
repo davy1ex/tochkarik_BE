@@ -2,7 +2,7 @@ import {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import axios from 'axios';
-import {useAuth} from '../../services/AuthContext';
+import { useAuth } from '../../services/AuthContext';
 
 import '../../components/InputField/InputField.css';
 import "./LoginPage.css";

@@ -20,7 +20,7 @@ interface GeneratedPointProps {
     hasReport: boolean;
     onCancel: () => void;
     onStartJourney?: () => void;
-    onCreateReport?: () => void;
+    onCreateReport: (pointId: number) => void;
     onEditReport?: () => void;
     coordinates: [number, number] | null;
     timeOfGenerate: string;
@@ -162,7 +162,7 @@ const GeneratedPoint: React.FC<GeneratedPointProps> = ({
                     {hasReport ? (
                         <BigButton onClick={onEditReport}>Edit Report</BigButton>
                     ) : (
-                        <>{isLogin && <BigButton onClick={onCreateReport}>Create Report</BigButton>}</>
+                        <>{isLogin && <BigButton onClick={() => onCreateReport(pointId!)}>Create Report</BigButton>}</>
                     )}
                     <BigButton onClick={onCancel}>Cancel</BigButton>
                 </div>

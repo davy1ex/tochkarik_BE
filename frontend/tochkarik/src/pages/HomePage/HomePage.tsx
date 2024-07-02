@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
     const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
     const [street, setStreet] = useState<string>('');
     const [timeOfGenerate, setTimeOfGenerate] = useState<string>('');
-    const [telemetryId, setTelemetryId] = useState<string>(0);
+    const [telemetryId, setTelemetryId] = useState<number>(0);
 
     const [showControls, setShowControls] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
@@ -83,10 +83,10 @@ const HomePage: React.FC = () => {
             })
 
         const { newPosition, generatedByRule } = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition);
-        let finalPosition = newPosition
+        let finalPosition = newPosition as [number, number]
         let radiusForGenerate = radius;
         if (!newPosition) {
-            finalPosition = position;
+            finalPosition = position as [number, number];
         }
         else {
             radiusForGenerate = 100;
@@ -171,8 +171,7 @@ const HomePage: React.FC = () => {
                             isNew={true}
                             hasReport={false}  // Change this based on your logic
                             onCancel={handleCancel}
-                            onCreateReport={(pointId: number) => handleCreateReport(pointId)}
-                            onEditReport={}
+                            onCreateReport={handleCreateReport}
                             coordinates={markerPosition}
                             timeOfGenerate={timeOfGenerate}
                         />

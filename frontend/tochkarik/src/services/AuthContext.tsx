@@ -1,6 +1,17 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import {createContext, useContext, useEffect, useState, ReactNode, FC} from 'react';
 
-const AuthContext = createContext(null);
+
+interface AuthContextType {
+    isAuthenticated: boolean;
+    login: (token: string) => void;
+    logout: () => void;
+}
+
+interface AuthProviderProps {
+    children: ReactNode;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 /**
  * Component that wraps its children with an AuthContext.
@@ -9,7 +20,7 @@ const AuthContext = createContext(null);
  * @param {ReactNode} props.children - The children to be rendered.
  * @return {JSX.Element} The AuthProvider component.
  */
-export const AuthProvider = ({children}) => {
+export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
@@ -19,7 +30,7 @@ export const AuthProvider = ({children}) => {
         }
     }, [localStorage.getItem('token')]);
 
-    const login = (token) => {
+    const login = (token : string) => {
         localStorage.setItem('token', token);
         setIsAuthenticated(true);
     };
@@ -36,4 +47,10 @@ export const AuthProvider = ({children}) => {
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): AuthContextType => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
