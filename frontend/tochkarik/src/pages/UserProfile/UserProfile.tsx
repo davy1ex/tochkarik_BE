@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom'
-import {axiosInstance, setAuthToken} from '../../hooks/axiosConfig';
+import { useNavigate  } from 'react-router-dom'
+import {axiosPrivateInstance} from '../../services/authService';
 
 import '../Style.css';
 import './UserProfile.css';
@@ -16,6 +16,14 @@ interface User {
     username: string;
 }
 
+/**
+ * Renders the user profile page.
+ *
+ * @param {UserProfileProps} props - The props object containing the following properties:
+ *   - userId: The ID of the user.
+ *   - logoutHandler: The function to handle logout.
+ * @return {JSX.Element} The rendered user profile page.
+ */
 const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -26,25 +34,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
         navigate(path);
     };
 
-
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setAuthToken(token);
-        }
-
-        axiosInstance.get(`/user/current_user`, {}).then(response => {
-            if (!response.data) {
-                navigate('/');
-            } else {
-                setUser(response.data);
-                setLoading(false);
-            }
-        }).catch(error => {
-            setError(error.response ? error.response.data.message : 'Error fetching user');
-            setLoading(false);
-        });
-    }, [userId, navigate]);
+        axiosPrivateInstance.get(`/user/current_user`, {})
+            .then(response => {
+                if (!response.data) {
+                    navigate('/');
+                } else {
+                    setUser(response.data);
+                    setLoading(false);
+                }
+            }).catch(error => {
+                navigate('/')
+            })
+        }, [userId, navigate]);
 
     const redirectToBookmarks = () => {
         navigate('/bookmarks');
@@ -52,6 +54,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
 
     const redirectToUserPosts = () => {
         navigate('/user_posts');
+    };
+
+    const redirectToAdminDashboard = () => {
+        navigate('/admindashboard');
     };
 
     if (loading) return <p>Loading...</p>;
@@ -72,6 +78,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                         </div>
                         <div className="container-buttons">
                             <BigButton>Edit profile</BigButton>
+                            <BigButton onClick={redirectToAdminDashboard}>Simillarik</BigButton>
                             <BigButton onClick={redirectToUserPosts}>My posts</BigButton>
                             <BigButton onClick={redirectToBookmarks}>My bookmarks</BigButton>
                             <BigButton onClick={logoutHandler}>Logout</BigButton>

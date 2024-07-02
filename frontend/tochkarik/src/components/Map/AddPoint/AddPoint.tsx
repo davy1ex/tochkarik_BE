@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-import {axiosInstance, setAuthToken} from '../../../hooks/axiosConfig';
+import {axiosPrivateInstance, setAuthToken} from '../../../services/authService';
 
 
 interface AddPointProps {
@@ -18,17 +18,35 @@ interface AddPointProps {
     onSave: (pointId: number) => void;
 }
 
+/**
+ * Renders a component for adding a new point with a dialog box.
+ *
+ * @param {Function} addButtonCancelHandler - The handler for cancelling the addition of a point.
+ * @param {Object} position - The position of the new point.
+ * @param {Date} timeOfGenerate - The time when the point was generated.
+ * @param {Function} onSave - The handler for saving the new point.
+ */
 const AddPoint: React.FC<AddPointProps> = ({addButtonCancelHandler, position, timeOfGenerate, onSave}) => {
     const [inputName, setName] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [open, setOpen] = useState<boolean>(true);
 
+    /**
+     * Closes the dialog and calls the `addButtonCancelHandler` function.
+     *
+     * @return {void}
+     */
     const handleClose = () => {
         setOpen(false);
         addButtonCancelHandler();
     };
 
+    /**
+     * Handles saving a new point to the server.
+     *
+     * @return {Promise<void>} Promise that resolves when the point is successfully saved.
+     */
     const addButtonSaveHandler = async () => {
         const token = localStorage.getItem('token');
         const user_id = localStorage.getItem('user_id');
@@ -37,7 +55,7 @@ const AddPoint: React.FC<AddPointProps> = ({addButtonCancelHandler, position, ti
         }
 
         setLoading(true);
-        axiosInstance.post('/points', {
+        axiosPrivateInstance.post('/points', {
             user_id: user_id,
             name: inputName,
             coordinates: position,
@@ -57,6 +75,12 @@ const AddPoint: React.FC<AddPointProps> = ({addButtonCancelHandler, position, ti
             });
     };
 
+    /**
+     * Updates the state with the new value of the input field.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object containing the new value.
+     * @return {void}
+     */
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };

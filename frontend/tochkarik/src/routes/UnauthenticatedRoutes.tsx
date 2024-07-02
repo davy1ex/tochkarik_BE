@@ -11,12 +11,18 @@ interface UnauthenticatedRoutesProps {
     setAuthToken: (token: string | null) => void;
 }
 
+/**
+ * Renders the routes for unauthenticated users.
+ *
+ * @param {FC<UnauthenticatedRoutesProps>} setAuthToken - Function to set authentication token.
+ * @return {ReactElement} The rendered routes for unauthenticated users.
+ */
 const UnauthenticatedRoutes: FC<UnauthenticatedRoutesProps> = ({ setAuthToken }) => {
     return (
         <>
             <Header user_login={false} />
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<HomePage/>} />
                 <Route path="/login" element={<LoginPage setAuthToken={setAuthToken} />} />
                 <Route path="/reg" element={<RegistrationPage setAuthToken={setAuthToken} />} />
                 <Route path="*" element={<Navigate to="/login" />} />

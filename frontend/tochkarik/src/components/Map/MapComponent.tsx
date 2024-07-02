@@ -29,6 +29,16 @@ interface MapComponentProps {
     centerPosition: [number, number];
 }
 
+/**
+ * Renders a map component with the given coordinates, radius, and center position.
+ *
+ * @param {MapComponentProps} props - The props object containing the following properties:
+ *   - coordinates: An array of two numbers representing the latitude and longitude of the coordinates.
+ *   - showRadius: A boolean indicating whether to show the radius on the map.
+ *   - radius: A number representing the radius of the circle to be drawn on the map.
+ *   - centerPosition: An array of two numbers representing the latitude and longitude of the center position.
+ * @return {ReactElement} The rendered map component.
+ */
 const MapComponent: React.FC<MapComponentProps> = ({ coordinates, showRadius, radius, centerPosition }) => {
     const UpdateMapPosition: React.FC<{ position: [number, number] }> = ({ position }) => {
         const map = useMap();

@@ -1,4 +1,5 @@
 import {FC} from "react";
+import {useNavigate} from "react-router-dom";
 
 
 interface PostPreviewProps {
@@ -7,6 +8,16 @@ interface PostPreviewProps {
     postTitle?: string;
     postDesc?: string;
 }
+
+/**
+ * Renders a preview of a post with user information, post details, and interaction features.
+ *
+ * @param {string} userPhoto - The URL of the user's profile photo.
+ * @param {string} username - The username of the post author.
+ * @param {string} postTitle - The title of the post.
+ * @param {string} postDesc - The description of the post.
+ * @return {JSX.Element} The JSX element representing the post preview.
+ */
 const PostPreview: FC<PostPreviewProps> = ({
     userPhoto = '',
     username = '',
@@ -18,10 +29,15 @@ const PostPreview: FC<PostPreviewProps> = ({
     const postLikeImg = 'https://via.placeholder.com/20';
     const postCommentCountImg = 'https://via.placeholder.com/20';
 
+    const navigate = useNavigate();
+
+    const redirectToPost = () => {
+        navigate('/post')
+    }
+
     return (
-
-
-        <div className={"post-item"}>
+        <div className={"post-item"}
+             onClick={() => redirectToPost()}>
             <div className={"post-header"}>
                 <div className={"post-user-info-container"}>
                     <div className={"post-user-photo"}>

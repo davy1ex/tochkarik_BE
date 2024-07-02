@@ -7,17 +7,29 @@ import logo from '../../icons/logo.svg';
 import explore from '../../icons/explore.svg';
 import browse from '../../icons/browse.svg';
 
+import {useAuth} from '../../services/AuthContext';
+
 import BigButton from "../Buttons/BigButton";
 
 
-interface HeaderProps {
-    user_login: boolean;
-}
-
-const Header: FC<HeaderProps> = ({ user_login }) => {
+/**
+ * Renders the header component.
+ *
+ * @return {JSX.Element} The header component.
+ */
+const Header: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const {isAuthenticated} = useAuth();
+
+    /**
+     * Handles the click event for the "Join In" button.
+     *
+     * This function is called when the "Join In" button is clicked. It uses the `navigate` function from the `react-router-dom` library to navigate to the `/login` route.
+     *
+     * @return {void} This function does not return a value.
+     */
     const handleJoinInClick = () => {
         navigate('/login');
     };
@@ -26,7 +38,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
 
     return (
         <header className="header">
-            {user_login && (
+            {isAuthenticated && (
                 <div className="menu-icon" onClick={() => navigate("/profile")}>
                     ☰
                 </div>
@@ -40,7 +52,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
             </a>
 
             <div className="headerContainer">
-                {user_login ? (
+                {isAuthenticated ? (
                     <>
                         <a className="points" onClick={() => alert('Перейти в магазин')}>
                             300 <span className="icon"><img src={coin} alt="" /></span>

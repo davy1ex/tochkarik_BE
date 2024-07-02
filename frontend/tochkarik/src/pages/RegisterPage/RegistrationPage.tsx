@@ -9,6 +9,12 @@ interface RegistrationPageProps {
     setAuthToken: (token: string | null) => void;
 }
 
+/**
+ * Handles the form submission for user registration.
+ *
+ * @param {FormEvent<HTMLFormElement>} event - The form submission event.
+ * @return {void} No return value.
+ */
 const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -19,6 +25,12 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
 
     const apiUrl = process.env.VITE_API_URL;
 
+    /**
+     * Handles the form submission when a user tries to register.
+     *
+     * @param {FormEvent<HTMLFormElement>} event - The form submission event triggering the registration process.
+     * @return {void} No explicit return value, but it performs registration actions based on form input.
+     */
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -58,14 +70,32 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
         }
     };
 
+    /**
+     * Updates the username state with the value from the input element.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object representing the change event on the input element.
+     * @return {void} This function does not return anything.
+     */
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
     };
 
+    /**
+     * Updates the password state with the value from the input element.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object representing the change event on the input element.
+     * @return {void} This function does not return anything.
+     */
     const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
 
+    /**
+     * Updates the passwordRepeat state with the value from the input element.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object representing the change event on the input element.
+     * @return {void} This function does not return anything.
+     */
     const handlePasswordRepeatChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPasswordRepeat(e.target.value);
     };

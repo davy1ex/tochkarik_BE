@@ -5,6 +5,9 @@ use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Listens to the authentication success event and generates a refresh token for the authenticated user.
+ */
 class AuthenticationSuccessListener
 {
     private $refreshTokenManager;
@@ -14,6 +17,13 @@ class AuthenticationSuccessListener
         $this->refreshTokenManager = $refreshTokenManager;
     }
 
+    /**
+     * Handles the authentication success event.
+     *
+     * @param AuthenticationSuccessEvent $event The authentication success event.
+     *
+     * @return void
+     */
     public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
     {
         $data = $event->getData();

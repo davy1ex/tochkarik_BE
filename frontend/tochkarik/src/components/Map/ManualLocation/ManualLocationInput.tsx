@@ -11,10 +11,24 @@ interface ManualLocationInputProps {
     setError: (error: string) => void;
 }
 
+/**
+ * Renders a component for manual location input.
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.setPosition - Callback function to set the position.
+ * @param {Function} props.setError - Callback function to set the error message.
+ * @return {JSX.Element} The rendered component.
+ */
 const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError }) => {
     const [manualLocation, setManualLocation] = useState<string>('');
     const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
 
+    /**
+     * Updates the manual location state and fetches location suggestions from OpenStreetMap API based on the input value.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} event - The event object containing the input value.
+     * @return {Promise<void>} - A promise that resolves when the function completes.
+     */
     const handleManualLocationChange = async (event: ChangeEvent<HTMLInputElement>) => {
         setManualLocation(event.target.value);
 
@@ -31,6 +45,12 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
         }
     };
 
+    /**
+     * Updates the position, location suggestions, manual location, and error state variables based on the selected suggestion.
+     *
+     * @param {any} suggestion - The selected suggestion object containing latitude and longitude information.
+     * @return {void} - Does not return anything.
+     */
     const handleSuggestionClick = (suggestion: any) => {
         setPosition([parseFloat(suggestion.lat), parseFloat(suggestion.lon)]);
         setLocationSuggestions([]);
@@ -38,6 +58,13 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
         setError('');
     };
 
+    /**
+     * Asynchronously handles the submission of a manual location.
+     * Fetches the latitude and longitude of the location from the OpenStreetMap API
+     * and updates the position and error state variables accordingly.
+     *
+     * @return {Promise<void>} A Promise that resolves when the function completes.
+     */
     const handleManualLocationSubmit = async () => {
         if (manualLocation) {
             try {

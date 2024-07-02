@@ -2,7 +2,7 @@ import {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import axios from 'axios';
-import {axiosInstance} from '../../hooks/axiosConfig';
+import { useAuth } from '../../services/AuthContext';
 
 import '../../components/InputField/InputField.css';
 import "./LoginPage.css";
@@ -17,17 +17,33 @@ interface ErrorResponse {
 }
 
 
+/**
+ * Handles the form submission for user login.
+ *
+ * @param {FormEvent<HTMLFormElement>} event - The form submission event.
+ * @return {void} No return value.
+ */
 const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const {login} = useAuth();
+
     const navigate = useNavigate();
 
+    /**
+     * Handles the form submission for user login.
+     *
+     * @param {FormEvent<HTMLFormElement>} event - The form submission event.
+     * @return {void} No return value.
+     */
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        const API_URL = process.env.VITE_API_URL + '/api'
+
         try {
-            const response = await axiosInstance.post(`/login_check`, {
+            const response = await axios.post(`${API_URL}/login_check`, {
                 username,
                 password,
             });
@@ -35,13 +51,18 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
             const token = response.data.token;
             const refresh_token = response.data.refresh_token;
 
+            login(token);
+
             localStorage.setItem('token', token);
             localStorage.setItem('refresh_token', refresh_token);
 
             setAuthToken(token);
 
             navigate('/');
+            window.location.href = '/';
+            window.location.reload();
         } catch (err) {
+            console.log(err)
             if (axios.isAxiosError(err)) {
                 const errorResponse = err.response?.data as ErrorResponse;
                 setError(errorResponse.message || 'Incorrect login data');
@@ -51,10 +72,22 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
         }
     };
 
+    /**
+     * Updates the state with the new value of the username input field.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object containing the new value.
+     * @return {void}
+     */
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
     };
 
+    /**
+     * Updates the state with the new value of the password input field.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The event object containing the new value.
+     * @return {void}
+     */
     const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
