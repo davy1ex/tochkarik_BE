@@ -135,12 +135,18 @@ const useLocationHandler = () => {
 
             if (nearbyPlaces.length > 0) {
                 const place = nearbyPlaces[0];
-                const newPosition = place.type === 'node'
-                    ? [place.lat, place.lon]
-                    : [place.center.lat, place.center.lon];
+                let newPosition: [number, number] | null = null;
 
-                setPosition(newPosition);
-                return {newPosition, generatedByRule: true};
+                if (place.type === 'node' && place.lat !== undefined && place.lon !== undefined) {
+                    newPosition = [place.lat, place.lon];
+                } else if (place.type !== 'node' && place.center !== undefined) {
+                    newPosition = [place.center.lat, place.center.lon];
+                }
+
+                if (newPosition !== null) {
+                    setPosition(newPosition);
+                    return { newPosition, generatedByRule: true };
+                }
             } else {
                 throw new Error('No nearby places found');
             }

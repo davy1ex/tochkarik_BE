@@ -1,5 +1,16 @@
 import axios from 'axios';
 
+
+interface Place {
+    type: 'node' | 'way' | 'relation';
+    lat?: number;
+    lon?: number;
+    center?: {
+        lat: number;
+        lon: number;
+    };
+}
+
 /**
  * Retrieves nearby places based on latitude, longitude, radius, and type.
  *
@@ -7,10 +18,10 @@ import axios from 'axios';
  * @param {number} longitude - The longitude of the location.
  * @param {number} radius - The radius in meters to search for places.
  * @param {string} type - The type of places to search for.
- * @return {Promise<Array<any>>} - A promise that resolves to an array of nearby places.
+ * @return {Promise<Place[]>} - A promise that resolves to an array of nearby places.
  * @throws {Error} - If an invalid location type is provided.
  */
-const getNearbyPlaces = async (latitude: number, longitude: number, radius: number, type: string) => {
+const getNearbyPlaces = async (latitude: number, longitude: number, radius: number, type: string): Promise<Place[]> => {
     let typeQuery = '';
     console.log(type)
     switch(type) {

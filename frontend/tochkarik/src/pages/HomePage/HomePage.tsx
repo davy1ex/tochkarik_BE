@@ -79,8 +79,10 @@ const HomePage: React.FC = () => {
         await axiosPublicInstance.get('/generation_rules')
             .then(response => {
                 setLocationType(response.data.data[0].rules.type[0]);
+            }).catch(error => {
 
             })
+
 
         const { newPosition, generatedByRule } = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition);
         let finalPosition = newPosition as [number, number]
