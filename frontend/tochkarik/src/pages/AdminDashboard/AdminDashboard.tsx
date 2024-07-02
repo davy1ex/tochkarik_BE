@@ -12,15 +12,8 @@ import '../../components/InputField/InputField.css'
 interface Rule {
     id: number;
     name: string;
-    rules: { type: string[] };
+    coordinates: { type: [number, number] };
 }
-
-const locationTypes = [
-    { value: 'mall', label: 'Mall' },
-    { value: 'supermarket', label: 'Supermarket' },
-    { value: 'restaurant', label: 'Restaurant' },
-    { value: 'park', label: 'Park' },
-];
 
 interface AnalyticsData {
     totalGeneratedPoints: number;
@@ -35,7 +28,8 @@ interface AnalyticsData {
 const AdminDashboard: React.FC = () => {
     const [rules, setRules] = useState<Rule[]>([]);
     const [newRuleName, setNewRuleName] = useState<string>('');
-    const [newRuleTypes, setNewRuleTypes] = useState<string[]>([]);
+    const [latitude, setLatitude] = useState<number | string>();
+    const [longitude, setLongitude] = useState<number | string>();
     const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
     const [error, setError] = useState<string>('');
 
@@ -76,11 +70,12 @@ const AdminDashboard: React.FC = () => {
         try {
             axiosPrivateInstance.post('/generation_rules', {
                 name: newRuleName,
-                rules: { type: newRuleTypes }
+                coordinates: [latitude, longitude]
             }).then(response => {
                 setRules([...rules, response.data.data]);
                 setNewRuleName('');
-                setNewRuleTypes([]);
+                setLongitude('')
+                setLatitude('')
             });
 
         } catch (error) {
@@ -101,13 +96,6 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    const handleTypeChange = (type: string) => {
-        setNewRuleTypes(prevTypes =>
-            prevTypes.includes(type)
-                ? prevTypes.filter(t => t !== type)
-                : [...prevTypes, type]
-        );
-    };
 
     return (
         <div>
@@ -118,23 +106,22 @@ const AdminDashboard: React.FC = () => {
                 <h3>Add New Rule</h3>
                 <input
                     type="text"
-                    placeholder="Rule Name"
+                    placeholder="Name"
                     value={newRuleName}
                     onChange={(e) => setNewRuleName(e.target.value)}
                 />
-                <div>
-                    {locationTypes.map(type => (
-                        <label key={type.value}>
-                            <input
-                                type="checkbox"
-                                value={type.value}
-                                checked={newRuleTypes.includes(type.value)}
-                                onChange={() => handleTypeChange(type.value)}
-                            />
-                            {type.label}
-                        </label>
-                    ))}
-                </div>
+                <input
+                    type="text"
+                    placeholder="Latitude"
+                    value={latitude}
+                    onChange={(e) => setLatitude(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Longitude"
+                    value={longitude}
+                    onChange={(e) => setLongitude(e.target.value)}
+                />
                 <BigButton onClick={handleAddRule}>Add Rule</BigButton>
             </div>
 
@@ -152,7 +139,7 @@ const AdminDashboard: React.FC = () => {
                     <tr key={rule.id}>
                         <td>{rule.id}</td>
                         <td>{rule.name}</td>
-                        <td>{rule.rules.type.join(', ')}</td>
+                        <td>{rule.coordinates.join(', ')}</td>
                         <td>
                             <BigButton onClick={() => handleDelete(rule.id)}>Delete</BigButton>
                         </td>

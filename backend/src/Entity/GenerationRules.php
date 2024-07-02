@@ -14,27 +14,15 @@ class GenerationRules
     #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\Column(type: "json")]
-    private array $rules = [];
-
     #[ORM\Column(type: "string", length: 255)]
     private string $name;
+
+    #[ORM\Column]
+    private array $coordinates = [];
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getRules(): ?array
-    {
-        return $this->rules;
-    }
-
-    public function setRules(array $rules): self
-    {
-        $this->rules = $rules;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -45,6 +33,18 @@ class GenerationRules
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCoordinates(): array
+    {
+        return $this->coordinates;
+    }
+
+    public function setCoordinates(array $coordinates): static
+    {
+        $this->coordinates = $coordinates;
 
         return $this;
     }
