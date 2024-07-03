@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { setAuthToken } from '../../services/authService';
 import { axiosPrivateInstance } from '../../services/authService';
 import { axiosPublicInstance } from '../../services/authService';
@@ -25,7 +25,7 @@ interface AnalyticsData {
     visitRateByRule: number;
 }
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboard: FC = () => {
     const [rules, setRules] = useState<Rule[]>([]);
     const [newRuleName, setNewRuleName] = useState<string>('');
     const [latitude, setLatitude] = useState<number | string>();
@@ -87,7 +87,7 @@ const AdminDashboard: React.FC = () => {
     const handleDelete = async (id: number) => {
         try {
             axiosPrivateInstance.delete(`/generation_rules/${id}`)
-                .then(response => {
+                .then(() => {
                     setRules(rules.filter(rule => rule.id !== id));
                 });
         } catch (error) {
