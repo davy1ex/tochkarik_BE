@@ -13,7 +13,6 @@ import useLocationHandler from '../../components/Map/hooks/useLocationHandler';
 import './HomePage.css';
 import '../../components/Map/Map.css'
 
-
 /**
  * Renders the HomePage component which displays a map with a radius slider and a button to generate a new point.
  *
@@ -27,13 +26,11 @@ const HomePage: React.FC = () => {
     const [street, setStreet] = useState<string>('');
     const [timeOfGenerate, setTimeOfGenerate] = useState<string>('');
     const [telemetryId, setTelemetryId] = useState<number>(0);
+    const [generatedByRule, setGeneratedByRule] = useState<boolean>(false)
 
     const [showControls, setShowControls] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
-
-    const { generateRandomCoordinates, getStreetName, getFormattedTime, updatePositionWithNearbyPlace } = useLocationHandler();
-
-    const [pointId, setPointId] = useState<number | null>(null);
+    const { getRandomCoordinatesWithPassability, getStreetName, getFormattedTime, isPointWithinAnyRuleRadius } = useLocationHandler();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(async (position) => {
@@ -76,38 +73,22 @@ const HomePage: React.FC = () => {
      * @return {Promise<void>} A Promise that resolves when the generation process is complete.
      */
     const handleGenerate = async () => {
-        await axiosPublicInstance.get('/generation_rules')
-            .then(response => {
-                setLocationType(response.data.data[0].rules.type[0]);
-            }).catch(error => {
+        const {coordinates: coordinatesRandomPosition, generatedByRule: isGeneratedByRule} = await getRandomCoordinatesWithPassability(position!, radius);
+        setGeneratedByRule(isGeneratedByRule);
+        setMarkerPosition(coordinatesRandomPosition);
+        setPosition(coordinatesRandomPosition);
 
-            })
-
-
-        const { newPosition, generatedByRule } = await updatePositionWithNearbyPlace(position!, radius, locationType, setPosition);
-        let finalPosition = newPosition as [number, number]
-        let radiusForGenerate = radius;
-        if (!newPosition) {
-            finalPosition = position as [number, number];
-        }
-        else {
-            radiusForGenerate = 100;
-        }
-
-        const [newLatitude, newLongitude] = await generateRandomCoordinates(finalPosition!, radiusForGenerate);
-        setMarkerPosition([newLatitude, newLongitude]);
-
-        const streetName = await getStreetName(newLatitude, newLongitude);
+        const streetName = await getStreetName(coordinatesRandomPosition[0], coordinatesRandomPosition[1]);
         setStreet(streetName);
 
-        const formattedTime = getFormattedTime(newLatitude, newLongitude);
+        const formattedTime = getFormattedTime(coordinatesRandomPosition[0], coordinatesRandomPosition[1])
         setTimeOfGenerate(formattedTime);
 
         setShowControls(false);
 
-        axiosPublicInstance.post('/point_telemetry', {
+        await axiosPublicInstance.post('/point_telemetry', {
             name: 'Generated Point',
-            coordinates: position,
+            coordinates: coordinatesRandomPosition,
             timeOfGenerate: formattedTime,
             description: street,
             isVisited: false,
@@ -136,6 +117,22 @@ const HomePage: React.FC = () => {
      *
      * @return {void} This function does not return anything.
      */
+    const handleCancel = () => {
+        setMarkerPosition(null);
+        setShowControls(true);
+        setStreet('');
+        setTimeOfGenerate('');
+        setPointId(null);
+    };
+
+    const handleCreateReport = async () => {
+        const rulePoints = await isPointWithinAnyRuleRadius(position!);
+        axiosPublicInstance.put(`/point_telemetry/${telemetryId}`, {
+            visited: rulePoints,
+            generatedByRule: generatedByRule
+        })
+    }
+
     const handleCancel = () => {
         setMarkerPosition(null);
         setShowControls(true);

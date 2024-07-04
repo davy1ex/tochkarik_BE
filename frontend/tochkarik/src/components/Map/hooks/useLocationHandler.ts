@@ -1,57 +1,27 @@
 import axios from 'axios';
+import axios from 'axios'
+import {axiosPublicInstance} from '../../../services/authService';
 import moment from 'moment-timezone';
 import tzlookup from 'tz-lookup';
 
-import getNearbyPlaces from "./get.nearby.places";
-
-/**
- * Returns an object with functions for generating random coordinates, getting the street name,
- * getting the formatted time, and updating the position with nearby places.
- *
- * @return {{ generateRandomCoordinates: (center: [number, number], radius: number) => Promise<[number, number]>, getStreetName: (latitude: number, longitude: number) => Promise<string>, getFormattedTime: (latitude: number, longitude: number) => string, updatePositionWithNearbyPlace: (position: [number, number], radius: number, locationType: string | null, setPosition: (pos: [number, number]) => void) => Promise<{ newPosition: [number, number] | null, generatedByRule: boolean }>} }}
- */
 const useLocationHandler = () => {
-    /**
-     * Generates random coordinates within a given radius from a center point.
-     *
-     * @param {[number, number]} center - The center point of the circle.
-     * @param {number} radius - The radius of the circle.
-     * @return {Promise<[number, number]>} A Promise that resolves to the generated coordinates.
-     */
-    const generateRandomCoordinates = async (center: [number, number], radius: number): Promise<[number, number]> => {
-        let coordinates: [number, number] = [0, 0];
-        let isPassable = false;
+    const generateRandomCoordinates = (
+        coordinates_of_local_position: [number, number],
+        radius_for_generate: number
+    ) => {
+        const randomAngle = Math.random() * 2 * Math.PI;
+        const randomRadius = Math.random() * radius_for_generate;
 
-        while (!isPassable) {
-            const randomAngle = Math.random() * 2 * Math.PI;
-            const randomRadius = Math.random() * radius;
+        const offsetX = randomRadius * Math.cos(randomAngle);
+        const offsetY = randomRadius * Math.sin(randomAngle);
 
-            const offsetX = randomRadius * Math.cos(randomAngle);
-            const offsetY = randomRadius * Math.sin(randomAngle);
+        const earthRadius = 6378137;
+        const randomLatitude = coordinates_of_local_position[0] + (offsetY / earthRadius) * (180 / Math.PI);
+        const randomLongitude = coordinates_of_local_position[1] + (offsetX / earthRadius) * (180 / Math.PI) / Math.cos(coordinates_of_local_position[0] * Math.PI / 180);
 
-            const earthRadius = 6378137;
-            const newLatitude = center[0] + (offsetY / earthRadius) * (180 / Math.PI);
-            const newLongitude = center[1] + (offsetX / earthRadius) * (180 / Math.PI) / Math.cos(center[0] * Math.PI / 180);
+        return [randomLatitude, randomLongitude];
+    }
 
-            coordinates = [newLatitude, newLongitude];
-            isPassable = await checkPassability(coordinates);
-
-            if (isPassable) {
-                console.log(`Found passable coordinates: ${newLatitude}, ${newLongitude}`);
-            } else {
-                console.log(`Generated coordinates are not passable: ${newLatitude}, ${newLongitude}. Regenerating...`);
-            }
-        }
-
-        return coordinates;
-    };
-
-    /**
-     * Checks if the given coordinates are passable by checking for any highways or footways within a 50-meter radius.
-     *
-     * @param {Array<number>} coordinates - The latitude and longitude coordinates to check.
-     * @return {Promise<boolean>} A Promise that resolves to true if the coordinates are passable, false otherwise.
-     */
     const checkPassability = async (coordinates: [number, number]): Promise<boolean> => {
         const [lat, lng] = coordinates;
         const overpassQuery = `
@@ -79,13 +49,35 @@ const useLocationHandler = () => {
         }
     };
 
-    /**
-     * Retrieves the street name based on the provided latitude and longitude coordinates.
-     *
-     * @param {number} latitude - The latitude of the location.
-     * @param {number} longitude - The longitude of the location.
-     * @return {Promise<string>} A promise that resolves to the street name if successful, or an empty string if an error occurs.
-     */
+    const checkPointsWithinRadius = async (position: [number, number], radius: number, rules: any[]) => {
+        const nearbyRules = rules.filter(rule => {
+            const [lat, lng] = rule.coordinates.map(parseFloat);
+            console.log([lat, lng]);
+            const distance = getDistance(position, [lat, lng]);
+            return distance <= radius;
+        });
+        console.log('check position: ' + position + 'and rules ' + rules)
+        console.log('finded nearby: ')
+        console.log(nearbyRules)
+
+        return nearbyRules;
+    };
+
+    const isPointWithinAnyRuleRadius = async (point: [number, number]): Promise<boolean> => {
+        const rules = await fetchGenerationRules();
+        console.log("isPointWithinAnyRuleRadius")
+        console.log(rules)
+
+        if (rules.length === 0)
+            return false;
+
+        return rules.some(rule => {
+            const [lat, lng] = rule.coordinates.map(parseFloat);
+            const distance = getDistance(point, [lat, lng]);
+            return distance <= rule.radius;
+        });
+    };
+
     const getStreetName = async (latitude: number, longitude: number): Promise<string> => {
         try {
             const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${latitude},${longitude}`);
@@ -129,6 +121,18 @@ const useLocationHandler = () => {
             return {newPosition: null, generatedByRule: false};
         }
 
+            attempts++;
+        }
+
+        if (!isPassable) {
+            console.warn(`Could not find passable coordinates within ${maxAttempts} attempts.`);
+            return { coordinates: position, generatedByRule: false };
+        }
+
+        return { coordinates: position, generatedByRule: false };
+    }
+
+    const fetchGenerationRules = async () => {
         try {
             const nearbyPlaces = await getNearbyPlaces(position[0], position[1], radius, locationType);
             console.log("FINDED RULES POSITION: ", nearbyPlaces[0])
@@ -150,17 +154,37 @@ const useLocationHandler = () => {
             } else {
                 throw new Error('No nearby places found');
             }
+            const response = await axiosPublicInstance.get('generation_rules');
+            return response.data.data;
         } catch (error) {
             console.error('Error finding nearby places:', error);
             return {newPosition: null, generatedByRule: false};
+            if (error.response && error.response.status === 404) {
+                console.error('Endpoint not found. Please check the URL.');
+            }
+            return [];
         }
     };
 
+    const getDistance = (point1: [number, number], point2: [number, number]) => {
+        const [lat1, lng1] = point1;
+        const [lat2, lng2] = point2;
+        const earthRadius = 6371000; // meters
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLng = (lng2 - lng1) * (Math.PI / 180);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadius * c; // distance in meters
+    };
+
     return {
-        generateRandomCoordinates,
+        getRandomCoordinatesWithPassability,
         getStreetName,
         getFormattedTime,
-        updatePositionWithNearbyPlace,
+        isPointWithinAnyRuleRadius
     };
 };
 
