@@ -31,6 +31,7 @@ const AdminDashboard: FC = () => {
     const [latitude, setLatitude] = useState<number | string>();
     const [longitude, setLongitude] = useState<number | string>();
     const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+    const [radius, setRadius] = useState<number | string>('')
     const [error, setError] = useState<string>('');
 
     const fetchRules = async () => {
@@ -70,12 +71,14 @@ const AdminDashboard: FC = () => {
         try {
             axiosPrivateInstance.post('/generation_rules', {
                 name: newRuleName,
-                coordinates: [latitude, longitude]
+                coordinates: [latitude, longitude],
+                radius: radius
             }).then(response => {
                 setRules([...rules, response.data.data]);
                 setNewRuleName('');
                 setLongitude('')
                 setLatitude('')
+                setRadius('')
             });
 
         } catch (error) {
@@ -122,6 +125,12 @@ const AdminDashboard: FC = () => {
                     value={longitude}
                     onChange={(e) => setLongitude(e.target.value)}
                 />
+                <input
+                    type="text"
+                    placeholder="Radius"
+                    value={radius}
+                    onChange={(e) => setRadius(e.target.value)}
+                />
                 <BigButton onClick={handleAddRule}>Add Rule</BigButton>
             </div>
 
@@ -130,7 +139,8 @@ const AdminDashboard: FC = () => {
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Rules</th>
+                    <th>Coordinates</th>
+                    <th>Radius</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -140,6 +150,7 @@ const AdminDashboard: FC = () => {
                         <td>{rule.id}</td>
                         <td>{rule.name}</td>
                         <td>{rule.coordinates.join(', ')}</td>
+                        <td>{rule.radius}</td>
                         <td>
                             <BigButton onClick={() => handleDelete(rule.id)}>Delete</BigButton>
                         </td>
