@@ -137,7 +137,6 @@ const AdminDashboard: FC = () => {
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Coordinates</th>
                     <th>Radius</th>
@@ -147,7 +146,6 @@ const AdminDashboard: FC = () => {
                 <tbody>
                 {rules.map(rule => (
                     <tr key={rule.id}>
-                        <td>{rule.id}</td>
                         <td>{rule.name}</td>
                         <td>{rule.coordinates.join(', ')}</td>
                         <td>{rule.radius}</td>
