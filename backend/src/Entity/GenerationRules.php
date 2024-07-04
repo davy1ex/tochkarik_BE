@@ -20,6 +20,9 @@ class GenerationRules
     #[ORM\Column]
     private array $coordinates = [];
 
+    #[ORM\Column]
+    private ?int $radius=null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class GenerationRules
     public function setCoordinates(array $coordinates): static
     {
         $this->coordinates = $coordinates;
+
+        return $this;
+    }
+
+    public function getRadius(): ?int
+    {
+        return $this->radius;
+    }
+
+    public function setRadius(int $radius): self
+    {
+        $this->radius = $radius;
 
         return $this;
     }

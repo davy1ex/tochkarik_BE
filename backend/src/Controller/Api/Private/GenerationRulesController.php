@@ -38,14 +38,16 @@ class GenerationRulesController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $name = $data['name'];
         $coordinates = $data['coordinates'];
+        $radius = $data['radius'];
 
-        if (!($name || $coordinates)) {
+        if (!($name || !$coordinates || !$radius)) {
             return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
         }
 
         $generationRule = new GenerationRules();
         $generationRule->setName($name);
         $generationRule->setCoordinates($coordinates);
+        $generationRule->setRadius($radius);
 
         $entityManager->persist($generationRule);
         $entityManager->flush();
