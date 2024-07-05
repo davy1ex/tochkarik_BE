@@ -73,18 +73,22 @@ const useLocationHandler = () => {
     };
 
     const isPointWithinAnyRuleRadius = async (point: [number, number]): Promise<boolean> => {
-        const rules = await fetchGenerationRules();
-        console.log("isPointWithinAnyRuleRadius")
-        console.log(rules)
+        try {
+            const rules = await fetchGenerationRules();
 
-        if (rules.length === 0)
-            return false;
+            if (!Array.isArray(rules) || rules.length === 0) {
+                return false;
+            }
 
-        return rules.some(rule => {
-            const [lat, lng] = rule.coordinates.map(parseFloat);
-            const distance = getDistance(point, [lat, lng]);
-            return distance <= rule.radius;
-        });
+            return rules.some(rule => {
+                const [lat, lng] = rule.coordinates.map(parseFloat);
+                const distance = getDistance(point, [lat, lng]);
+                return distance <= rule.radius;
+            });
+        } catch (error) {
+            console.error('Error in checkPointsWithinRadius:', error);
+            return [];
+        }
     };
 
     const getStreetName = async (latitude: number, longitude: number): Promise<string> => {
