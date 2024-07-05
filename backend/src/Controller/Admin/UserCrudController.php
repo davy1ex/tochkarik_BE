@@ -8,7 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -39,11 +39,17 @@ class UserCrudController extends AbstractCrudController
                 ->allowMultipleChoices()
                 ->renderExpanded(false),
 
-            AssociationField::new('points', 'Points') // Поле для выбора точек
+            AssociationField::new('points', 'Points')
                 ->setFormTypeOptions([
                     'by_reference' => false,
                 ]),
 
         ];
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->overrideTemplate('crud/edit', 'admin/edit_user.html.twig');
     }
 }
