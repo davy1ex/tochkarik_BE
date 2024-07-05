@@ -67,7 +67,7 @@ const HomePage: FC = () => {
             timeOfGenerate: formattedTime,
             description: street,
             isVisited: false,
-            generatedByRule: generatedByRule
+            generatedByRule: isGeneratedByRule
         }).then(response => {
             setTelemetryId(response.data.data.id);
             console.log("RETURNED POINTTELEMETRY: ", response.data.data)

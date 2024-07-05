@@ -98,16 +98,15 @@ const useLocationHandler = () => {
         let attempts = 0;
         maxAttempts = 10;
 
-        const rules = await fetchGenerationRules();
-        const nearbyRules = await checkPointsWithinRadius(position, radius, rules);
-        const generatedByRule = nearbyRules.length > 0;
-
         while (!isPassable && attempts < maxAttempts) {
             const newCoordinates = generateRandomCoordinates(position, radius);
             isPassable = checkPassability(newCoordinates);
 
             if (isPassable) {
                 console.log(`Found passable coordinates: ${newCoordinates[0]}, ${newCoordinates[1]}`);
+                const rules = await fetchGenerationRules();
+                const nearbyRules = await checkPointsWithinRadius(newCoordinates, radius, rules);
+                const generatedByRule = nearbyRules.length > 0;
                 return {coordinates: newCoordinates, generatedByRule};
             }
 
