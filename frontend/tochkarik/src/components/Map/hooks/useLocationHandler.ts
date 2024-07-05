@@ -58,8 +58,22 @@ const useLocationHandler = () => {
         console.log('check position: ' + position + 'and rules ' + rules)
         console.log('finded nearby: ')
         console.log(nearbyRules)
+        try {
+            if (!Array.isArray(rules)) {
+                throw new Error('Rules should be an array');
+            }
+
+            const nearbyRules = rules.filter(rule => {
+                const [lat, lng] = rule.coordinates.map(parseFloat);
+                const distance = getDistance(position, [lat, lng]);
+                return distance <= radius;
+            });
 
         return nearbyRules;
+            return nearbyRules;
+        } catch (error) {
+            return [];
+        }
     };
 
     const isPointWithinAnyRuleRadius = async (point: [number, number]): Promise<boolean> => {
