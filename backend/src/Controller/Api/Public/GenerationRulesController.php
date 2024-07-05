@@ -26,7 +26,11 @@ class GenerationRulesController extends AbstractController
             $generationRules = $generationRulesRepository->findAll();
 
             if (empty($generationRules)) {
-                return $this->json(['error' => 'No generation rules found'], JsonResponse::HTTP_NOT_FOUND);
+                return $this->json(['
+                    error' => 'No generation rules found',
+                    'data' => [],
+
+                ], JsonResponse::HTTP_NOT_FOUND);
             }
 
             return $this->json([
