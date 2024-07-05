@@ -68,6 +68,16 @@ const useLocationHandler = () => {
                 const distance = getDistance(position, [lat, lng]);
                 return distance <= radius;
             });
+        try {
+            if (!Array.isArray(rules)) {
+                throw new Error('Rules should be an array');
+            }
+
+            const nearbyRules = rules.filter(rule => {
+                const [lat, lng] = rule.coordinates.map(parseFloat);
+                const distance = getDistance(position, [lat, lng]);
+                return distance <= radius;
+            });
 
         return nearbyRules;
             return nearbyRules;
