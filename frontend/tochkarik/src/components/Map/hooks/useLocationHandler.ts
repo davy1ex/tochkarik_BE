@@ -66,8 +66,6 @@ const useLocationHandler = () => {
 
             return nearbyRules;
         } catch (error) {
-            console.error('Error in checkPointsWithinRadius:', error);
-            // Дополнительная логика обработки ошибок, если необходимо
             return [];
         }
     };
