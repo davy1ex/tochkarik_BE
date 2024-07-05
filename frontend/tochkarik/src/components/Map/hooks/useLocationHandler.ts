@@ -49,15 +49,6 @@ const useLocationHandler = () => {
     };
 
     const checkPointsWithinRadius = async (position: [number, number], radius: number, rules: any[]) => {
-        const nearbyRules = rules.filter(rule => {
-            const [lat, lng] = rule.coordinates.map(parseFloat);
-            console.log([lat, lng]);
-            const distance = getDistance(position, [lat, lng]);
-            return distance <= radius;
-        });
-        console.log('check position: ' + position + 'and rules ' + rules)
-        console.log('finded nearby: ')
-        console.log(nearbyRules)
         try {
             if (!Array.isArray(rules)) {
                 throw new Error('Rules should be an array');
@@ -65,23 +56,18 @@ const useLocationHandler = () => {
 
             const nearbyRules = rules.filter(rule => {
                 const [lat, lng] = rule.coordinates.map(parseFloat);
+                console.log([lat, lng]);
                 const distance = getDistance(position, [lat, lng]);
                 return distance <= radius;
             });
-        try {
-            if (!Array.isArray(rules)) {
-                throw new Error('Rules should be an array');
-            }
+            console.log('check position: ' + position + 'and rules ' + rules)
+            console.log('finded nearby: ')
+            console.log(nearbyRules)
 
-            const nearbyRules = rules.filter(rule => {
-                const [lat, lng] = rule.coordinates.map(parseFloat);
-                const distance = getDistance(position, [lat, lng]);
-                return distance <= radius;
-            });
-
-        return nearbyRules;
             return nearbyRules;
         } catch (error) {
+            console.error('Error in checkPointsWithinRadius:', error);
+            // Дополнительная логика обработки ошибок, если необходимо
             return [];
         }
     };
