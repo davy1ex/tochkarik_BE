@@ -76,8 +76,8 @@ const HomePage: FC = () => {
 
     const handleCreateReport = async () => {
         const rulePoints = await isPointWithinAnyRuleRadius(position!);
-        axiosPublicInstance.put(`/point_telemetry/${telemetryId}`, {
-            visited: rulePoints,
+        await axiosPublicInstance.put(`/point_telemetry/${telemetryId}`, {
+            isVisited: true,
             generatedByRule: generatedByRule
         })
         alert('In the future there will be functionality for creating a report')
