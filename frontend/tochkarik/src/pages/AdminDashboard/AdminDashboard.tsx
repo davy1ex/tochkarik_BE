@@ -36,13 +36,17 @@ const AdminDashboard: FC = () => {
     const [error, setError] = useState<string>('');
 
     const fetchRules = async () => {
-        axiosPublicInstance.get('/generation_rules')
-            .then(response => {
+        try {
+            const response = await axiosPublicInstance.get('/generation_rules');
+
+            if (Array.isArray(response.data.data)) {
                 setRules(response.data.data);
-            }).catch (error => {
-                console.error('Error fetching rules:', error);
-                setError('Error fetching rules');
-            });
+            } else {
+                setRules([]);
+            }
+        } catch (error) {
+            setError('Error fetching rules');
+        }
     }
 
     const fetchAnalytics = () => {
@@ -150,6 +154,22 @@ const AdminDashboard: FC = () => {
                 </tr>
                 </thead>
                 <tbody>
+                {rules.length > 0 ? (
+                    rules.map(rule => (
+                        <tr key={rule.id}>
+                            <td>{rule.name}</td>
+                            <td>{rule.coordinates.join(', ')}</td>
+                            <td>{rule.radius}</td>
+                            <td>
+                                <BigButton onClick={() => handleDelete(rule.id)}>Delete</BigButton>
+                            </td>
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan={4}>No rules found</td>
+                    </tr>
+                )}
                 {rules.map(rule => (
                     <tr key={rule.id}>
                         <td>{rule.name}</td>

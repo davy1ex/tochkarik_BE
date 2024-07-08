@@ -66,7 +66,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, showRadius, ra
                     {coordinates && <Marker position={coordinates} />}
 
                     // DEBUG
-                    {rules && rules.map((rule, index) => (
+                    {Array.isArray(rules) && rules.map((rule, index) => (
                         <Circle
                             key={index}
                             center={rule.coordinates}
