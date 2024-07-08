@@ -13,6 +13,7 @@ interface Rule {
     id: number;
     name: string;
     coordinates: { type: [number, number] };
+    radius: number;
 }
 
 interface AnalyticsData {
@@ -31,7 +32,7 @@ const AdminDashboard: FC = () => {
     const [latitude, setLatitude] = useState<number | string>();
     const [longitude, setLongitude] = useState<number | string>();
     const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
-    const [radius, setRadius] = useState<number | string>('')
+    const [radius, setRadius] = useState<number | string>('');
     const [error, setError] = useState<string>('');
 
     const fetchRules = async () => {
