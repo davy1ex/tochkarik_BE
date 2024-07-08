@@ -58,7 +58,7 @@ const useLocationHandler = () => {
                 const [lat, lng] = rule.coordinates.map(parseFloat);
                 console.log([lat, lng]);
                 const distance = getDistance(position, [lat, lng]);
-                return distance <= radius;
+                return distance <= rule.radius;
             });
             console.log('check position: ' + position + 'and rules ' + rules)
             console.log('finded nearby: ')
@@ -165,7 +165,8 @@ const useLocationHandler = () => {
         getRandomCoordinatesWithPassability,
         getStreetName,
         getFormattedTime,
-        isPointWithinAnyRuleRadius
+        isPointWithinAnyRuleRadius,
+        fetchGenerationRules // DEBUG
     };
 };
 

@@ -27,6 +27,7 @@ interface MapComponentProps {
     showRadius: boolean;
     radius: number;
     centerPosition: [number, number];
+    rules: [];
 }
 
 /**
@@ -39,7 +40,7 @@ interface MapComponentProps {
  *   - centerPosition: An array of two numbers representing the latitude and longitude of the center position.
  * @return {ReactElement} The rendered map component.
  */
-const MapComponent: React.FC<MapComponentProps> = ({ coordinates, showRadius, radius, centerPosition }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ coordinates, showRadius, radius, centerPosition, rules=[] }) => { // DEBUG
     const UpdateMapPosition: React.FC<{ position: [number, number] }> = ({ position }) => {
         const map = useMap();
 
@@ -63,6 +64,17 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, showRadius, ra
                     {centerPosition && <UpdateMapPosition position={centerPosition} />}
                     {showRadius && centerPosition && <Circle center={centerPosition} radius={radius} />}
                     {coordinates && <Marker position={coordinates} />}
+
+                    // DEBUG
+                    {rules && rules.map((rule, index) => (
+                        <Circle
+                            key={index}
+                            center={rule.coordinates}
+                            radius={rule.radius}
+                            color="blue" // Можно задать цвет для лучшей видимости
+                        />
+                    ))}
+                    // DEBUG
                 </MapContainer>
             </div>
         </div>

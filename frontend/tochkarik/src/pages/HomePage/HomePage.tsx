@@ -28,13 +28,25 @@ const HomePage: FC = () => {
 
     const [showControls, setShowControls] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
-    const { getRandomCoordinatesWithPassability, getStreetName, getFormattedTime, isPointWithinAnyRuleRadius } = useLocationHandler();
+    const { getRandomCoordinatesWithPassability, getStreetName, getFormattedTime, isPointWithinAnyRuleRadius, fetchGenerationRules } = useLocationHandler(); // DEBUG
+
+    // DEBUG
+    const [rules, setRules] = useState([]);
+    // END DEBUG
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(async (position) => {
             const { latitude, longitude } = position.coords;
             setPosition([latitude, longitude]);
         });
+
+        // DEBUG
+        const fetchRules = async () => {
+            const fetchedRules = await fetchGenerationRules();
+            setRules(fetchedRules);
+        };
+        fetchRules();
+        // END DEBUG
     }, []);
 
     /**
@@ -100,6 +112,7 @@ const HomePage: FC = () => {
                         showRadius={true}
                         radius={radius}
                         centerPosition={position}
+                        rules={rules}
                     />
                     {showControls ? (
                         <div className="controls-container">
