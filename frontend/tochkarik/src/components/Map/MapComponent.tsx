@@ -71,7 +71,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, showRadius, ra
                             key={index}
                             center={rule.coordinates}
                             radius={rule.radius}
-                            color="blue" // Можно задать цвет для лучшей видимости
+                            color="blue"
                         />
                     ))}
                     // DEBUG
