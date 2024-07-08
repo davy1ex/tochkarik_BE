@@ -9,6 +9,7 @@ import './ManualLocationInput.css';
 interface ManualLocationInputProps {
     setPosition: (position: [number, number]) => void;
     setError: (error: string) => void;
+    forceUpdateLocation: (location: string) => void;
 }
 
 /**
@@ -17,9 +18,10 @@ interface ManualLocationInputProps {
  * @param {Object} props - The component props.
  * @param {Function} props.setPosition - Callback function to set the position.
  * @param {Function} props.setError - Callback function to set the error message.
+ * @param {Function} props.forceUpdateLocation - Callback function to force update location.
  * @return {JSX.Element} The rendered component.
  */
-const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError }) => {
+const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError, forceUpdateLocation }) => {
     const [manualLocation, setManualLocation] = useState<string>('');
     const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
     const cancelTokenRef = useRef<CancelTokenSource | null>(null);
@@ -106,7 +108,7 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
                     placeholder="Enter city name"
                     className="manual-location-input"
                 />
-                <BigButton onClick={handleManualLocationSubmit}>Set Location</BigButton>
+                <BigButton onClick={() => forceUpdateLocation(manualLocation)}>Set Location</BigButton>
             </div>
             <div className="search-suggestion-container">
                 {locationSuggestions.length > 0 && (

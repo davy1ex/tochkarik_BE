@@ -9,6 +9,7 @@ import { axiosPublicInstance } from '../../services/authService';
 import useLocationHandler from '../../components/Map/hooks/useLocationHandler';
 import './HomePage.css';
 import '../../components/Map/Map.css';
+import axios from "axios";
 
 
 /**
@@ -91,6 +92,20 @@ const HomePage: FC = () => {
         setPointId(null);
     };
 
+    const forceUpdateLocation = async (location: string) => {
+        try {
+            const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${location}`);
+            if (response.data.length > 0) {
+                setPosition([parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]);
+                setError('');
+            } else {
+                setError('Location not found. Please try another city.');
+            }
+        } catch (error) {
+            setError('Error fetching location. Please try again.');
+        }
+    };
+
     return (
         <div className="home-container">
             {position ? (
@@ -107,7 +122,11 @@ const HomePage: FC = () => {
                                 {street}
                                 <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange}/>
                                 <BigButton onClick={handleGenerate}>Generate</BigButton>
-                                <ManualLocationInput setPosition={setPosition} setError={setError}/>
+                                <ManualLocationInput
+                                    setPosition={setPosition}
+                                    setError={setError}
+                                    forceUpdateLocation={forceUpdateLocation}
+                                />
                                 {error && <ErrorMessage message={error}/>}
                             </div>
                         </div>
