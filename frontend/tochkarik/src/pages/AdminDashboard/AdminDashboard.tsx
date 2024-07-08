@@ -68,6 +68,11 @@ const AdminDashboard: FC = () => {
     }, []);
 
     const handleAddRule = async () => {
+        if (!newRuleName || !latitude || !longitude || !radius) {
+            setError('All fields are required to add a new rule');
+            return;
+        }
+
         try {
             axiosPrivateInstance.post('/generation_rules', {
                 name: newRuleName,
