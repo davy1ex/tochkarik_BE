@@ -80,6 +80,7 @@ const HomePage: FC = () => {
             visited: rulePoints,
             generatedByRule: generatedByRule
         })
+        alert('In the future there will be functionality for creating a report')
     }
 
     const handleCancel = () => {
