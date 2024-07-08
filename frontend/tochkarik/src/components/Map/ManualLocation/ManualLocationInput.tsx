@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useState, useRef} from 'react';
 import axios from 'axios';
 
 import '../../../components/InputField/InputField.css';
@@ -22,6 +22,7 @@ interface ManualLocationInputProps {
 const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError }) => {
     const [manualLocation, setManualLocation] = useState<string>('');
     const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
+    const cancelTokenRef = useRef<CancelTokenSource | null>(null);
 
     /**
      * Updates the manual location state and fetches location suggestions from OpenStreetMap API based on the input value.
@@ -33,12 +34,25 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
         setManualLocation(event.target.value);
 
         if (event.target.value.length > 2) {
+            if (cancelTokenRef.current) {
+                cancelTokenRef.current.cancel('Operation canceled due to new request.');
+            }
+
+            const source = axios.CancelToken.source();
+            cancelTokenRef.current = source;
+
             try {
-                const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`);
+                const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`, {
+                    cancelToken: source.token
+                });
                 const limitedSuggestions = response.data.slice(0, 3);
                 setLocationSuggestions(limitedSuggestions);
             } catch (error) {
-                console.error('Error fetching location suggestions:', error);
+                if (axios.isCancel(error)) {
+                    console.log('Request canceled', error.message);
+                } else {
+                    console.error('Error fetching location suggestions:', error);
+                }
             }
         } else {
             setLocationSuggestions([]);
