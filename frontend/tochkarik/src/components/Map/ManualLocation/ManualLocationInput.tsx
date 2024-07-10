@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState, useRef} from 'react';
+import React, {ChangeEvent, useRef, useState} from 'react';
 import axios from 'axios';
 
 import '../../../components/InputField/InputField.css';
@@ -8,6 +8,7 @@ import './ManualLocationInput.css';
 
 interface ManualLocationInputProps {
     setPosition: (position: [number, number]) => void;
+    setUserPosition: (position: [number, number]) => void;
     setError: (error: string) => void;
     forceUpdateLocation: (location: string) => void;
 }
@@ -17,11 +18,17 @@ interface ManualLocationInputProps {
  *
  * @param {Object} props - The component props.
  * @param {Function} props.setPosition - Callback function to set the position.
+ * @param {Function} props.setUserPosition - Callback function to set central the position.
  * @param {Function} props.setError - Callback function to set the error message.
  * @param {Function} props.forceUpdateLocation - Callback function to force update location.
  * @return {JSX.Element} The rendered component.
  */
-const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError, forceUpdateLocation }) => {
+const ManualLocationInput: React.FC<ManualLocationInputProps> = ({
+                                                                     setPosition,
+                                                                     setUserPosition,
+                                                                     setError,
+                                                                     forceUpdateLocation
+                                                                 }) => {
     const [manualLocation, setManualLocation] = useState<string>('');
     const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
     const cancelTokenRef = useRef<CancelTokenSource | null>(null);
@@ -68,7 +75,10 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
      * @return {void} - Does not return anything.
      */
     const handleSuggestionClick = (suggestion: any) => {
-        setPosition([parseFloat(suggestion.lat), parseFloat(suggestion.lon)]);
+        const newPosition: [number, number] = [parseFloat(suggestion.lat), parseFloat(suggestion.lon)];
+        setPosition(newPosition);
+        setUserPosition(newPosition);
+
         setLocationSuggestions([]);
         setManualLocation('');
         setError('');
@@ -86,7 +96,9 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
             try {
                 const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${manualLocation}`);
                 if (response.data.length > 0) {
-                    setPosition([parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]);
+                    const newPosition: [number, number] = [parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]
+                    setPosition(newPosition);
+                    setUserPosition(newPosition);
                     setError('');
                 } else {
                     setError('Location not found. Please try another city.');
