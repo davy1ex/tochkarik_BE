@@ -41,8 +41,8 @@ const LoginPage: FC = () => {
 
         try {
             const response = await axios.post(`${API_URL}/login_check`, {
-                username,
-                password,
+                username: username,
+                password: password,
             });
 
             const {token} = response.data;
