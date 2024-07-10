@@ -7,9 +7,9 @@ import logo from '../../icons/logo.svg';
 import explore from '../../icons/explore.svg';
 import browse from '../../icons/browse.svg';
 
-import {useAuth} from '../../services/AuthContext';
-
 import BigButton from "../Buttons/BigButton";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store";
 
 
 /**
@@ -21,7 +21,7 @@ const Header: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const {isAuthenticated} = useAuth();
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     /**
      * Handles the click event for the "Join In" button.

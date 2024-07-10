@@ -1,12 +1,12 @@
 import {FC, useEffect, useState} from 'react';
-import {axiosPrivateInstance, setAuthToken} from '../../services/authService'
+import {axiosPrivateInstance} from '../../api/axios'
 
 import GeneratedPoint from "../../components/Map/GeneratedPoint/GeneratedPoint";
 import MapComponent from "../../components/Map/MapComponent";
 
 import './Bookmarks.css'
 import '../../components/Map/Map.css'
-import "../../components/Map/GeneratedPoint/GeneratedPoint.css";
+import '../../components/Map/GeneratedPoint/GeneratedPoint.css';
 
 interface Bookmark {
     id: number;
@@ -34,12 +34,6 @@ const Bookmarks: FC = () => {
      * @return {Promise<void>} A Promise that resolves when the bookmarks are fetched and the state is updated.
      */
     const fetchBookmarks = () => {
-        const token = localStorage.getItem('token');
-
-        if (token) {
-            setAuthToken(token);
-        }
-
         axiosPrivateInstance.get('/points')
             .then(response => {
                 setBookmarks(response.data.points);

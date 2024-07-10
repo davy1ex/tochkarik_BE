@@ -1,16 +1,18 @@
-import { FC, useEffect, useState } from 'react';
+import {FC, useEffect, useState} from 'react';
+import axios from "axios";
+import {axiosPublicInstance} from '../../api/axios';
+
 import MapComponent from '../../components/Map/MapComponent';
 import RadiusSlider from '../../components/Map/Slider/RadiusSlider';
 import ManualLocationInput from '../../components/Map/ManualLocation/ManualLocationInput';
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
 import GeneratedPoint from '../../components/Map/GeneratedPoint/GeneratedPoint';
 import BigButton from '../../components/Buttons/BigButton';
-import { axiosPublicInstance } from '../../services/authService';
+
 import useLocationHandler from '../../components/Map/hooks/useLocationHandler';
+
 import './HomePage.css';
 import '../../components/Map/Map.css';
-import axios from "axios";
-
 
 /**
  * Renders the HomePage component which displays a map with a radius slider and a button to generate a new point.

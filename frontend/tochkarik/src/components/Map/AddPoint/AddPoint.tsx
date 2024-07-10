@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-import {axiosPrivateInstance, setAuthToken} from '../../../services/authService';
+import {axiosPrivateInstance} from '../../../api/axios';
 
 
 interface AddPointProps {
@@ -50,9 +50,6 @@ const AddPoint: React.FC<AddPointProps> = ({addButtonCancelHandler, position, ti
     const addButtonSaveHandler = async () => {
         const token = localStorage.getItem('token');
         const user_id = localStorage.getItem('user_id');
-        if (token) {
-            setAuthToken(token);
-        }
 
         setLoading(true);
         axiosPrivateInstance.post('/points', {

@@ -1,53 +1,74 @@
-import {useEffect} from 'react';
-import {BrowserRouter as Router} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
 
-import {clearAuthTokens, setAuthToken} from './services/authService'
-import {AuthProvider} from './services/AuthContext';
+import {RootState} from './store/store';
+import {validateToken} from './store/authAction';
+import {clearAuthState} from "./store/authSlice";
+import PrivateRoute from './components/routes/PrivateRoute';
+import PublicRoute from './components/routes/PublicRoute';
 
-import AppRoutes from './routes/AppRoutes';
+import LoginPage from './pages/LoginPage/LoginPage';
+import RegisterPage from './pages/RegisterPage/RegisterPage';
+import UserProfile from './pages/UserProfile/UserProfile';
+import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
+import UserPosts from './pages/UserPosts/UserPosts';
+import Bookmarks from './pages/Bookmarks/Bookmarks';
+import HomePage from './pages/HomePage/HomePage';
+import Header from "./components/Header/Header";
+import Error401 from "./pages/Errors/Error401";
+import Error404 from "./pages/Errors/Error404";
+import Error501 from "./pages/Errors/Error501";
+import Error502 from "./pages/Errors/Error502";
+
 import './App.css';
 
-
-/**
- * Renders the main application component.
- *
- * This component initializes the authentication token from local storage and sets it as an
- * HTTP-only cookie using the `setAuthToken` function. It also defines the `handleLogout`
- * function to clear the authentication token from local storage and the `isAuthenticated`
- * variable to check if a token is present in local storage.
- *
- * The component uses the `AuthProvider` and `Router` components from React Router to provide
- * authentication context and routing functionality. The `AppRoutes` component is passed
- * the `isAuthenticated`, `setAuthToken`, and `handleLogout` functions as props to handle
- * authentication-related logic.
- *
- * @return {JSX.Element} The main application component.
- */
 function App() {
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token)
-            setAuthToken(token);
-    }, [])
+        if (!isAuthenticated) {
+            dispatch(validateToken());
+        }
+    }, [dispatch, isAuthenticated]);
 
-    const handleLogout = () => {
-        clearAuthTokens();
-    }
-
-    const isAuthenticated = !!localStorage.getItem('token');
 
     return (
-        <AuthProvider>
+        <>
             <Router>
                 <div className="root-container">
-                    <AppRoutes
-                        isAuthenticated={isAuthenticated}
-                        setAuthToken={setAuthToken}
-                        handleLogout={handleLogout}
-                    />
+                    <Header user_login={isAuthenticated}/>
+                    <Routes>
+                        <Route path="/login"
+                               element={<PublicRoute component={LoginPage} isAuthenticated={isAuthenticated}/>}/>
+                        <Route path="/reg"
+                               element={<PublicRoute component={RegisterPage} isAuthenticated={isAuthenticated}/>}/>
+
+                        <Route path="/profile"
+                               element={<PrivateRoute component={UserProfile} isAuthenticated={isAuthenticated}/>}/>
+                        <Route path="/admindashboard"
+                               element={<PrivateRoute component={AdminDashboard} isAuthenticated={isAuthenticated}/>}/>
+                        <Route path="/user_posts"
+                               element={<PrivateRoute component={UserPosts} isAuthenticated={isAuthenticated}/>}/>
+                        <Route path="/bookmarks"
+                               element={<PrivateRoute component={Bookmarks} isAuthenticated={isAuthenticated}/>}/>
+                        <Route path="/logout" element={<PrivateRoute component={dispatch(clearAuthState)}
+                                                                     isAuthenticated={isAuthenticated}/>}/>
+
+                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/401" element={<Error401/>}/>
+                        <Route path="/404" element={<Error404/>}/>
+                        <Route path="/501" element={<Error501/>}/>
+                        <Route path="/502" element={<Error502/>}/>
+
+                        <Route path="*" element={<Navigate to="/"/>}/>
+                    </Routes>
                 </div>
             </Router>
-        </AuthProvider>
+        </>
+
     );
 }
 

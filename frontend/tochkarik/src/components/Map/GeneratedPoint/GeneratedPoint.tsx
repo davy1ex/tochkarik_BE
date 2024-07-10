@@ -7,9 +7,9 @@ import AddPoint from '../AddPoint/AddPoint';
 import bookmark from '../../../icons/bookmark.svg';
 import bookmarked from '../../../icons/bookmarked.svg';
 
-import "./GeneratedPoint.css";
+import './GeneratedPoint.css';
 import '../Map.css';
-import { axiosPrivateInstance } from "../../../services/authService";
+import {axiosPrivateInstance} from '../../../api/axios';
 
 
 interface GeneratedPointProps {
