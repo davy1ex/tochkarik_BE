@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useState, useRef} from 'react';
 import axios from 'axios';
 
 import '../../../components/InputField/InputField.css';
@@ -9,6 +9,7 @@ import './ManualLocationInput.css';
 interface ManualLocationInputProps {
     setPosition: (position: [number, number]) => void;
     setError: (error: string) => void;
+    forceUpdateLocation: (location: string) => void;
 }
 
 /**
@@ -17,11 +18,13 @@ interface ManualLocationInputProps {
  * @param {Object} props - The component props.
  * @param {Function} props.setPosition - Callback function to set the position.
  * @param {Function} props.setError - Callback function to set the error message.
+ * @param {Function} props.forceUpdateLocation - Callback function to force update location.
  * @return {JSX.Element} The rendered component.
  */
-const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError }) => {
+const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError, forceUpdateLocation }) => {
     const [manualLocation, setManualLocation] = useState<string>('');
     const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
+    const cancelTokenRef = useRef<CancelTokenSource | null>(null);
 
     /**
      * Updates the manual location state and fetches location suggestions from OpenStreetMap API based on the input value.
@@ -33,12 +36,25 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
         setManualLocation(event.target.value);
 
         if (event.target.value.length > 2) {
+            if (cancelTokenRef.current) {
+                cancelTokenRef.current.cancel('Operation canceled due to new request.');
+            }
+
+            const source = axios.CancelToken.source();
+            cancelTokenRef.current = source;
+
             try {
-                const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`);
+                const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`, {
+                    cancelToken: source.token
+                });
                 const limitedSuggestions = response.data.slice(0, 3);
                 setLocationSuggestions(limitedSuggestions);
             } catch (error) {
-                console.error('Error fetching location suggestions:', error);
+                if (axios.isCancel(error)) {
+                    console.log('Request canceled', error.message);
+                } else {
+                    console.error('Error fetching location suggestions:', error);
+                }
             }
         } else {
             setLocationSuggestions([]);
@@ -92,7 +108,7 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
                     placeholder="Enter city name"
                     className="manual-location-input"
                 />
-                <BigButton onClick={handleManualLocationSubmit}>Set Location</BigButton>
+                <BigButton onClick={() => forceUpdateLocation(manualLocation)}>Set Location</BigButton>
             </div>
             <div className="search-suggestion-container">
                 {locationSuggestions.length > 0 && (

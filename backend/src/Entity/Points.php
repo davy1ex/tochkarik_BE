@@ -22,17 +22,6 @@ class Points
     #[MaxDepth(1)]
     private ?User $username = null;
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
@@ -50,6 +39,7 @@ class Points
         return $this->id;
     }
 
+
     public function getUsername(): ?User
     {
         return $this->username;
@@ -60,6 +50,16 @@ class Points
         $this->username = $username;
 
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getTimeOfGenerate(): ?\DateTimeImmutable

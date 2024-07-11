@@ -90,8 +90,8 @@ class PointTelemetryController extends AbstractController
                 $telemetry->setTimeOfGenerate(new \DateTimeImmutable($timeOfGenerate));
             }
 
-            if (isset($data['visited'])) {
-                $isVisited = $data['visited'];
+            if (isset($data['isVisited'])) {
+                $isVisited = $data['isVisited'];
                 $telemetry->setVisited($isVisited);
             }
 

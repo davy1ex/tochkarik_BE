@@ -36,10 +36,18 @@ class GenerationRulesController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $coordinates = $data['coordinates'];
+        $radius = $data['radius'];
+
+        if (!($name || !$coordinates || !$radius)) {
+            return $this->json(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
+        }
 
         $generationRule = new GenerationRules();
-        $generationRule->setName($data['name'] ?? '');
-        $generationRule->setRules($data['rules'] ?? []);
+        $generationRule->setName($name);
+        $generationRule->setCoordinates($coordinates);
+        $generationRule->setRadius($radius);
 
         $entityManager->persist($generationRule);
         $entityManager->flush();
