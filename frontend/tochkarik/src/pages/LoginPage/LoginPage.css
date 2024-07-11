@@ -31,3 +31,8 @@
     color: white !important;
 }
 
+.error-message {
+    color: #646cff; /* или любой другой цвет для выделения */
+    font-size: 0.875rem;
+    margin-top: 0;
+}
