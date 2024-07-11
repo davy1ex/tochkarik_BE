@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { validateTokenSuccess, validateTokenFailure } from './authSlice';
 
 export const login = (username: string, password: string) => async dispatch => {
     try {
@@ -15,21 +16,16 @@ export const login = (username: string, password: string) => async dispatch => {
 export const validateToken = () => async dispatch => {
     const token = localStorage.getItem('token');
     if (!token) {
-        dispatch({type: 'VALIDATE_TOKEN_FAILURE'});
-        return;
-    }
-
-
-    try {
-        const response = await axios.get(`${process.env.VITE_API_URL}/api/auth/check_token`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        dispatch({type: 'VALIDATE_TOKEN_SUCCESS', payload: response.data});
-    } catch (error) {
-        dispatch({type: 'VALIDATE_TOKEN_FAILURE'});
-        localStorage.removeItem('token');
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/validate_token`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            dispatch(validateTokenSuccess(response.data));
+        } catch (error) {
+            dispatch(validateTokenFailure());
+        }
+    } else {
+        dispatch(validateTokenFailure());
     }
 };
 

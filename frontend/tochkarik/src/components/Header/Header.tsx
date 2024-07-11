@@ -8,20 +8,22 @@ import explore from '../../icons/explore.svg';
 import browse from '../../icons/browse.svg';
 
 import BigButton from "../Buttons/BigButton";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store/store";
 
+
+interface HeaderProps {
+    isAuthenticated?: any
+}
 
 /**
  * Renders the header component.
  *
  * @return {JSX.Element} The header component.
  */
-const Header: FC = () => {
+const Header: FC <HeaderProps> = ({isAuthenticated}) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+    // const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     /**
      * Handles the click event for the "Join In" button.
@@ -55,13 +57,13 @@ const Header: FC = () => {
                 {isAuthenticated ? (
                     <>
                         <a className="points" onClick={() => alert('Перейти в магазин')}>
-                            300 <span className="icon"><img src={coin} alt="" /></span>
+                            300 <span className="icon"><img src={coin} alt=""/></span>
                         </a>
                         <a className="icon" onClick={() => navigate("/generate")}>
                             <img alt="icon explore" width="22" src={explore}/>
                         </a>
                         <a className="icon" onClick={() => navigate("/posts")}>
-                            <img alt="icon browse posts" src={browse} />
+                            <img alt="icon browse posts" src={browse}/>
                         </a>
                     </>
                 ) : (

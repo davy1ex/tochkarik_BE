@@ -39,7 +39,7 @@ function App() {
         <>
             <Router>
                 <div className="root-container">
-                    <Header user_login={isAuthenticated}/>
+                    <Header isAuthenticated={isAuthenticated} />
                     <Routes>
                         <Route path="/login"
                                element={<PublicRoute component={LoginPage} isAuthenticated={isAuthenticated}/>}/>

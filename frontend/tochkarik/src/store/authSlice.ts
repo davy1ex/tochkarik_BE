@@ -3,7 +3,7 @@ import {AuthState, User} from '../types';
 
 const initialState: AuthState = {
     token: localStorage.getItem('token') || null,
-    refreshToken: localStorage.getItem('refresh_token') || null,
+    refreshToken: localStorage.getItem('refreshToken') || null,
 
     isAuthenticated: !!localStorage.getItem('token'),
     loading: true,
@@ -40,6 +40,8 @@ export const authSlice = createSlice({
             state.loading = false;
         },
         validateTokenFailure: (state) => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
             state.isAuthenticated = false;
             state.user = null;
             state.loading = false;
@@ -62,6 +64,7 @@ export const {
     setAuthError,
     setToken,
     setRefreshToken,
+    validateTokenSuccess,
     validateTokenFailure,
     clearAuthState
 } = authSlice.actions;
