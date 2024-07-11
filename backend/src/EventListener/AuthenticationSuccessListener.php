@@ -42,7 +42,7 @@ class AuthenticationSuccessListener
 
         $this->refreshTokenManager->save($refreshToken);
 
-        $data['refresh_token'] = $refreshToken->getRefreshToken();
+        $data['refreshToken'] = $refreshToken->getRefreshToken();
         $data['user_data'] = [
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),

@@ -1,7 +1,5 @@
-import { FC, useEffect, useState } from "react";
-import { setAuthToken } from '../../services/authService';
-import { axiosPrivateInstance } from '../../services/authService';
-import { axiosPublicInstance } from '../../services/authService';
+import {FC, useEffect, useState} from "react";
+import {axiosPrivateInstance, axiosPublicInstance} from '../../api/axios';
 
 import BigButton from "../../components/Buttons/BigButton";
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
@@ -61,15 +59,8 @@ const AdminDashboard: FC = () => {
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-
-        if (token) {
-            setAuthToken(token);
-            fetchAnalytics();
-        }
-
-
         fetchRules();
+        fetchAnalytics()
     }, []);
 
     const handleAddRule = async () => {

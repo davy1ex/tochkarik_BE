@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {axiosPublicInstance} from '../../../services/authService';
+import {axiosPublicInstance} from '../../../api/axios';
 import moment from 'moment-timezone';
 import tzlookup from 'tz-lookup';
 

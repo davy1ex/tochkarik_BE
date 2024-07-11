@@ -1,16 +1,18 @@
-import { FC, useEffect, useState } from 'react';
+import {FC, useEffect, useState} from 'react';
+import axios from "axios";
+import {axiosPublicInstance} from '../../api/axios';
+
 import MapComponent from '../../components/Map/MapComponent';
 import RadiusSlider from '../../components/Map/Slider/RadiusSlider';
 import ManualLocationInput from '../../components/Map/ManualLocation/ManualLocationInput';
 import ErrorMessage from '../../components/Map/ErrorMessage/ErrorMessage';
 import GeneratedPoint from '../../components/Map/GeneratedPoint/GeneratedPoint';
 import BigButton from '../../components/Buttons/BigButton';
-import { axiosPublicInstance } from '../../services/authService';
+
 import useLocationHandler from '../../components/Map/hooks/useLocationHandler';
+
 import './HomePage.css';
 import '../../components/Map/Map.css';
-import axios from "axios";
-
 
 /**
  * Renders the HomePage component which displays a map with a radius slider and a button to generate a new point.
@@ -98,7 +100,9 @@ const HomePage: FC = () => {
         try {
             const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${location}`);
             if (response.data.length > 0) {
-                setUserPosition([parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]);
+                const newLocation = [parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]
+                setUserPosition(newLocation);
+                setPosition(newLocation);
                 setError('');
             } else {
                 setError('Location not found. Please try another city.');
@@ -107,6 +111,7 @@ const HomePage: FC = () => {
             setError('Error fetching location. Please try again.');
         }
     };
+
 
     return (
         <div className="home-container">
@@ -125,7 +130,8 @@ const HomePage: FC = () => {
                                 <RadiusSlider radius={radius} handleRadiusChange={handleRadiusChange}/>
                                 <BigButton onClick={handleGenerate}>Generate</BigButton>
                                 <ManualLocationInput
-                                    setPosition={setUserPosition}
+                                    setPosition={setPosition}
+                                    setUserPosition={setUserPosition}
                                     setError={setError}
                                     forceUpdateLocation={forceUpdateLocation}
                                 />

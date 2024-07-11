@@ -1,16 +1,13 @@
 import {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {setRefreshToken, setToken} from '../../store/authSlice';
 
 import axios from 'axios';
-import { useAuth } from '../../services/AuthContext';
 
 import '../../components/InputField/InputField.css';
 import "./LoginPage.css";
 
-
-interface LoginPageProps {
-    setAuthToken: (token: string | null) => void;
-}
 
 interface ErrorResponse {
     message: string;
@@ -23,12 +20,12 @@ interface ErrorResponse {
  * @param {FormEvent<HTMLFormElement>} event - The form submission event.
  * @return {void} No return value.
  */
-const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
+const LoginPage: FC = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
-    const {login} = useAuth();
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     /**
@@ -44,23 +41,17 @@ const LoginPage: FC<LoginPageProps> = ({ setAuthToken }) => {
 
         try {
             const response = await axios.post(`${API_URL}/login_check`, {
-                username,
-                password,
+                username: username,
+                password: password,
             });
 
-            const token = response.data.token;
-            const refresh_token = response.data.refresh_token;
+            const {token} = response.data;
+            const {refresh_token} = response.data;
 
-            login(token);
+            dispatch(setToken(token));
+            dispatch(setRefreshToken(refresh_token));
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('refresh_token', refresh_token);
-
-            setAuthToken(token);
-
-            navigate('/');
-            window.location.href = '/';
-            window.location.reload();
+            navigate('/')
         } catch (err) {
             console.log(err)
             if (axios.isAxiosError(err)) {

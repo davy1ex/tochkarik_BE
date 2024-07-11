@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { useNavigate  } from 'react-router-dom'
-import {axiosPrivateInstance} from '../../services/authService';
+import {useNavigate} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
+import {axiosPrivateInstance} from '../../api/axios';
+import {clearAuthState} from '../../store/authSlice';
+
 
 import '../Style.css';
 import './UserProfile.css';
@@ -9,7 +12,6 @@ import BigButton from '../../components/Buttons/BigButton';
 
 interface UserProfileProps {
     userId: number;
-    logoutHandler: () => void;
 }
 
 interface User {
@@ -24,11 +26,12 @@ interface User {
  *   - logoutHandler: The function to handle logout.
  * @return {JSX.Element} The rendered user profile page.
  */
-const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
+const UserProfile: React.FC<UserProfileProps> = ({userId}) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const redirect = (path: string) => {
         navigate(path);
@@ -81,7 +84,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
                             <BigButton onClick={redirectToAdminDashboard}>Simillarik</BigButton>
                             <BigButton onClick={redirectToUserPosts}>My posts</BigButton>
                             <BigButton onClick={redirectToBookmarks}>My bookmarks</BigButton>
-                            <BigButton onClick={logoutHandler}>Logout</BigButton>
+                            <BigButton onClick={() => dispatch(clearAuthState())}>Logout</BigButton>
                         </div>
                     </>
                 )}
