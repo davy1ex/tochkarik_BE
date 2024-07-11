@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\DTO\RegisterDTO;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 
 #[Route('/api/auth')]
@@ -39,17 +42,21 @@ class AuthController extends AbstractController
     public function apiRegister(
         Request                     $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface      $entityManager
+        EntityManagerInterface      $entityManager,
+        ValidatorInterface $validator
     ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data['username']) || empty($data['password'])) {
-            return new JsonResponse(['message' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
-        }
+        $registerDTO = new RegisterDTO();
+        $registerDTO->username = $data['username'] ?? '';
+        $registerDTO->password = $data['password'] ?? '';
 
-        if (preg_match('/[А-Яа-яЁё]/u', $data['username']) || preg_match('/[А-Яа-яЁё]/u', $data['password'])) {
-            return new JsonResponse(['message' => 'Username and password must not contain Cyrillic characters'], Response::HTTP_BAD_REQUEST);
+        $errors = $validator->validate($registerDTO);
+
+        if (count($errors) > 0) {
+            $errorsString = (string) $errors;
+            return new JsonResponse(['message' => $errorsString], Response::HTTP_BAD_REQUEST);
         }
 
         $user = new User();
@@ -57,7 +64,7 @@ class AuthController extends AbstractController
         $user->setPassword(
             $userPasswordHasher->hashPassword(
                 $user,
-                $data['password']
+                $registerDTO->password
             )
         );
         $user->setCreatedAt(new \DateTimeImmutable());
