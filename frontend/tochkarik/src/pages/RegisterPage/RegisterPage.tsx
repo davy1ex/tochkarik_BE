@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+import { RegisterDTO } from '../../dto/RegisterDTO'; // Импортируем DTO
+
 import '../../components/InputField/InputField.css';
 import './RegisterPage.css';
 
@@ -15,7 +17,7 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
     const navigate = useNavigate();
     const apiUrl = process.env.VITE_API_URL;
 
-    const initialValues = {
+    const initialValues: RegisterDTO = {
         username: '',
         password: '',
         password_repeat: ''
@@ -33,7 +35,7 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
             .required('Please confirm your password')
     });
 
-    const handleSubmit = async (values: typeof initialValues, { setSubmitting, setFieldError }) => {
+    const handleSubmit = async (values: RegisterDTO, { setSubmitting, setFieldError }) => {
         if (values.password !== values.password_repeat) {
             setFieldError('password_repeat', 'Passwords do not match!');
             setSubmitting(false);
@@ -50,8 +52,6 @@ const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
             if (axios.isAxiosError(err)) {
                 const errorResponse = err.response?.data as { message: string };
                 if (err.response?.status === 400) {
-                    setFieldError('username', 'Username already exists. Please choose another one.');
-                } else {
                     setFieldError('general', `Error: ${errorResponse.message}`);
                 }
             } else {
