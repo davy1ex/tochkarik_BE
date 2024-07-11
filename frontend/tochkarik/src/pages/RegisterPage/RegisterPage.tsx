@@ -1,6 +1,8 @@
-import React, {ChangeEvent, FC, FormEvent, useState} from 'react';
-import {useNavigate} from "react-router-dom";
+import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 import '../../components/InputField/InputField.css';
 import './RegisterPage.css';
@@ -9,139 +11,114 @@ interface RegistrationPageProps {
     setAuthToken: (token: string | null) => void;
 }
 
-/**
- * Handles the form submission for user registration.
- *
- * @param {FormEvent<HTMLFormElement>} event - The form submission event.
- * @return {void} No return value.
- */
 const RegistrationPage: FC<RegistrationPageProps> = ({ setAuthToken }) => {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [password_repeat, setPasswordRepeat] = useState<string>('');
-    const [error, setError] = useState<string>('');
-
     const navigate = useNavigate();
-
     const apiUrl = process.env.VITE_API_URL;
 
-    /**
-     * Handles the form submission when a user tries to register.
-     *
-     * @param {FormEvent<HTMLFormElement>} event - The form submission event triggering the registration process.
-     * @return {void} No explicit return value, but it performs registration actions based on form input.
-     */
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const initialValues = {
+        username: '',
+        password: '',
+        password_repeat: ''
+    };
 
-        if (password !== password_repeat) {
-            setError('Password do not match! Try again');
-            return;
-        }
+    const validationSchema = Yup.object({
+        username: Yup.string()
+            .required('Username is required')
+            .matches(/^[A-Za-z0-9]+$/, 'Username must not contain Cyrillic characters'),
+        password: Yup.string()
+            .required('Password is required')
+            .matches(/^[A-Za-z0-9]+$/, 'Password must not contain Cyrillic characters'),
+        password_repeat: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Please confirm your password')
+    });
 
-        const cyrillicPattern = /[А-Яа-яЁё]/;
-
-        if (cyrillicPattern.test(username) || cyrillicPattern.test(password)) {
-            setError('Username and password must not contain Cyrillic characters.');
+    const handleSubmit = async (values: typeof initialValues, { setSubmitting, setFieldError }) => {
+        if (values.password !== values.password_repeat) {
+            setFieldError('password_repeat', 'Passwords do not match!');
+            setSubmitting(false);
             return;
         }
 
         try {
             const response = await axios.post(`${apiUrl}/api/auth/signup`, {
-                username,
-                password,
+                username: values.username,
+                password: values.password,
             });
             navigate('/login');
-        } catch (error: any) {
-            if (error.response) {
-                console.error('Error response:', error.response);
-                if (error.response.status === 400) {
-                    setError('Username already exists. Please choose another one.');
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                const errorResponse = err.response?.data as { message: string };
+                if (err.response?.status === 400) {
+                    setFieldError('username', 'Username already exists. Please choose another one.');
                 } else {
-                    setError(`Error: ${error.response.data.message}`);
+                    setFieldError('general', `Error: ${errorResponse.message}`);
                 }
-            } else if (error.request) {
-                console.error('Error request:', error.request);
-                setError('No response received from server.');
             } else {
-                console.error('Error message:', error.message);
-                setError(`Error: ${error.message}`);
+                setFieldError('general', 'An unexpected error occurred');
             }
         }
-    };
 
-    /**
-     * Updates the username state with the value from the input element.
-     *
-     * @param {ChangeEvent<HTMLInputElement>} e - The event object representing the change event on the input element.
-     * @return {void} This function does not return anything.
-     */
-    const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setUsername(e.target.value);
-    };
-
-    /**
-     * Updates the password state with the value from the input element.
-     *
-     * @param {ChangeEvent<HTMLInputElement>} e - The event object representing the change event on the input element.
-     * @return {void} This function does not return anything.
-     */
-    const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
-    };
-
-    /**
-     * Updates the passwordRepeat state with the value from the input element.
-     *
-     * @param {ChangeEvent<HTMLInputElement>} e - The event object representing the change event on the input element.
-     * @return {void} This function does not return anything.
-     */
-    const handlePasswordRepeatChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setPasswordRepeat(e.target.value);
+        setSubmitting(false);
     };
 
     return (
         <div className="register-container">
             <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="register-container-item">
-                    <label>Login</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={handleUsernameChange}
-                        required
-                        placeholder="Login"
-                    />
-                </div>
 
-                <div className="register-container-item">
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        required
-                        placeholder="Password"
-                    />
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+                {({ isSubmitting, errors }) => (
+                    <Form>
+                        <div className="register-container-item">
+                            <label htmlFor="username">Login</label>
+                            <Field
+                                type="text"
+                                name="username"
+                                placeholder="Login"
+                                required
+                            />
+                            <ErrorMessage name="username" component="div" className="error-message" />
+                        </div>
 
-                    <input
-                        type="password"
-                        value={password_repeat}
-                        onChange={handlePasswordRepeatChange}
-                        required
-                        placeholder="Repeat password"
-                    />
-                </div>
-                <button type="submit">Sign Up</button>
-                <a href="/login">Sign In</a>
-                <p style={{color: "lightgray"}}>Or u can go to <a href={"/"} style={{
-                    color: "#a2b8ff !important",
-                    textDecoration: "underline"
-                }}>Home page</a> without authorization!</p>
+                        <div className="register-container-item">
+                            <label htmlFor="password">Password</label>
+                            <Field
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                required
+                            />
+                            <ErrorMessage name="password" component="div" className="error-message" />
 
-                {error && <p>{error}</p>}
-            </form>
+                            <Field
+                                type="password"
+                                name="password_repeat"
+                                placeholder="Repeat password"
+                                required
+                            />
+                            <ErrorMessage name="password_repeat" component="div" className="error-message" />
+                        </div>
+
+                        <button type="submit" disabled={isSubmitting}>
+                            Sign Up
+                        </button>
+                        <a href="/login">Sign In</a>
+                        <p style={{ color: 'lightgray' }}>
+                            Or you can go to{' '}
+                            <a href="/" style={{ color: '#a2b8ff !important', textDecoration: 'underline' }}>
+                                Home page
+                            </a>{' '}
+                            without authorization!
+                        </p>
+
+                        {errors.general && <p className="error-message">{errors.general}</p>}
+                    </Form>
+                )}
+            </Formik>
         </div>
     );
 };
