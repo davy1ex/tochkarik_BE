@@ -1,14 +1,14 @@
 version: "3.1"
 
 services:
-  php-fpm:
-    build:
-      context: .
-      dockerfile: ./docker/php-fpm/Dockerfile
-    volumes:
-      - ./backend:/application
-    depends_on:
-      - postgres
+  # php-fpm:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/php-fpm/Dockerfile
+  #   volumes:
+  #     - ./backend:/application
+  #   depends_on:
+  #     - postgres
 
 
   nginx-frontend:
@@ -24,32 +24,32 @@ services:
     depends_on:
       - node
 
-  nginx-backend:
-    build:
-      context: .
-      dockerfile: ./docker/nginx/Dockerfile
-    volumes:
-      - ./backend:/application
-      - ./docker/nginx/nginx-backend.conf:/etc/nginx/nginx.conf
-      - ./docker/nginx/ssl:/etc/nginx/ssl
-    ports:
-      - "8443:8443"
-    depends_on:
-      - php-fpm
+  # nginx-backend:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/nginx/Dockerfile
+  #   volumes:
+  #     - ./backend:/application
+  #     - ./docker/nginx/nginx-backend.conf:/etc/nginx/nginx.conf
+  #     - ./docker/nginx/ssl:/etc/nginx/ssl
+  #   ports:
+  #     - "8443:8443"
+    # depends_on:
+      # - php-fpm
 
 
-  postgres:
-    build:
-      context: .
-      dockerfile: ./docker/postgres/Dockerfile
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    ports:
-      - '5431:5432'
+  # postgres:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/postgres/Dockerfile
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_USER=${POSTGRES_USER}
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #     - POSTGRES_DB=${POSTGRES_DB}
+  #   ports:
+  #     - '5431:5432'
 
   node:
     build:
@@ -64,5 +64,5 @@ services:
       - NODE_ENV=development
       - VITE_API_URL=${VITE_API_URL}
 
-volumes:
-  postgres_data:
+# volumes:
+#   postgres_data:
