@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Points{% endblock %}
+
+{% block body %}
+    <h1>Create new Points</h1>
+
+    {{ include('points/_form.html.twig') }}
+
+    <a href="{{ path('app_points_index') }}">back to list</a>
+{% endblock %}

@@ -1,21 +1,37 @@
-import React, { FC } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, {FC} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import './Header.css';
 
-import coin from '../../../public/coin.svg';
-import explore from '../../../public/explore.svg';
-import browse from '../../../public/browse.svg';
+import coin from '../../icons/coin.svg';
+import logo from '../../icons/logo.svg';
+import explore from '../../icons/explore.svg';
+import browse from '../../icons/browse.svg';
 
-import BigBtn from "../buttons/Button";
+import BigButton from "../Buttons/BigButton";
+
 
 interface HeaderProps {
-    user_login: boolean;
+    isAuthenticated?: any
 }
 
-const Header: FC<HeaderProps> = ({ user_login }) => {
+/**
+ * Renders the header component.
+ *
+ * @return {JSX.Element} The header component.
+ */
+const Header: FC <HeaderProps> = ({isAuthenticated}) => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+    /**
+     * Handles the click event for the "Join In" button.
+     *
+     * This function is called when the "Join In" button is clicked. It uses the `navigate` function from the `react-router-dom` library to navigate to the `/login` route.
+     *
+     * @return {void} This function does not return a value.
+     */
     const handleJoinInClick = () => {
         navigate('/login');
     };
@@ -24,7 +40,7 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
 
     return (
         <header className="header">
-            {user_login && (
+            {isAuthenticated && (
                 <div className="menu-icon" onClick={() => navigate("/profile")}>
                     ☰
                 </div>
@@ -32,27 +48,27 @@ const Header: FC<HeaderProps> = ({ user_login }) => {
 
             <a className="logo" onClick={() => navigate("/")}>
                 <div className="logo-image">
-                    <img alt="icon logo" src="../../../public/logo.svg" />
+                    <img alt="icon logo" src={logo}/>
                 </div>
                 TochKarik
             </a>
 
             <div className="headerContainer">
-                {user_login ? (
+                {isAuthenticated ? (
                     <>
                         <a className="points" onClick={() => alert('Перейти в магазин')}>
-                            300 <span className="icon"><img src={coin} alt="" /></span>
+                            300 <span className="icon"><img src={coin} alt=""/></span>
                         </a>
                         <a className="icon" onClick={() => navigate("/generate")}>
-                            <img alt="icon explore" src={explore} />
+                            <img alt="icon explore" width="22" src={explore}/>
                         </a>
                         <a className="icon" onClick={() => navigate("/posts")}>
-                            <img alt="icon browse posts" src={browse} />
+                            <img alt="icon browse posts" src={browse}/>
                         </a>
                     </>
                 ) : (
                     showJoinInButton && (
-                        <BigBtn onClick={handleJoinInClick}>Join In</BigBtn>
+                        <BigButton onClick={handleJoinInClick}>Join In</BigButton>
                     )
                 )}
             </div>

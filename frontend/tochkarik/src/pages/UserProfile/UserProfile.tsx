@@ -1,68 +1,93 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
+import {axiosPrivateInstance} from '../../api/axios';
+import {clearAuthState} from '../../store/authSlice';
+
 
 import '../Style.css';
 import './UserProfile.css';
 
-import BigBtn from '../../components/buttons/Button';
+import BigButton from '../../components/Buttons/BigButton';
 
 interface UserProfileProps {
     userId: number;
-    logoutHandler: () => void;
 }
 
 interface User {
     username: string;
-    // Добавьте другие поля пользователя, если они есть
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ userId, logoutHandler }) => {
+/**
+ * Renders the user profile page.
+ *
+ * @param {UserProfileProps} props - The props object containing the following properties:
+ *   - userId: The ID of the user.
+ *   - logoutHandler: The function to handle logout.
+ * @return {JSX.Element} The rendered user profile page.
+ */
+const UserProfile: React.FC<UserProfileProps> = ({userId}) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const token = localStorage.getItem('token');
-        const url = `${apiUrl}/api/user/${userId}`;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const redirect = (path: string) => {
+        navigate(path);
+    };
 
-        axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+    useEffect(() => {
+        axiosPrivateInstance.get(`/user/current_user`, {})
             .then(response => {
-                setUser(response.data);
-                setLoading(false);
+                if (!response.data) {
+                    navigate('/');
+                } else {
+                    setUser(response.data);
+                    setLoading(false);
+                }
+            }).catch(error => {
+                navigate('/')
             })
-            .catch(error => {
-                setError(error.response ? error.response.data.message : 'Error fetching user');
-                setLoading(false);
-            });
-    }, [userId]);
+        }, [userId, navigate]);
+
+    const redirectToBookmarks = () => {
+        navigate('/bookmarks');
+    };
+
+    const redirectToUserPosts = () => {
+        navigate('/user_posts');
+    };
+
+    const redirectToAdminDashboard = () => {
+        navigate('/admindashboard');
+    };
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading user data: {error}</p>;
+    if (error) return <p>{error}</p>;
 
     return (
         <div className="container-user-profile">
-            <div>
-                {'< Profile'}
+            <div onClick={() => {
+                redirect('/')
+            }}>
+                {"< profile"}
             </div>
             <div className="content-container">
-                <div className="container-profile">
-                    {user && (
-                        <>
+                {user && (
+                    <>
+                        <div className="container-profile">
                             <p>@{user.username}</p>
-                        </>
-                    )}
-                </div>
-                <div className="container-buttons">
-                    <BigBtn>Edit profile</BigBtn>
-                    <BigBtn>My posts</BigBtn>
-                    <BigBtn>My bookmarks</BigBtn>
-                    <BigBtn onClick={logoutHandler}>Logout</BigBtn>
-                </div>
+                        </div>
+                        <div className="container-buttons">
+                            <BigButton>Edit profile</BigButton>
+                            <BigButton onClick={redirectToAdminDashboard}>Simillarik</BigButton>
+                            <BigButton onClick={redirectToUserPosts}>My posts</BigButton>
+                            <BigButton onClick={redirectToBookmarks}>My bookmarks</BigButton>
+                            <BigButton onClick={() => dispatch(clearAuthState())}>Logout</BigButton>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

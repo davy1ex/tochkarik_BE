@@ -1,0 +1,38 @@
+h2 {
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.analytics-container h3 {
+    margin: 0 !important;
+}
+
+.analytics-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.analytics-container-body {
+    display: flex;
+    margin-top: 30px;
+}
+
+.analytics-container-half {
+    display: flex;
+    flex-direction: column;
+}
+
+.analytics-container-half:last-child {
+    margin-left: 30px;
+}
+
+.analytics-value {
+    color: lightblue;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.analytics-score {
+    margin-top: 20px
+}

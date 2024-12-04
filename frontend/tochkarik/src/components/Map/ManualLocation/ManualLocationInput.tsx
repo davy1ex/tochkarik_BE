@@ -1,49 +1,104 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, {ChangeEvent, useRef, useState} from 'react';
 import axios from 'axios';
 
 import '../../../components/InputField/InputField.css';
-import BigBtn from '../../../components/buttons/Button';
+import BigButton from '../../../components/Buttons/BigButton';
 
 import './ManualLocationInput.css';
 
 interface ManualLocationInputProps {
     setPosition: (position: [number, number]) => void;
+    setUserPosition: (position: [number, number]) => void;
     setError: (error: string) => void;
+    forceUpdateLocation: (location: string) => void;
 }
 
-const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, setError }) => {
+/**
+ * Renders a component for manual location input.
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.setPosition - Callback function to set the position.
+ * @param {Function} props.setUserPosition - Callback function to set central the position.
+ * @param {Function} props.setError - Callback function to set the error message.
+ * @param {Function} props.forceUpdateLocation - Callback function to force update location.
+ * @return {JSX.Element} The rendered component.
+ */
+const ManualLocationInput: React.FC<ManualLocationInputProps> = ({
+                                                                     setPosition,
+                                                                     setUserPosition,
+                                                                     setError,
+                                                                     forceUpdateLocation
+                                                                 }) => {
     const [manualLocation, setManualLocation] = useState<string>('');
     const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
+    const cancelTokenRef = useRef<CancelTokenSource | null>(null);
 
+    /**
+     * Updates the manual location state and fetches location suggestions from OpenStreetMap API based on the input value.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} event - The event object containing the input value.
+     * @return {Promise<void>} - A promise that resolves when the function completes.
+     */
     const handleManualLocationChange = async (event: ChangeEvent<HTMLInputElement>) => {
         setManualLocation(event.target.value);
 
         if (event.target.value.length > 2) {
+            if (cancelTokenRef.current) {
+                cancelTokenRef.current.cancel('Operation canceled due to new request.');
+            }
+
+            const source = axios.CancelToken.source();
+            cancelTokenRef.current = source;
+
             try {
-                const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`);
+                const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${event.target.value}`, {
+                    cancelToken: source.token
+                });
                 const limitedSuggestions = response.data.slice(0, 3);
                 setLocationSuggestions(limitedSuggestions);
             } catch (error) {
-                console.error('Error fetching location suggestions:', error);
+                if (axios.isCancel(error)) {
+                    console.log('Request canceled', error.message);
+                } else {
+                    console.error('Error fetching location suggestions:', error);
+                }
             }
         } else {
             setLocationSuggestions([]);
         }
     };
 
+    /**
+     * Updates the position, location suggestions, manual location, and error state variables based on the selected suggestion.
+     *
+     * @param {any} suggestion - The selected suggestion object containing latitude and longitude information.
+     * @return {void} - Does not return anything.
+     */
     const handleSuggestionClick = (suggestion: any) => {
-        setPosition([parseFloat(suggestion.lat), parseFloat(suggestion.lon)]);
+        const newPosition: [number, number] = [parseFloat(suggestion.lat), parseFloat(suggestion.lon)];
+        setPosition(newPosition);
+        setUserPosition(newPosition);
+
         setLocationSuggestions([]);
         setManualLocation('');
         setError('');
     };
 
+    /**
+     * Asynchronously handles the submission of a manual location.
+     * Fetches the latitude and longitude of the location from the OpenStreetMap API
+     * and updates the position and error state variables accordingly.
+     *
+     * @return {Promise<void>} A Promise that resolves when the function completes.
+     */
     const handleManualLocationSubmit = async () => {
         if (manualLocation) {
             try {
                 const response = await axios.get(`https://nominatim.openstreetmap.org/search?accept-language=ru&format=json&q=${manualLocation}`);
                 if (response.data.length > 0) {
-                    setPosition([parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]);
+                    const newPosition: [number, number] = [parseFloat(response.data[0].lat), parseFloat(response.data[0].lon)]
+                    setPosition(newPosition);
+                    setUserPosition(newPosition);
                     setError('');
                 } else {
                     setError('Location not found. Please try another city.');
@@ -65,7 +120,7 @@ const ManualLocationInput: React.FC<ManualLocationInputProps> = ({ setPosition, 
                     placeholder="Enter city name"
                     className="manual-location-input"
                 />
-                <BigBtn onClick={handleManualLocationSubmit}>Set Location</BigBtn>
+                <BigButton onClick={() => forceUpdateLocation(manualLocation)}>Set Location</BigButton>
             </div>
             <div className="search-suggestion-container">
                 {locationSuggestions.length > 0 && (

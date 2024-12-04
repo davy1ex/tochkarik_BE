@@ -1,0 +1,16 @@
+.add-point-description {
+    height: 300px;
+}
+
+.add-point-description-input {
+    height: 35px;
+    color: white;
+}
+
+.add-point-description .bigBtn {
+    width: 30%;
+    font-weight: lighter;
+    font-size: small;
+
+    margin-left: auto;
+}

@@ -1,11 +1,19 @@
 import React from 'react';
-import './Slider.css';
+import './RadiusSlider.css';
 
 interface RadiusSliderProps {
     radius: number;
     handleRadiusChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Renders a radius slider component.
+ *
+ * @param {RadiusSliderProps} props - The props for the component.
+ * @param {number} props.radius - The current radius value.
+ * @param {function} props.handleRadiusChange - The function to handle radius change.
+ * @return {ReactElement} The rendered radius slider component.
+ */
 const RadiusSlider: React.FC<RadiusSliderProps> = ({ radius, handleRadiusChange }) => (
     <div className="slider-container">
         <input
@@ -16,7 +24,7 @@ const RadiusSlider: React.FC<RadiusSliderProps> = ({ radius, handleRadiusChange 
             onChange={handleRadiusChange}
             className="slider"
         />
-        <span>{radius} meters</span>
+        <div className={"slider-component"}>{radius} meters</div>
     </div>
 );
 
